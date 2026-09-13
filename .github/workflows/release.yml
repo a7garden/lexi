@@ -36,8 +36,9 @@ jobs:
 
       - name: Import Developer ID certificate
         env:
-          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE }}
+          P12_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          EXPECTED_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
         shell: bash
         run: |
           set -euo pipefail
@@ -69,6 +70,10 @@ jobs:
             echo "Developer ID Application identity was not found in the imported certificate." >&2
             exit 1
           fi
+          if [[ "$signing_identity" != "$EXPECTED_SIGNING_IDENTITY" ]]; then
+            echo "Imported signing identity does not match APPLE_SIGNING_IDENTITY." >&2
+            exit 1
+          fi
           echo "SIGNING_IDENTITY=$signing_identity" >> "$GITHUB_ENV"
           echo "SIGNING_KEYCHAIN=$keychain_path" >> "$GITHUB_ENV"
 
@@ -80,7 +85,7 @@ jobs:
 
       - name: Archive signed app
         env:
-          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         shell: bash
         run: |
           set -euo pipefail
@@ -108,8 +113,8 @@ jobs:
       - name: Submit to Apple notary service
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         shell: bash
         run: |
           set -euo pipefail

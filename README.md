@@ -9,9 +9,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/a7garden/lexi/releases/latest">최신 릴리스</a> ·
-  <a href="https://github.com/a7garden/lexi/actions/workflows/ci.yml"><img src="https://github.com/a7garden/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
-  <a href="https://github.com/a7garden/lexi/releases"><img src="https://img.shields.io/github/v/release/a7garden/lexi" alt="GitHub Release"></a>
+  <a href="https://github.com/project-oxi/lexi/releases/latest">최신 릴리스</a> ·
+  <a href="https://github.com/project-oxi/lexi/actions/workflows/ci.yml"><img src="https://github.com/project-oxi/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
+  <a href="https://github.com/project-oxi/lexi/releases"><img src="https://img.shields.io/github/v/release/project-oxi/lexi" alt="GitHub Release"></a>
 </p>
 
 Lexi는 이미 저장한 표현은 AI 호출 없이 즉시 보여주고, 처음 보는 표현만 로컬 MLX 모델로 설명을 만듭니다. 웹 조사는 사용자가 켠 경우에만 실행하며, 실제로 읽은 공개 자료만 출처로 저장합니다.
@@ -29,7 +29,7 @@ Lexi는 이미 저장한 표현은 AI 호출 없이 즉시 보여주고, 처음 
 
 ## 설치
 
-1. [Releases](https://github.com/a7garden/lexi/releases/latest)에서 최신 `Lexi-*-macOS-arm64.zip`을 받습니다.
+1. [Releases](https://github.com/project-oxi/lexi/releases/latest)에서 최신 `Lexi-*-macOS-arm64.zip`을 받습니다.
 2. 압축을 풀고 `Lexi.app`을 응용 프로그램 폴더로 옮깁니다.
 3. Lexi를 실행합니다. 배포 파일은 Developer ID로 서명되고 Apple 공증을 거칩니다.
 4. 선택 텍스트 조회를 처음 사용할 때 macOS가 요청하는 **손쉬운 사용** 권한을 허용합니다.
@@ -72,7 +72,7 @@ Lexi는 이미 저장한 표현은 AI 호출 없이 즉시 보여주고, 처음 
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 
 ```bash
-git clone https://github.com/a7garden/lexi.git
+git clone https://github.com/project-oxi/lexi.git
 cd lexi
 brew install xcodegen
 xcodegen generate
