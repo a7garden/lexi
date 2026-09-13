@@ -1,0 +1,160 @@
+name: Signed macOS release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: command -v xcodegen >/dev/null || brew install xcodegen
+
+      - name: Validate tag version
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected="v$(sed -n 's/^[[:space:]]*MARKETING_VERSION: "\([^"]*\)"/\1/p' project.yml)"
+          if [[ "$GITHUB_REF_NAME" != "$expected" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match project version $expected" >&2
+            exit 1
+          fi
+
+      - name: Import Developer ID certificate
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          certificate_path="$RUNNER_TEMP/developer-id.p12"
+          keychain_path="$RUNNER_TEMP/lexi-signing.keychain-db"
+          keychain_password="$(openssl rand -base64 32)"
+
+          printf '%s' "$BUILD_CERTIFICATE_BASE64" | base64 -D > "$certificate_path"
+          security create-keychain -p "$keychain_password" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$keychain_password" "$keychain_path"
+          security import "$certificate_path" \
+            -k "$keychain_path" \
+            -P "$P12_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -s \
+            -k "$keychain_password" \
+            "$keychain_path"
+          security list-keychains -d user -s "$keychain_path"
+
+          signing_identity="$(security find-identity -v -p codesigning "$keychain_path" \
+            | sed -n 's/.*"\(Developer ID Application:.*\)"/\1/p' \
+            | head -n 1)"
+          if [[ -z "$signing_identity" ]]; then
+            echo "Developer ID Application identity was not found in the imported certificate." >&2
+            exit 1
+          fi
+          echo "SIGNING_IDENTITY=$signing_identity" >> "$GITHUB_ENV"
+          echo "SIGNING_KEYCHAIN=$keychain_path" >> "$GITHUB_ENV"
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Run LexiCore tests
+        run: swift test --package-path Packages/LexiCore
+
+      - name: Archive signed app
+        env:
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project Lexi.xcodeproj \
+            -scheme Lexi \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -archivePath "$RUNNER_TEMP/Lexi.xcarchive" \
+            ARCHS=arm64 \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="$SIGNING_IDENTITY" \
+            OTHER_CODE_SIGN_FLAGS="--timestamp --keychain $SIGNING_KEYCHAIN" \
+            archive
+
+      - name: Verify code signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          app_path="$RUNNER_TEMP/Lexi.xcarchive/Products/Applications/Lexi.app"
+          codesign --verify --deep --strict --verbose=2 "$app_path"
+          codesign --display --verbose=4 "$app_path"
+
+      - name: Submit to Apple notary service
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          app_path="$RUNNER_TEMP/Lexi.xcarchive/Products/Applications/Lexi.app"
+          submission_zip="$RUNNER_TEMP/Lexi-notarization.zip"
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$submission_zip"
+          xcrun notarytool submit "$submission_zip" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+
+      - name: Staple and assess
+        shell: bash
+        run: |
+          set -euo pipefail
+          app_path="$RUNNER_TEMP/Lexi.xcarchive/Products/Applications/Lexi.app"
+          xcrun stapler staple "$app_path"
+          xcrun stapler validate "$app_path"
+          spctl --assess --type execute --verbose=4 "$app_path"
+
+      - name: Package release
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          app_path="$RUNNER_TEMP/Lexi.xcarchive/Products/Applications/Lexi.app"
+          release_dir="$RUNNER_TEMP/release"
+          mkdir -p "$release_dir"
+          release_zip="$release_dir/Lexi-$version-macOS-arm64.zip"
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$release_zip"
+          (
+            cd "$release_dir"
+            shasum -a 256 "$(basename "$release_zip")" > "Lexi-$version-macOS-arm64.sha256"
+          )
+          echo "RELEASE_DIR=$release_dir" >> "$GITHUB_ENV"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" \
+            "$RELEASE_DIR"/* \
+            --verify-tag \
+            --title "Lexi ${GITHUB_REF_NAME#v}" \
+            --generate-notes

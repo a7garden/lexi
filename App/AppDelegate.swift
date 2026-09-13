@@ -2,7 +2,7 @@ import AppKit
 import KeyboardShortcuts
 import LexiCore
 import SwiftUI
-import UserNotifications
+@preconcurrency import UserNotifications
 
 /// 목업 #2의 글로벌 단축키. 기본값 ⌘D (클립보드 텍스트로 검색).
 extension KeyboardShortcuts.Name {
@@ -154,7 +154,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func setUpStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        item.button?.image = NSImage(systemSymbolName: "character.book.closed", accessibilityDescription: "Lexi")
+        let menuBarImage = NSImage(named: "MenuBarIcon")
+            ?? NSImage(systemSymbolName: "character.book.closed", accessibilityDescription: "Lexi")
+        menuBarImage?.isTemplate = true
+        menuBarImage?.size = NSSize(width: 18, height: 18)
+        item.button?.image = menuBarImage
+        item.button?.imageScaling = .scaleProportionallyDown
+        item.button?.setAccessibilityLabel("Lexi")
         let menu = NSMenu()
         let searchItem = menu.addItem(withTitle: "클립보드 텍스트로 검색", action: #selector(searchClipboard), keyEquivalent: "d")
         searchItem.target = self

@@ -6,3 +6,18 @@ Packages/**/.build/
 Packages/**/.swiftpm/
 xcuserdata/
 .DS_Store
+
+# Apple signing and notarization credentials
+*.p12
+*.p8
+*.cer
+*.certSigningRequest
+*.mobileprovision
+.env
+.env.*
+
+# Local release artifacts
+*.xcarchive
+*.dmg
+*.zip
+release/
