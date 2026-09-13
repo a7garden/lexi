@@ -1,24 +1,31 @@
 import SwiftUI
 
-/// 설정 (목업 #8). AI 제공자 선택: Ollama → MLX 내장 → 외부 API(기본 비활성).
-/// 이번 스켈레톤은 Ollama 연결 값만. 어댑터 연결과 실행 위치 구분은 다음 마일스톤.
+/// 설정 (목업 #8). AI 제공자: 내장 MLX(Apple Silicon) 기본. 외부 API는 기본 비활성.
+/// 설계 규칙: 웹 조사는 별도 동의.
 struct SettingsView: View {
-    @AppStorage("ollamaBaseURL") private var ollamaBaseURL = "http://localhost:11434"
-    @AppStorage("ollamaModel") private var ollamaModel = ""
+    @AppStorage("mlxModelID") private var mlxModelID = "mlx-community/Qwen3-4B-4bit"
+    @AppStorage("webResearchAllowed") private var webResearchAllowed = false
 
     var body: some View {
         Form {
             Section("AI 제공자") {
-                Picker("제공 방식", selection: .constant("ollama")) {
-                    Text("로컬 모델 (Ollama)").tag("ollama")
-                    Text("내장 모델 (MLX)").tag("mlx").disabled(true)
+                Picker("제공 방식", selection: .constant("mlx")) {
+                    Text("내장 모델 (MLX · Apple Silicon)").tag("mlx")
                     Text("외부 API (OpenAI·Claude 등)").tag("external").disabled(true)
                 }
-                TextField("서버 주소", text: $ollamaBaseURL)
-                TextField("모델 (예: llama3.1:8b)", text: $ollamaModel)
+                TextField("모델 (mlx-community HuggingFace ID)", text: $mlxModelID)
+                Text("모델 파일은 첫 생성 시 HuggingFace에서 내려받아 로컬에서 실행됩니다.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Section("웹 조사") {
+                Toggle("새 개념 조회 시 공개 자료 검색 허용", isOn: $webResearchAllowed)
+                Text("끄면 로컬 모델 지식만으로 초안을 만들고, 결과는 'AI 초안 · 외부 출처 없음'으로 표시됩니다.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
             Section {
-                Text("웹 조사는 별도 동의 후 활성화됩니다. 로컬 주소라도 실제 계산 위치는 설정에서 확인하세요.")
+                Text("설정 변경은 앱을 다시 시작하면 적용됩니다.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }

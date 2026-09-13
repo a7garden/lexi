@@ -40,8 +40,7 @@ public enum LookupStatus: String, Sendable {
 /// - 정규화는 보수적으로: 앞뒤 공백 정리 + 빈 문자열 거부만. 대소문자·기호는 원문 보존.
 /// - 같은 표현이 여러 개념(동음이의)을 가리키면 전부 후보로 돌려준다. 앱이 임의로 확정하지 않는다.
 public struct LookupService: Sendable {
-    let database: AppDatabase
-
+    public let database: AppDatabase
     public init(database: AppDatabase) {
         self.database = database
     }
@@ -131,5 +130,15 @@ public struct LookupService: Sendable {
     func normalize(_ text: String) -> String {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed
+    }
+
+    /// 개정본에 출처를 연결한다. 앱이 실제로 가져온 자료만 저장한다(모델이 지어낸 URL 금지).
+    public func addSource(revisionId: Int64, title: String, url: String?, excerpt: String?) async throws {
+        _ = try await database.writer.write { db in
+            try db.execute(
+                sql: "INSERT INTO sourceRef (revisionId, title, url, excerpt) VALUES (?, ?, ?, ?)",
+                arguments: [revisionId, title, url, excerpt]
+            )
+        }
     }
 }

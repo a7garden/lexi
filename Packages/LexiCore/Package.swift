@@ -8,10 +8,18 @@ let package = Package(
         .library(name: "LexiCore", targets: ["LexiCore"])
     ],
     dependencies: [
-        .package(url: "https://github.com/groue/GRDB.swift", from: "7.0.0")
+        .package(url: "https://github.com/groue/GRDB.swift", from: "7.0.0"),
+        .package(url: "https://github.com/ml-explore/mlx-swift-examples", from: "2.29.1"),
     ],
     targets: [
-        .target(name: "LexiCore", dependencies: [.product(name: "GRDB", package: "GRDB.swift")]),
+        .target(
+            name: "LexiCore",
+            dependencies: [
+                .product(name: "GRDB", package: "GRDB.swift"),
+                .product(name: "MLXLLM", package: "mlx-swift-examples"),
+                .product(name: "MLXLMCommon", package: "mlx-swift-examples"),
+            ]
+        ),
         .testTarget(name: "LexiCoreTests", dependencies: ["LexiCore"])
     ]
 )
