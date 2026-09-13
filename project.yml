@@ -1,0 +1,45 @@
+name: Lexi
+options:
+  bundleIdPrefix: kr.garden.lexi
+  createIntermediateGroups: true
+  deploymentTarget:
+    macOS: "14.0"
+
+packages:
+  LexiCore:
+    path: Packages/LexiCore
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: 2.0.0
+
+targets:
+  Lexi:
+    type: application
+    platform: macOS
+    sources:
+      - App
+    dependencies:
+      - package: LexiCore
+      - package: KeyboardShortcuts
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Lexi
+        CFBundleName: Lexi
+        LSMinimumSystemVersion: "14.0"
+        NSHumanReadableCopyright: ""
+        NSServices:
+          - NSMenuItem:
+              default: Lexi에서 찾아보기
+            NSMessage: lookupSelectedText
+            NSSendTypes:
+              - public.utf8-plain-text
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: kr.garden.lexi.app
+        PRODUCT_NAME: Lexi
+        SWIFT_VERSION: "6.0"
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        ENABLE_HARDENED_RUNTIME: YES
