@@ -293,16 +293,19 @@ public enum WebResearchParsing {
 public struct WebResearchService: Sendable {
     private typealias Material = (title: String, url: URL, text: String)
 
-    private static let systemPrompt = """
-    당신은 한국어 용어 사전 편집자입니다. 제공된 자료만 근거로 삼고, 자료에 없는 내용은 추측하지 않습니다.
-    반드시 아래 JSON 스키마만 출력하세요. 코드펜스, 주석, JSON 외 텍스트는 절대 출력하지 않습니다.
-    {"oneLine": "...", "easyExplanation": "...", "examples": ["..."], "sources": [{"title": "...", "url": "...", "quote": "..."}]}
-    - 모든 내용은 한국어로 작성합니다.
-    - oneLine: 한 줄 정의.
-    - easyExplanation: 쉬운 설명(2~3문장).
-    - examples: 실용적인 예시 1~3개.
-    - sources: 근거로 삼은 자료의 제목(title), URL(url), 원문 인용(quote).
-    """
+    /// 설명 언어만 바뀌는 템플릿. JSON 스키마는 언어와 무관하게 고정이라 파서가 그대로 동작한다.
+    static func systemPrompt(explanationLanguage: EntryLanguage) -> String {
+        """
+        당신은 다국어 용어 사전 편집자입니다. 제공된 자료만 근거로 삼고, 자료에 없는 내용은 추측하지 않습니다.
+        반드시 아래 JSON 스키마만 출력하세요. 코드펜스, 주석, JSON 외 텍스트는 절대 출력하지 않습니다.
+        {"oneLine": "...", "easyExplanation": "...", "examples": ["..."], "sources": [{"title": "...", "url": "...", "quote": "..."}]}
+        - 모든 내용의 언어: \(explanationLanguage.nativeName). 고유명사·기호는 원어 표기를 유지해도 됩니다.
+        - oneLine: 한 줄 정의.
+        - easyExplanation: 쉬운 설명(2~3문장).
+        - examples: 실용적인 예시 1~3개.
+        - sources: 근거로 삼은 자료의 제목(title), URL(url), 원문 인용(quote).
+        """
+    }
 
     private let search: any SearchProvider
     private let llm: any LLMProvider
@@ -314,12 +317,17 @@ public struct WebResearchService: Sendable {
         self.fetcher = fetcher
     }
 
-    public func research(term: String, context: String?) async throws -> DraftDefinition {
+    public func research(
+        term: String,
+        context: String?,
+        termLanguage: EntryLanguage? = nil,
+        explanationLanguage: EntryLanguage = .korean
+    ) async throws -> DraftDefinition {
         let hits = try await search.search(term, limit: 4)
         let materials = await fetchMaterials(Array(hits.prefix(3)))
         let raw = try await llm.complete(
-            system: Self.systemPrompt,
-            user: Self.userPrompt(term: term, context: context, materials: materials)
+            system: Self.systemPrompt(explanationLanguage: explanationLanguage),
+            user: Self.userPrompt(term: term, termLanguage: termLanguage, context: context, materials: materials)
         )
         var draft = try WebResearchParsing.parseDraft(fromLLMOutput: raw)
         draft.sources = Self.filteredSources(draft.sources, materials: materials)
@@ -364,8 +372,16 @@ public struct WebResearchService: Sendable {
         }
     }
 
-    private static func userPrompt(term: String, context: String?, materials: [Material]) -> String {
+    private static func userPrompt(
+        term: String,
+        termLanguage: EntryLanguage?,
+        context: String?,
+        materials: [Material]
+    ) -> String {
         var lines = ["용어: \(term)"]
+        if let termLanguage {
+            lines.append("용어 언어: \(termLanguage.nativeName)")
+        }
         if let context = context?.trimmingCharacters(in: .whitespacesAndNewlines), !context.isEmpty {
             lines.append("맥락: \(context)")
         }

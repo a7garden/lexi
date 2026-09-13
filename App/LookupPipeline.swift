@@ -18,22 +18,27 @@ final class LookupPipeline {
     private let service: LookupService
     let research: WebResearchService?
     private let llmIdentifier: String?
+    private let explanationLanguage: ExplanationLanguagePreference
     private(set) var lastQuery: String = ""
 
     init(
         service: LookupService,
         research: WebResearchService?,
-        llmIdentifier: String?
+        llmIdentifier: String?,
+        explanationLanguage: ExplanationLanguagePreference = .fixed(.korean)
     ) {
         self.service = service
         self.research = research
         self.llmIdentifier = llmIdentifier
+        self.explanationLanguage = explanationLanguage
     }
 
-    /// 1차: 사전 정확 검색. AI 호출 없음.
+    /// 1차: 사전 정확 검색. AI 호출 없음. 요청한 설명 언어의 개정본을 우선한다.
     func lookup(_ rawQuery: String) async -> [DictionaryEntry] {
         lastQuery = rawQuery
-        let entries = (try? await service.lookupExact(rawQuery)) ?? []
+        let termLanguage = LanguageDetector.detect(rawQuery)
+        let revisionLang = explanationLanguage.resolve(termLanguage: termLanguage)
+        let entries = (try? await service.lookupExact(rawQuery, revisionLang: revisionLang)) ?? []
         if let best = entries.first {
             try? await service.recordLookup(rawQuery, conceptId: best.conceptId, status: .hit)
         } else {
@@ -49,7 +54,12 @@ final class LookupPipeline {
             return .failure(PipelineError.noEngine)
         }
         do {
-            let draft = try await research.research(term: rawQuery, context: nil)
+            let termLanguage = LanguageDetector.detect(rawQuery)
+            let explanationLang = explanationLanguage.resolve(termLanguage: termLanguage)
+            let draft = try await research.research(
+                term: rawQuery, context: nil,
+                termLanguage: termLanguage, explanationLanguage: explanationLang)
+            try Task.checkCancellation()
             let conceptId = try await service.saveConcept(
                 preferredTerm: rawQuery,
                 aliases: [],
@@ -57,7 +67,9 @@ final class LookupPipeline {
                 oneLine: draft.oneLine,
                 easyExplanation: draft.easyExplanation,
                 author: "ai",
-                provider: llmIdentifier
+                provider: llmIdentifier,
+                termLanguage: termLanguage,
+                explanationLanguage: explanationLang
             )
             // 출처는 개정본에 연결 — 앱이 실제로 가져온 자료만 저장.
             let revisionId = try await latestRevisionId(conceptId)
@@ -71,6 +83,7 @@ final class LookupPipeline {
             }
             let entries = try await service.lookupExact(rawQuery)
             if let entry = entries.first {
+                try? await service.recordLookup(rawQuery, conceptId: entry.conceptId, status: .hit)
                 return .success((entry, draft.sources))
             }
             return .failure(PipelineError.notSaved)

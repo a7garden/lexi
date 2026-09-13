@@ -1,14 +1,7 @@
 import Foundation
 import LexiCore
 
-/// 패널에서 펼쳐 보여줄 섹션. 섹션 버튼이 토글 (같은 버튼 재클릭 = 접기).
-public enum ExpandedSection: String, Equatable, CaseIterable, Sendable {
-    case details
-    case examples
-    case related
-}
-
-/// 즉시 보기 패널의 상태와 액션 콜백 (목업 #3~5).
+/// 즉시 보기 패널의 상태와 액션 콜백.
 /// 상태는 루트 파이프라인이 `update(_:)`로 주입하고, UI는 콜백으로 되묻는다.
 @MainActor
 public final class PanelModel: ObservableObject {
@@ -41,13 +34,10 @@ public final class PanelModel: ObservableObject {
 
     @Published public private(set) var state: PanelState
 
-    /// 현재 펼쳐진 섹션. nil = 모두 접힘.
-    @Published public var expandedSection: ExpandedSection?
-
     public var onRetry: (() -> Void)?
     public var onCancel: (() -> Void)?
     public var onEdit: (() -> Void)?
-    public var onFollowUp: (() -> Void)?
+    public var onSettings: (() -> Void)?
     /// 패널 닫기 — InstantPanelController가 주입.
     public var onClose: (() -> Void)?
 

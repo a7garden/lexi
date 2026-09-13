@@ -33,17 +33,21 @@ targets:
         NSHumanReadableCopyright: ""
         NSServices:
           - NSMenuItem:
-              default: Lexi에서 찾아보기
+              default: Lexi에게 물어보기
             NSMessage: lookupSelectedText
+            NSPortName: Lexi
+            NSRequiredContext: {}
+            NSServiceDescription: 선택한 텍스트를 Lexi로 조회하고, 없는 개념은 조사해 저장합니다.
             NSSendTypes:
               - public.utf8-plain-text
+              - NSStringPboardType
     settings:
       base:
         ARCHS: arm64
         PRODUCT_BUNDLE_IDENTIFIER: kr.garden.lexi.app
         PRODUCT_NAME: Lexi
         SWIFT_VERSION: "6.0"
-        MARKETING_VERSION: "1.0.0"
+        MARKETING_VERSION: "1.1.0"
         CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_STYLE: Manual
         DEVELOPMENT_TEAM: W5SAS95CBV
@@ -55,3 +59,27 @@ targets:
         Release:
           CODE_SIGN_IDENTITY: Developer ID Application
           CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+
+  LexiTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests/LexiAppTests
+    dependencies:
+      - target: Lexi
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: kr.garden.lexi.tests
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Lexi.app/Contents/MacOS/Lexi
+        BUNDLE_LOADER: $(TEST_HOST)
+
+schemes:
+  Lexi:
+    build:
+      targets:
+        Lexi: all
+    test:
+      targets:
+        - LexiTests

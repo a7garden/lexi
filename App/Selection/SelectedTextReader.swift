@@ -11,7 +11,7 @@ public enum SelectedTextError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .notTrusted:
-            return "선택한 텍스트를 읽으려면 접근성 권한이 필요합니다. 시스템 설정 > 개인정보 보호 및 보안 > 접근성에서 Lexi를 허용해 주세요."
+            return "선택한 텍스트를 읽으려면 손쉬운 사용 권한이 필요합니다. Lexi 설정 > 일반 > 접근 권한에서 Lexi를 허용해 주세요."
         case .selectionUnavailable(let appName):
             let app = appName ?? "현재 앱"
             return "\(app)에서 선택된 텍스트를 가져올 수 없습니다. 텍스트를 선택한 후 다시 시도해 주세요."

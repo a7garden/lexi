@@ -30,6 +30,17 @@ jobs:
       - name: Run LexiCore tests
         run: swift test --package-path Packages/LexiCore
 
+      - name: Test app services and settings
+        run: |
+          xcodebuild \
+            -project Lexi.xcodeproj \
+            -scheme Lexi \
+            -configuration Debug \
+            -destination 'platform=macOS,arch=arm64' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            test
+
       - name: Build app without signing
         run: |
           xcodebuild \

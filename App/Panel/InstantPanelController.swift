@@ -77,7 +77,7 @@ public final class InstantPanelController {
         for button in [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton] {
             panel.standardWindowButton(button)?.isHidden = true
         }
-        panel.onEscape = { [weak self] in self?.close() }
+        panel.onEscape = { [weak model] in model?.onClose?() }
         panel.contentView = NSHostingView(rootView: PanelContentView(model: model))
         self.panel = panel
         return panel

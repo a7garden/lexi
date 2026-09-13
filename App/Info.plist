@@ -32,14 +32,21 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Lexi에서 찾아보기</string>
+				<string>Lexi에게 물어보기</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>lookupSelectedText</string>
+			<key>NSPortName</key>
+			<string>Lexi</string>
+			<key>NSRequiredContext</key>
+			<dict/>
 			<key>NSSendTypes</key>
 			<array>
 				<string>public.utf8-plain-text</string>
+				<string>NSStringPboardType</string>
 			</array>
+			<key>NSServiceDescription</key>
+			<string>선택한 텍스트를 Lexi로 조회하고, 없는 개념은 조사해 저장합니다.</string>
 		</dict>
 	</array>
 </dict>

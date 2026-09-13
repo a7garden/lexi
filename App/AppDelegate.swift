@@ -1,211 +1,234 @@
 import AppKit
+import CoreServices
 import KeyboardShortcuts
 import LexiCore
 import SwiftUI
-@preconcurrency import UserNotifications
 
-/// 목업 #2의 글로벌 단축키. 기본값 ⌘D (클립보드 텍스트로 검색).
 extension KeyboardShortcuts.Name {
     static let lookupSelection = Self("lookupSelection", default: .init(.d, modifiers: [.command]))
 }
 
-/// 검색 없이 로컬 모델 지식만으로 초안을 만드는 경로(웹 조사 비허용 시).
-/// 이 경우 출처가 없으므로 결과는 "AI 초안 · 외부 출처 없음" 상태로 표시된다.
 struct NoSearch: SearchProvider {
     func search(_ query: String, limit: Int) async throws -> [SearchHit] { [] }
 }
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var statusItem: NSStatusItem?
+final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+    struct LibraryRequest: Identifiable {
+        let id = UUID()
+        var conceptID: Int64?
+        var newEntry = false
+    }
+
+    @Published var libraryRequest: LibraryRequest?
+    @Published var lookupNotice: String?
+    @Published private(set) var iconPlacement: AppIconPlacement
+    var showLibraryWindow: (() -> Void)?
+    var showSettingsWindow: (() -> Void)?
+
+    private let defaults: UserDefaults
     private var panelController: InstantPanelController?
     private var panelModel: PanelModel?
     private var pipeline: LookupPipeline?
+    private var engineSettings: EngineSettings?
     private var researchTask: Task<Void, Never>?
+    private var lastQuery = ""
+
+    override init() {
+        defaults = .standard
+        iconPlacement = AppIconPlacement(
+            stored: UserDefaults.standard.string(forKey: AppIconPlacement.storageKey))
+        super.init()
+    }
+
+    init(defaults: UserDefaults) {
+        self.defaults = defaults
+        iconPlacement = AppIconPlacement(stored: defaults.string(forKey: AppIconPlacement.storageKey))
+        super.init()
+    }
+
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        applyActivationPolicy()
+        NSApp.servicesProvider = self
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        setUpEngine()
-        setUpStatusItem()
         setUpPanel()
-        setUpShortcuts()
-        NSApp.servicesProvider = self
-
-        if let demo = ProcessInfo.processInfo.environment["LEXI_DEMO_QUERY"], !demo.isEmpty {
-            Task { await runLookup(demo) }
+        KeyboardShortcuts.onKeyUp(for: .lookupSelection) { [weak self] in
+            self?.lookupFromSelection()
+        }
+        Self.refreshServices()
+        if let query = ProcessInfo.processInfo.environment["LEXI_DEMO_QUERY"], !query.isEmpty {
+            startLookup(query)
         }
     }
 
-    // MARK: - 생성 엔진 (설정 연동)
+    static func refreshServices() {
+        LSRegisterURL(Bundle.main.bundleURL as CFURL, true)
+        NSUpdateDynamicServices()
+    }
 
-    private func setUpEngine() {
-        guard let db = try? AppDatabase.makeDefault() else { return }
-        try? db.migrate()
-        let service = LookupService(database: db)
+    func updateIconPlacement(_ placement: AppIconPlacement) {
+        guard iconPlacement != placement else { return }
+        iconPlacement = placement
+        defaults.set(placement.rawValue, forKey: AppIconPlacement.storageKey)
+        applyActivationPolicy()
+    }
 
-        let defaults = UserDefaults.standard
-        let modelID = defaults.string(forKey: "mlxModelID") ?? "mlx-community/Qwen3-4B-4bit"
-        let webAllowed = defaults.bool(forKey: "webResearchAllowed")
+    func setMenuBarIconVisible(_ isVisible: Bool) {
+        updateIconPlacement(iconPlacement.settingMenuBarIconVisible(isVisible))
+    }
 
-        // 내장 MLX(Apple Silicon)가 기본 생성 엔진. 모델 파일은 첫 생성 시 내려받는다.
-        let provider = MLXProvider(config: .init(modelID: modelID))
+    private func applyActivationPolicy() {
+        NSApp.setActivationPolicy(iconPlacement.activationPolicy)
+    }
+
+    private func prepareEngine() async throws {
+        let settings = EngineSettings()
+        guard pipeline == nil || engineSettings != settings else { return }
+        // DB 열기·마이그레이션(v2 되메우기 포함)은 라이브러리가 클수록 오래 걸린다.
+        // MainActor 밖에서 수행해 첫 조회가 패널을 멈추지 않게 한다.
+        let db = try await Task.detached(priority: .userInitiated) {
+            let db = try AppDatabase.makeDefault()
+            try db.migrate()
+            return db
+        }.value
+        let provider = MLXProvider(config: .init(modelID: settings.modelID))
         let research = WebResearchService(
-            search: webAllowed ? DuckDuckGoSearch() : NoSearch(),
+            search: settings.webResearchAllowed ? DuckDuckGoSearch() : NoSearch(),
             llm: provider,
             fetcher: PageFetcher()
         )
-        pipeline = LookupPipeline(service: service, research: research, llmIdentifier: provider.identifier)
+        pipeline = LookupPipeline(
+            service: LookupService(database: db),
+            research: research,
+            llmIdentifier: provider.identifier,
+            explanationLanguage: settings.explanationLanguage
+        )
+        engineSettings = settings
     }
-
-    // MARK: - 패널
 
     private func setUpPanel() {
         let model = PanelModel()
         panelModel = model
         panelController = InstantPanelController(model: model)
-        wirePanelActions()
-    }
-
-    private func wirePanelActions() {
-        guard let model = panelModel else { return }
         model.onRetry = { [weak self] in
-            guard let self, let query = self.pipeline?.lastQuery, !query.isEmpty else { return }
-            self.researchTask?.cancel()
-            self.researchTask = Task { await self.runLookup(query) }
+            guard let self else { return }
+            self.startLookup(self.lastQuery)
         }
         model.onCancel = { [weak self] in
             self?.researchTask?.cancel()
             self?.panelController?.close()
         }
-        model.onEdit = { [weak self] in self?.openLibrary() }
-        model.onFollowUp = nil  // 추가 질문(패널 확장)은 후속 마일스톤
-    }
-
-    private func setUpShortcuts() {
-        KeyboardShortcuts.onKeyUp(for: .lookupSelection) { [weak self] in
-            self?.lookupFromSelection()
+        model.onClose = model.onCancel
+        model.onEdit = { [weak self] in
+            guard let self else { return }
+            let conceptID: Int64?
+            switch self.panelModel?.state {
+            case .hit(let entry), .result(let entry, _, _): conceptID = entry.conceptId
+            default: conceptID = nil
+            }
+            self.panelController?.close()
+            self.openLibrary(conceptID: conceptID)
         }
+        model.onSettings = { [weak self] in self?.openSettings() }
     }
-
-    // MARK: - 조회 흐름
 
     private func lookupFromSelection() {
-        guard SelectedTextReader.isAccessibilityGranted(promptIfNeeded: true) else { return }
         do {
             let text = try SelectedTextReader.readSelectedText()
-            Task { await runLookup(text) }
+            startLookup(text)
         } catch {
-            // 설계 규칙: 읽기 실패 시 클립보드로 대체 조회하지 않는다. 사전 창을 연다.
+            if (error as? SelectedTextError) == .notTrusted {
+                _ = SelectedTextReader.isAccessibilityGranted(promptIfNeeded: true)
+            }
+            lookupNotice = error.localizedDescription
             openLibrary()
         }
     }
 
-    private func runLookup(_ query: String) async {
-        guard let pipeline, let model = panelModel else { return }
+    /// Every entry point owns one cancellable lookup. A late result cannot replace a newer query.
+    func startLookup(_ query: String) {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        researchTask?.cancel()
+        lastQuery = trimmed
+        if panelModel == nil { setUpPanel() }
+        researchTask = Task { await runLookup(trimmed) }
+    }
 
-        // 1차: 사전 정확 검색 — AI 실행 없음.
-        let entries = await pipeline.lookup(trimmed)
+    private func runLookup(_ query: String) async {
+        guard let model = panelModel else { return }
+        do {
+            try await prepareEngine()
+        } catch {
+            model.update(.failed(query: query, message: error.localizedDescription))
+            panelController?.show(near: NSEvent.mouseLocation)
+            return
+        }
+        guard let pipeline else { return }
+        let entries = await pipeline.lookup(query)
+        guard !Task.isCancelled else { return }
+        NotificationCenter.default.post(name: .lexiLibraryChanged, object: nil)
         if let hit = entries.first {
             model.update(.hit(hit))
             panelController?.show(near: NSEvent.mouseLocation)
             return
         }
-
-        // 2차: 조사·생성. 엔진이 없으면 억지로 정의를 만들지 않는다(미완료 기록은 이미 남김).
-        guard pipeline.research != nil else {
-            model.update(.failed(query: trimmed, message: "생성 엔진이 설정되지 않았어요."))
-            panelController?.show(near: NSEvent.mouseLocation)
-            return
-        }
-
-        model.update(.researching(query: trimmed))
+        model.update(.researching(query: query))
         panelController?.show(near: NSEvent.mouseLocation)
-
-        let result = await pipeline.researchAndSave(trimmed)
+        let result = await pipeline.researchAndSave(query)
         guard !Task.isCancelled else { return }
         switch result {
         case .success(let (entry, sources)):
-            let panelSources = sources.map {
+            model.update(.result(entry, sources: sources.map {
                 PanelModel.PanelSource(title: $0.title, url: $0.url, excerpt: $0.excerpt)
-            }
-            model.update(.result(entry, sources: panelSources, saved: true))
-            notifySaved(term: entry.preferredTerm)
+            }, saved: true))
+            NotificationCenter.default.post(name: .lexiLibraryChanged, object: nil)
         case .failure(let error):
-            model.update(.failed(query: trimmed, message: error.localizedDescription))
+            model.update(.failed(query: query, message: error.localizedDescription))
         }
     }
 
-    // MARK: - 저장 알림 (목업 #10)
-
-    private func notifySaved(term: String) {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
-            guard granted else { return }
-            let content = UNMutableNotificationContent()
-            content.title = "새 항목이 저장되었습니다"
-            content.body = "'\(term)'가 사전에 추가되었어요."
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-            center.add(request)
+    func searchClipboard() {
+        guard let text = NSPasteboard.general.string(forType: .string),
+              !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            lookupNotice = "클립보드에 텍스트가 없어요. 복사한 뒤 다시 시도하거나 개념을 직접 추가하세요."
+            openLibrary()
+            return
         }
+        startLookup(text)
     }
 
-    // MARK: - 메뉴바 (목업 #9)
-
-    private func setUpStatusItem() {
-        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        let menuBarImage = NSImage(named: "MenuBarIcon")
-            ?? NSImage(systemSymbolName: "character.book.closed", accessibilityDescription: "Lexi")
-        menuBarImage?.isTemplate = true
-        menuBarImage?.size = NSSize(width: 18, height: 18)
-        item.button?.image = menuBarImage
-        item.button?.imageScaling = .scaleProportionallyDown
-        item.button?.setAccessibilityLabel("Lexi")
-        let menu = NSMenu()
-        let searchItem = menu.addItem(withTitle: "클립보드 텍스트로 검색", action: #selector(searchClipboard), keyEquivalent: "d")
-        searchItem.target = self
-        let openItem = menu.addItem(withTitle: "사전 열기", action: #selector(openLibraryAction), keyEquivalent: "n")
-        openItem.target = self
-        menu.addItem(.separator())
-        let settingsItem = menu.addItem(withTitle: "설정…", action: #selector(openSettings), keyEquivalent: ",")
-        settingsItem.target = self
-        menu.addItem(.separator())
-        menu.addItem(withTitle: "Lexi 종료", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
-        item.menu = menu
-        statusItem = item
+    func openLibrary(conceptID: Int64? = nil) {
+        if let conceptID { libraryRequest = LibraryRequest(conceptID: conceptID) }
+        showLibraryWindow?()
+        NSApp.activate(ignoringOtherApps: true)
     }
 
-    @objc private func searchClipboard() {
-        guard let text = NSPasteboard.general.string(forType: .string)?
-            .trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
-        Task { await runLookup(text) }
-    }
-
-    @objc private func openLibraryAction() {
+    func openNewEntry() {
+        libraryRequest = LibraryRequest(newEntry: true)
         openLibrary()
     }
 
-    func openLibrary() {
+    func openSettings() {
+        showSettingsWindow?()
         NSApp.activate(ignoringOtherApps: true)
-        let window = NSApp.windows.first { $0.canBecomeMain && $0.title == "Lexi" }
-        window?.makeKeyAndOrderFront(nil)
     }
 
-    @objc private func openSettings() {
-        NSApp.activate(ignoringOtherApps: true)
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-    }
-
-    // MARK: - Services 메뉴 (목업 #1)
-
-    /// 우클릭 → 서비스 → "Lexi에서 찾아보기". NSSendTypes로 선택 텍스트를 받는다.
+    /// Called with the service pasteboard, independently of Accessibility permission or the clipboard.
     @objc func lookupSelectedText(
         _ pboard: NSPasteboard,
-        userData: String,
-        error: AutoreleasingUnsafeMutablePointer<NSString>
+        userData: String?,
+        error: AutoreleasingUnsafeMutablePointer<NSString?>
     ) {
-        guard let text = pboard.string(forType: .string)?
-            .trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return }
-        Task { await runLookup(text) }
+        let text = (pboard.string(forType: .string)
+            ?? pboard.string(forType: NSPasteboard.PasteboardType("NSStringPboardType")))?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let text, !text.isEmpty else {
+            error.pointee = "먼저 조회할 텍스트를 선택해 주세요." as NSString
+            return
+        }
+        startLookup(text)
     }
 }

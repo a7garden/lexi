@@ -318,6 +318,29 @@ private func makeStubbedSession() -> URLSession {
         #expect(user.contains("근거로 삼을 자료가 제공되지 않았습니다"))
         #expect(user.contains("맥락:") == false)
     }
+    @Test func 설명_언어와_용어_언어를_프롬프트에_지시한다() async throws {
+        let llm = Doubles.RecordingLLM(response: """
+        {"oneLine": "An embedding represents meaning as a vector", "easyExplanation": "Text is mapped to numbers.", "examples": [], "sources": []}
+        """)
+        let service = WebResearchService(
+            search: Doubles.StaticSearch(hits: []),
+            llm: llm,
+            fetcher: Doubles.KeyedFetcher(pages: [:])
+        )
+
+        _ = try await service.research(
+            term: "embedding", context: nil,
+            termLanguage: .english, explanationLanguage: .english)
+        #expect(llm.capturedSystem?.contains("English") == true)
+        #expect(llm.capturedUser?.contains("용어 언어: English") == true)
+
+        // 기본값은 기존처럼 한국어 설명 지시다.
+        _ = try await service.research(term: "임베딩", context: nil)
+        #expect(llm.capturedSystem?.contains("한국어") == true)
+        #expect(llm.capturedSystem?.contains("English") == false)
+        #expect(llm.capturedUser?.contains("용어 언어:") == false)
+    }
+
 }
 
 // MARK: - DuckDuckGo / PageFetcher (URLProtocol 로컬 스텁, 실제 네트워크 없음)

@@ -11,7 +11,7 @@ public struct LibraryCounts: Sendable, Equatable {
     public var aiGenerated: Int
     /// 최신 개정본 author가 user인 개념 수.
     public var userEdited: Int
-    /// lookupRecord 총 행수(hit + miss).
+    /// 최근 조회 카테고리 개념 수: 조회 기록이 하나라도 있는 서로 다른 개념 수.
     public var recentLookups: Int
 
     public init(all: Int, favorites: Int, aiGenerated: Int, userEdited: Int, recentLookups: Int) {
@@ -21,6 +21,20 @@ public struct LibraryCounts: Sendable, Equatable {
         self.userEdited = userEdited
         self.recentLookups = recentLookups
     }
+}
+
+/// 라이브러리 목록 카테고리 필터.
+public enum LibraryFilter: String, CaseIterable, Sendable {
+    /// 전체.
+    case all
+    /// 조회 기록이 있는 개념(최근 조회 순).
+    case recent
+    /// 즐겨찾기.
+    case favorites
+    /// 최신 개정본 author가 ai인 개념.
+    case aiGenerated
+    /// 최신 개정본 author가 user인 개념.
+    case userEdited
 }
 
 /// 라이브러리 목록 한 줄: 개념 + 최신 개정본 요약 + 조회 횟수.
@@ -85,17 +99,24 @@ public struct HistoryItem: Sendable, Equatable, Identifiable {
     }
 }
 
+/// 의미 검색용 파생 문서. DB 정본을 수정하거나 외부 포맷에 기록하지 않는다.
+struct SemanticLibraryDocument: Sendable {
+    var item: LibraryItem
+    var sourceText: String
+}
+
 // MARK: - 라이브러리 조회·관리
 
 extension LookupService {
-    /// 부분일치 필터. 검색어 자리 3개(표제어, 한 줄 요약, 별칭).
+    /// 검색 조건(자리표시자 3개: 표제어, 한 줄 요약, 별칭). 카테고리 필터와 AND로 결합된다.
     private static let searchFilter = """
-        WHERE c.preferredTerm LIKE ? ESCAPE '\\'
-           OR d.oneLine LIKE ? ESCAPE '\\'
-           OR EXISTS (SELECT 1 FROM alias a WHERE a.conceptId = c.id AND a.text LIKE ? ESCAPE '\\')
+        c.preferredTerm LIKE ? ESCAPE '\\'
+        OR d.oneLine LIKE ? ESCAPE '\\'
+        OR EXISTS (SELECT 1 FROM alias a WHERE a.conceptId = c.id AND a.text LIKE ? ESCAPE '\\')
         """
 
-    /// 라이브러리 요약 카운트. ai/user 구분은 **최신 개정본** author 기준이다.
+    /// 라이브러리 요약 카운트. ai/user 구분은 **최신 개정본** author 기준이고,
+    /// recentLookups는 listLibrary(filter: .recent)에 나올 개념 수와 같다.
     public func libraryCounts() async throws -> LibraryCounts {
         try await database.writer.read { db in
             LibraryCounts(
@@ -109,14 +130,23 @@ extension LookupService {
                     SELECT COUNT(*) FROM concept c
                     WHERE (SELECT author FROM definitionRevision WHERE conceptId = c.id ORDER BY id DESC LIMIT 1) = 'user'
                     """) ?? 0,
-                recentLookups: try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM lookupRecord") ?? 0
+                recentLookups: try Int.fetchOne(db, sql: """
+                    SELECT COUNT(*) FROM concept c
+                    WHERE EXISTS (SELECT 1 FROM lookupRecord WHERE conceptId = c.id)
+                    """) ?? 0
             )
         }
     }
 
     /// 라이브러리 목록. 검색어가 있으면 표제어·별칭·한 줄 요약 부분일치(LIKE, ASCII 대소문자 무시).
-    /// 검색어의 %, _, \는 와일드카드가 아니라 문자 그대로 취급한다. 정렬은 updatedAt DESC.
-    public func listLibrary(search: String = "", limit: Int = 500) async throws -> [LibraryItem] {
+    /// 검색어의 %, _, \는 와일드카드가 아니라 문자 그대로 취급한다.
+    /// 카테고리 필터는 검색과 AND로 결합되고, limit은 필터 적용 **후**에 잘린다.
+    /// 정렬: recent는 개념별 최신 lookedUpAt DESC(동률이면 id DESC), 그 외 updatedAt DESC, id DESC.
+    public func listLibrary(
+        search: String = "",
+        filter: LibraryFilter = .all,
+        limit: Int = 500
+    ) async throws -> [LibraryItem] {
         let term = normalize(search)
         let baseSQL = """
             SELECT c.id AS conceptId, c.preferredTerm, c.field, c.isFavorite,
@@ -127,19 +157,44 @@ extension LookupService {
               ON d.conceptId = c.id
              AND d.id = (SELECT MAX(id) FROM definitionRevision WHERE conceptId = c.id)
             """
-        let tail = " ORDER BY c.updatedAt DESC, c.id DESC LIMIT ?"
+        // 최신 개정본 author 기준. libraryCounts의 aiGenerated/userEdited와 같은 식이다.
+        let latestAuthor =
+            "(SELECT author FROM definitionRevision WHERE conceptId = c.id ORDER BY id DESC LIMIT 1)"
+        var clauses: [String] = []
+        var recentJoin = ""
+        var orderBy = " ORDER BY c.updatedAt DESC, c.id DESC"
+        let pattern = term.isEmpty ? nil : "%" + likeEscaped(term) + "%"
+        if pattern != nil {
+            clauses.append("(" + Self.searchFilter + ")")
+        }
+        switch filter {
+        case .all:
+            break
+        case .recent:
+            // 조회 기록이 있는 서로 다른 개념만 남기고, 개념별 최신 조회 시각 순으로 정렬한다.
+            recentJoin = """
+                JOIN (SELECT conceptId, MAX(lookedUpAt) AS latestLookedUpAt
+                      FROM lookupRecord WHERE conceptId IS NOT NULL
+                      GROUP BY conceptId) lr ON lr.conceptId = c.id
+                """
+            orderBy = " ORDER BY lr.latestLookedUpAt DESC, c.id DESC"
+        case .favorites:
+            clauses.append("c.isFavorite = 1")
+        case .aiGenerated:
+            clauses.append(latestAuthor + " = 'ai'")
+        case .userEdited:
+            clauses.append(latestAuthor + " = 'user'")
+        }
+        let whereSQL = clauses.isEmpty ? "" : " WHERE " + clauses.joined(separator: " AND ")
+        let sql = baseSQL + recentJoin + whereSQL + orderBy + " LIMIT ?"
+
         return try await database.writer.read { db in
-            let rows: [Row]
-            if term.isEmpty {
-                rows = try Row.fetchAll(db, sql: baseSQL + tail, arguments: [limit])
-            } else {
-                let pattern = "%" + likeEscaped(term) + "%"
-                rows = try Row.fetchAll(
-                    db,
-                    sql: baseSQL + Self.searchFilter + tail,
-                    arguments: [pattern, pattern, pattern, limit]
-                )
+            var statementArguments = StatementArguments()
+            if let pattern {
+                statementArguments += [pattern, pattern, pattern]
             }
+            statementArguments += [limit]
+            let rows = try Row.fetchAll(db, sql: sql, arguments: statementArguments)
             return rows.map { row in
                 LibraryItem(
                     id: row["conceptId"],
@@ -156,13 +211,67 @@ extension LookupService {
         }
     }
 
+    /// 현재 필터에 속한 항목의 표제어·분야·별칭·최신 설명을 임베딩 입력으로 투영한다.
+    /// 일반 검색과 달리 원문 순위나 저장 상태를 바꾸지 않는 읽기 전용 파생 데이터다.
+    func semanticLibraryDocuments(
+        filter: LibraryFilter = .all,
+        limit: Int = 500
+    ) async throws -> [SemanticLibraryDocument] {
+        let items = try await listLibrary(search: "", filter: filter, limit: limit)
+        guard !items.isEmpty else { return [] }
+
+        return try await database.writer.read { db in
+            let placeholders = Array(repeating: "?", count: items.count).joined(separator: ",")
+            var arguments = StatementArguments()
+            for item in items { arguments += [item.conceptId] }
+
+            let aliasRows = try Row.fetchAll(
+                db,
+                sql: "SELECT conceptId, text FROM alias WHERE conceptId IN (\(placeholders)) ORDER BY conceptId, id",
+                arguments: arguments
+            )
+            var aliasesByConcept: [Int64: [String]] = [:]
+            for row in aliasRows {
+                let conceptID: Int64 = row["conceptId"]
+                aliasesByConcept[conceptID, default: []].append(row["text"])
+            }
+
+            let explanationRows = try Row.fetchAll(
+                db,
+                sql: """
+                    SELECT d.conceptId, d.easyExplanation
+                    FROM definitionRevision d
+                    WHERE d.conceptId IN (\(placeholders))
+                      AND d.id = (SELECT MAX(id) FROM definitionRevision WHERE conceptId = d.conceptId)
+                    """,
+                arguments: arguments
+            )
+            let explanations = Dictionary(uniqueKeysWithValues: explanationRows.map { row in
+                (row["conceptId"] as Int64, row["easyExplanation"] as String)
+            })
+
+            return items.map { item in
+                var parts = ["표제어: \(item.preferredTerm)"]
+                if let field = item.field, !field.isEmpty { parts.append("분야: \(field)") }
+                let aliases = (aliasesByConcept[item.conceptId] ?? [])
+                    .filter { $0 != item.preferredTerm }
+                if !aliases.isEmpty { parts.append("별칭: \(aliases.joined(separator: ", "))") }
+                if let oneLine = item.oneLine, !oneLine.isEmpty { parts.append("한 줄 정의: \(oneLine)") }
+                if let easy = explanations[item.conceptId], !easy.isEmpty { parts.append("쉬운 설명: \(easy)") }
+                return SemanticLibraryDocument(item: item, sourceText: parts.joined(separator: "\n"))
+            }
+        }
+    }
+
     /// 개념 상세: 최신 개정본 entry + 그 개정본의 출처(retrievedAt DESC) + 조회 기록(최신순, 최대 100).
     /// 개념이 없으면 nil.
     public func entryDetail(conceptId: Int64) async throws -> (entry: DictionaryEntry, sources: [SourceItem], history: [HistoryItem])? {
         try await database.writer.read { db in
             let row = try Row.fetchOne(db, sql: """
                 SELECT c.id AS conceptId, c.preferredTerm, c.field, c.isFavorite,
-                       d.id AS revisionId, d.oneLine, d.easyExplanation, d.author
+                       c.lang AS termLang,
+                       d.id AS revisionId, d.oneLine, d.easyExplanation, d.author,
+                       d.lang AS revisionLang
                 FROM concept c
                 LEFT JOIN definitionRevision d
                   ON d.conceptId = c.id
@@ -175,10 +284,12 @@ extension LookupService {
                 preferredTerm: row["preferredTerm"],
                 field: row["field"],
                 isFavorite: row["isFavorite"],
+                termLanguage: EntryLanguage.decode(row["termLang"]),
                 revisionId: row["revisionId"],
                 oneLine: row["oneLine"],
                 easyExplanation: row["easyExplanation"],
-                author: row["author"]
+                author: row["author"],
+                explanationLanguage: EntryLanguage.decode(row["revisionLang"])
             )
             let revisionId: Int64? = row["revisionId"]
             let sources: [SourceItem]
@@ -221,11 +332,18 @@ extension LookupService {
     }
 
     /// 사용자 개정본을 추가한다(기존 개정본을 덮어쓰지 않음) + concept.updatedAt 갱신.
-    public func saveUserRevision(conceptId: Int64, oneLine: String, easyExplanation: String) async throws {
+    /// 언어를 주지 않으면 작성 텍스트에서 추정한다.
+    public func saveUserRevision(
+        conceptId: Int64,
+        oneLine: String,
+        easyExplanation: String,
+        language: EntryLanguage? = nil
+    ) async throws {
+        let lang = language ?? LanguageDetector.detect(oneLine + " " + easyExplanation)
         _ = try await database.writer.write { db in
             try db.execute(
-                sql: "INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author) VALUES (?, ?, ?, 'user')",
-                arguments: [conceptId, oneLine, easyExplanation]
+                sql: "INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author, lang, createdAt) VALUES (?, ?, ?, 'user', ?, ?)",
+                arguments: [conceptId, oneLine, easyExplanation, lang?.rawValue, Date.now]
             )
             try db.execute(
                 sql: "UPDATE concept SET updatedAt = ? WHERE id = ?",

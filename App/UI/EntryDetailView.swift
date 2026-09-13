@@ -1,10 +1,10 @@
 import SwiftUI
 import LexiCore
 
-/// 항목 상세 (목업 #6). 헤더(표제어·즐겨찾기·칩) + 설명/출처/히스토리 탭, 툴바 삭제.
+/// 개념의 설명·출처·조회 기록과 편집 동작.
 struct EntryDetailView: View {
     let payload: LibraryViewModel.DetailPayload
-    let viewModel: LibraryViewModel
+    @ObservedObject var viewModel: LibraryViewModel
 
     private enum Tab: Hashable {
         case explanation
@@ -21,12 +21,12 @@ struct EntryDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-                .padding()
+                .padding(24)
             Divider()
             Picker("보기", selection: $tab) {
                 Text("설명").tag(Tab.explanation)
                 Text("출처").tag(Tab.sources)
-                Text("히스토리").tag(Tab.history)
+                Text("조회 기록").tag(Tab.history)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
@@ -39,6 +39,10 @@ struct EntryDetailView: View {
             }
         }
         .toolbar {
+            ToolbarItem {
+                Button("설명 수정", systemImage: "square.and.pencil") { isShowingEditSheet = true }
+                    .help("이 개념의 설명 수정")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button(role: .destructive) {
                     isShowingDeleteConfirmation = true
@@ -63,15 +67,25 @@ struct EntryDetailView: View {
             }
             Button("취소", role: .cancel) {}
         } message: {
-            Text("항목과 함께 저장된 수정·출처·기록이 사라져요. 되돌릴 수 없어요.")
+            Text("개념과 설명·출처가 삭제됩니다. 조회 기록은 남지만 개념과의 연결은 해제돼요. 되돌릴 수 없어요.")
         }
     }
 
     private var header: some View {
-        HStack(spacing: 10) {
-            Text(payload.entry.preferredTerm)
-                .font(.largeTitle.weight(.bold))
-                .lineLimit(2)
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 6) {
+                    if let field = payload.entry.field, !field.isEmpty { chip(field, color: .secondary) }
+                    chip(payload.entry.author == "ai" ? "AI 초안" : "직접 작성", color: payload.entry.author == "ai" ? .blue : .green)
+                    if let language = payload.entry.explanationLanguage ?? payload.entry.termLanguage {
+                        chip(language.koreanName, color: .indigo)
+                    }
+                }
+                Text(payload.entry.preferredTerm)
+                    .font(.largeTitle.weight(.bold))
+                    .lineLimit(3)
+                    .textSelection(.enabled)
+            }
             Spacer()
             Button {
                 Task {
@@ -85,19 +99,10 @@ struct EntryDetailView: View {
                     .font(.title3)
                     .foregroundStyle(payload.entry.isFavorite ? Color.yellow : Color.secondary)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
+            .accessibilityLabel(payload.entry.isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가")
             .help(payload.entry.isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가")
 
-            if let field = payload.entry.field, !field.isEmpty {
-                chip(field, color: .secondary)
-            }
-            if let author = payload.entry.author {
-                switch author {
-                case "ai": chip("AI", color: .blue)
-                case "user": chip("내가 수정함", color: .green)
-                default: chip(author, color: .secondary)
-                }
-            }
         }
     }
 
@@ -154,9 +159,9 @@ struct EntryDetailView: View {
     private var sourcesTab: some View {
         if payload.sources.isEmpty {
             ContentUnavailableView(
-                "출처 없음 — AI 초안",
+                payload.entry.author == "ai" ? "외부 출처 없는 AI 초안" : "저장된 출처가 없어요",
                 systemImage: "doc.text.magnifyingglass",
-                description: Text("웹 출처 확인 없이 작성된 AI 초안이에요.")
+                description: Text(payload.entry.author == "ai" ? "로컬 모델이 작성한 설명이에요. 필요한 경우 내용을 검토하고 수정해 주세요." : "직접 작성한 설명에는 연결된 웹 출처가 없어요.")
             )
         } else {
             ScrollView {
@@ -223,14 +228,15 @@ struct EntryDetailView: View {
 /// 한 줄 정의 + 쉬운 설명을 고치는 시트. 저장은 saveRevision으로 이어진다.
 private struct RevisionEditSheet: View {
     let entry: DictionaryEntry
-    let onSave: (String, String) async -> Void
+    let onSave: (String, String) async -> String?
 
     @Environment(\.dismiss) private var dismiss
     @State private var oneLine: String
     @State private var easyExplanation: String
     @State private var isSaving = false
+    @State private var saveError: String?
 
-    init(entry: DictionaryEntry, onSave: @escaping (String, String) async -> Void) {
+    init(entry: DictionaryEntry, onSave: @escaping (String, String) async -> String?) {
         self.entry = entry
         self.onSave = onSave
         _oneLine = State(initialValue: entry.oneLine ?? "")
@@ -255,14 +261,19 @@ private struct RevisionEditSheet: View {
             .formStyle(.grouped)
             .padding()
 
+            if let saveError {
+                Text(saveError)
+                    .foregroundStyle(.red).font(.callout).padding(.horizontal)
+            }
             HStack {
                 Spacer()
-                Button("취소", role: .cancel) { dismiss() }
+                Button("취소", role: .cancel) { dismiss() }.disabled(isSaving)
                 Button("저장") {
                     isSaving = true
                     Task {
-                        await onSave(oneLine, easyExplanation)
-                        dismiss()
+                        let error = await onSave(oneLine, easyExplanation)
+                        isSaving = false
+                        if let error { saveError = error } else { dismiss() }
                     }
                 }
                 .keyboardShortcut(.defaultAction)
@@ -270,7 +281,8 @@ private struct RevisionEditSheet: View {
             }
             .padding([.horizontal, .bottom])
         }
-        .frame(width: 460)
+        .frame(width: 520)
+        .interactiveDismissDisabled(isSaving)
         .navigationTitle("설명 수정")
     }
 }

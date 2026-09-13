@@ -50,6 +50,19 @@ import Foundation
         }
     }
 
+    /// 조회 기록을 지정 시각으로 직접 넣는다(recordLookup은 Date.now라 정렬 검증에 못 쓴다).
+    private func insertLookup(
+        _ service: LookupService, conceptId: Int64?, query: String,
+        status: String = "hit", at date: Date
+    ) async throws {
+        try await service.database.writer.write { db in
+            try db.execute(
+                sql: "INSERT INTO lookupRecord (query, conceptId, status, lookedUpAt) VALUES (?, ?, ?, ?)",
+                arguments: [query, conceptId, status, date]
+            )
+        }
+    }
+
     @Test func counts는_저장_상태를_정확히_집계한다() async throws {
         let service = try makeService()
         let aiOnly = try await service.saveConcept(
@@ -73,8 +86,9 @@ import Foundation
         try await service.recordLookup("없는 질문", conceptId: nil, status: .miss)
 
         let counts = try await service.libraryCounts()
-        // 최신 개정본 기준: RAG=ai, FTS5=user(수정됨), 토큰=user
-        #expect(counts == LibraryCounts(all: 3, favorites: 1, aiGenerated: 1, userEdited: 2, recentLookups: 2))
+        // 최신 개정본 기준: RAG=ai, FTS5=user(수정됨), 토큰=user.
+        // recentLookups는 조회 기록이 있는 개념 수: hit 1건(RAG)만 해당, 개념 없는 miss는 제외.
+        #expect(counts == LibraryCounts(all: 3, favorites: 1, aiGenerated: 1, userEdited: 2, recentLookups: 1))
     }
 
     private func insertSource(
@@ -238,5 +252,108 @@ import Foundation
 
         // 없는 개념 삭제도 오류 없이 통과
         try await service.deleteConcept(conceptId: 12345)
+    }
+
+    // MARK: - 카테고리 필터
+
+    @Test func listLibrary는_카테고리별로_걸러서_돌려준다() async throws {
+        let (service, rag, fts, tok) = try await seedLibrary()
+
+        // all: updatedAt DESC(시드 고정: fts > tok > rag)
+        #expect(try await service.listLibrary(filter: .all).map(\.id) == [fts, tok, rag])
+        // aiGenerated: 최신 개정본 author == ai. fts는 user 개정본이 최신이라 제외.
+        #expect(try await service.listLibrary(filter: .aiGenerated).map(\.id) == [rag])
+        // userEdited: 최신 개정본 author == user
+        #expect(try await service.listLibrary(filter: .userEdited).map(\.id) == [fts, tok])
+        // favorites / recent: 조건에 해당하는 개념이 아직 없다
+        #expect(try await service.listLibrary(filter: .favorites).isEmpty)
+        #expect(try await service.listLibrary(filter: .recent).isEmpty)
+
+        try await service.setFavorite(conceptId: tok, true)
+        #expect(try await service.listLibrary(filter: .favorites).map(\.id) == [tok])
+        try await service.recordLookup("토큰 질문", conceptId: tok, status: .hit)
+        #expect(try await service.listLibrary(filter: .recent).map(\.id) == [tok])
+    }
+
+    @Test func listLibrary_recent는_최신조회순이고_조회당_한번만_나온다() async throws {
+        let (service, rag, fts, tok) = try await seedLibrary()
+
+        // tok: 같은 개념 두 번(과거) / fts: 중간 / rag: 가장 최근
+        try await insertLookup(service, conceptId: tok, query: "토큰 오래된 질문", at: base.addingTimeInterval(100))
+        try await insertLookup(service, conceptId: fts, query: "FTS 질문", at: base.addingTimeInterval(150))
+        try await insertLookup(service, conceptId: tok, query: "토큰 두 번째 질문", at: base.addingTimeInterval(200))
+        try await insertLookup(service, conceptId: rag, query: "RAG 질문", at: base.addingTimeInterval(300))
+
+        // 최신 lookedUpAt DESC: rag(300) > tok(200) > fts(150). tok은 두 번 조회돼도 한 번만.
+        #expect(try await service.listLibrary(filter: .recent).map(\.id) == [rag, tok, fts])
+    }
+
+    @Test func listLibrary_recent는_조회시각이_같으면_id가_큰_것부터_돌려준다() async throws {
+        let (service, rag, fts, tok) = try await seedLibrary()
+        let sameTime = base.addingTimeInterval(500)
+
+        for (conceptId, query) in [(rag, "RAG"), (fts, "FTS5"), (tok, "tok")] {
+            try await insertLookup(service, conceptId: conceptId, query: query, at: sameTime)
+        }
+
+        // 조회 시각 동률이면 id DESC: tok(3) > fts(2) > rag(1)
+        #expect(try await service.listLibrary(filter: .recent).map(\.id) == [tok, fts, rag])
+    }
+
+    @Test func recent와_recentLookups는_삭제된_개념과_개념없는_기록을_세지_않는다() async throws {
+        let (service, rag, _, _) = try await seedLibrary()
+
+        try await service.recordLookup("rag 질문", conceptId: rag, status: .hit)
+        try await service.recordLookup("개념 없는 질문", conceptId: nil, status: .miss)
+        #expect(try await service.listLibrary(filter: .recent).map(\.id) == [rag])
+        #expect(try await service.libraryCounts().recentLookups == 1)
+
+        // 개념 삭제 → 기록 행은 남지만(conceptId NULL) recent에서는 사라진다.
+        try await service.deleteConcept(conceptId: rag)
+        #expect(try await service.listLibrary(filter: .recent).isEmpty)
+        #expect(try await service.libraryCounts().recentLookups == 0)
+    }
+
+    @Test func listLibrary는_검색과_카테고리를_AND로_결합한다() async throws {
+        let (service, rag, fts, _) = try await seedLibrary()
+
+        // "검색"은 rag(별칭)와 fts(최신 요약)에 모두 걸린다.
+        #expect(try await service.listLibrary(search: "검색").map(\.id) == [fts, rag])
+        #expect(try await service.listLibrary(search: "검색", filter: .aiGenerated).map(\.id) == [rag])
+        #expect(try await service.listLibrary(search: "검색", filter: .userEdited).map(\.id) == [fts])
+        #expect(try await service.listLibrary(search: "검색", filter: .favorites).isEmpty)
+
+        // 와일드카드는 문자 그대로 취급: "%", "R%"는 어떤 표제어도 매치하지 않는다.
+        try await service.setFavorite(conceptId: rag, true)
+        #expect(try await service.listLibrary(search: "%", filter: .all).isEmpty)
+        #expect(try await service.listLibrary(search: "R%", filter: .favorites).isEmpty)
+        #expect(try await service.listLibrary(search: "RAG", filter: .favorites).map(\.id) == [rag])
+    }
+
+    @Test func listLibrary의_limit은_필터_적용_후에_적용된다() async throws {
+        let (service, rag, fts, tok) = try await seedLibrary()
+
+        // 전체 목록 선두(fts)는 user 개정본이라, limit을 먼저 자르면 ai는 하나도 남지 않는다.
+        #expect(try await service.listLibrary(filter: .aiGenerated, limit: 1).map(\.id) == [rag])
+        #expect(try await service.listLibrary(filter: .userEdited, limit: 1).map(\.id) == [fts])
+        #expect(try await service.listLibrary(filter: .userEdited).map(\.id) == [fts, tok])
+
+        try await insertLookup(service, conceptId: tok, query: "토큰 질문", at: base)
+        try await insertLookup(service, conceptId: rag, query: "RAG 질문", at: base.addingTimeInterval(60))
+        #expect(try await service.listLibrary(filter: .recent).map(\.id) == [rag, tok])
+        #expect(try await service.listLibrary(filter: .recent, limit: 1).map(\.id) == [rag])
+    }
+
+    @Test func recentLookups는_조회기록이_있는_서로_다른_개념_수다() async throws {
+        let (service, rag, fts, _) = try await seedLibrary()
+
+        try await service.recordLookup("첫", conceptId: rag, status: .hit)
+        try await service.recordLookup("둘", conceptId: rag, status: .hit) // 같은 개념 재조회
+        try await service.recordLookup("셋", conceptId: fts, status: .miss)
+        try await service.recordLookup("개념 없는 질문", conceptId: nil, status: .miss)
+
+        let counts = try await service.libraryCounts()
+        #expect(counts.recentLookups == 2)
+        #expect(try await service.listLibrary(filter: .recent).count == 2)
     }
 }

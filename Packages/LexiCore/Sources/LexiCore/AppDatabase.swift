@@ -28,6 +28,11 @@ public struct AppDatabase: Sendable {
     }
 
     public func migrate() throws {
+        try Self.makeMigrator().migrate(writer)
+    }
+
+    /// 앱이 사용하는 전체 마이그레이션. up-test에서 부분 적용(`migrate(_:upTo:)`)에 쓴다.
+    static func makeMigrator() -> DatabaseMigrator {
         var migrator = DatabaseMigrator()
         migrator.registerMigration("v1") { db in
             try db.create(table: "concept") { t in
@@ -84,6 +89,37 @@ public struct AppDatabase: Sendable {
                 t.column("lookedUpAt", .datetime).notNull().defaults(to: Date.now)
             }
         }
-        try migrator.migrate(writer)
+        migrator.registerMigration("v2") { db in
+            // 다국어 지원: 개념·개정본에 언어 태그를 추가한다. NULL은 "미상"이고 PDC `lang`의 소스다.
+            try db.alter(table: "concept") { t in
+                t.add(column: "lang", .text)
+            }
+            try db.alter(table: "definitionRevision") { t in
+                t.add(column: "lang", .text)
+            }
+            // 기존 행은 저장된 텍스트에서 언어를 추정해 되메운다. 설명은 문장 단위라 추정이
+            // 신뢰할 만하고, 추정 실패는 NULL(미상)로 남아 잘못된 표기를 강요하지 않는다.
+            let concepts = try Row.fetchAll(db, sql: "SELECT id, preferredTerm FROM concept")
+            for row in concepts {
+                if let lang = LanguageDetector.detect(row["preferredTerm"] as String) {
+                    try db.execute(
+                        sql: "UPDATE concept SET lang = ? WHERE id = ?",
+                        arguments: [lang.rawValue, row["id"] as Int64]
+                    )
+                }
+            }
+            let revisions = try Row.fetchAll(
+                db, sql: "SELECT id, oneLine, easyExplanation FROM definitionRevision")
+            for row in revisions {
+                let text = (row["oneLine"] as String) + " " + (row["easyExplanation"] as String)
+                if let lang = LanguageDetector.detect(text) {
+                    try db.execute(
+                        sql: "UPDATE definitionRevision SET lang = ? WHERE id = ?",
+                        arguments: [lang.rawValue, row["id"] as Int64]
+                    )
+                }
+            }
+        }
+        return migrator
     }
 }
