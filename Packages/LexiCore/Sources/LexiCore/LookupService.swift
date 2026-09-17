@@ -147,27 +147,39 @@ public struct LookupService: Sendable {
         let explanationLang = explanationLanguage
             ?? LanguageDetector.detect(oneLine + " " + easyExplanation)
         return try await database.writer.write { db in
+            let conceptUUID = UUIDv7.generate().uuidString
             let conceptId = try Int64.fetchOne(
                 db,
-                sql: "INSERT INTO concept (preferredTerm, field, lang, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?) RETURNING id",
-                arguments: [term, field, termLang?.rawValue, Date.now, Date.now]
+                sql: "INSERT INTO concept (preferredTerm, field, lang, createdAt, updatedAt, uuid) VALUES (?, ?, ?, ?, ?, ?) RETURNING id",
+                arguments: [term, field, termLang?.rawValue, Date.now, Date.now, conceptUUID]
             )!
             var texts = aliases.map { normalize($0) }.filter { !$0.isEmpty }
             if !texts.contains(term) { texts.append(term) }
             for text in Set(texts) {
                 let aliasLang = LanguageDetector.detect(text) ?? termLang ?? .korean
-                try db.execute(
-                    sql: "INSERT OR IGNORE INTO alias (conceptId, text, lang) VALUES (?, ?, ?)",
+                let exists = try Bool.fetchOne(
+                    db,
+                    sql: "SELECT EXISTS(SELECT 1 FROM alias WHERE conceptId = ? AND text = ? AND lang = ?)",
                     arguments: [conceptId, text, aliasLang.rawValue]
+                ) ?? false
+                guard !exists else { continue }
+                let aliasUUID = UUIDv7.generate().uuidString
+                try db.execute(
+                    sql: "INSERT INTO alias (conceptId, text, lang, uuid) VALUES (?, ?, ?, ?)",
+                    arguments: [conceptId, text, aliasLang.rawValue, aliasUUID]
                 )
+                try SyncJournal.upsert(db, kind: .alias, uuid: aliasUUID)
             }
+            let revisionUUID = UUIDv7.generate().uuidString
             try db.execute(
                 sql: """
-                INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author, provider, lang, createdAt)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author, provider, lang, createdAt, uuid)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                arguments: [conceptId, oneLine, easyExplanation, author, provider, explanationLang?.rawValue, Date.now]
+                arguments: [conceptId, oneLine, easyExplanation, author, provider, explanationLang?.rawValue, Date.now, revisionUUID]
             )
+            try SyncJournal.upsert(db, kind: .concept, uuid: conceptUUID)
+            try SyncJournal.upsert(db, kind: .revision, uuid: revisionUUID)
             return conceptId
         }
     }
@@ -181,10 +193,73 @@ public struct LookupService: Sendable {
     /// 개정본에 출처를 연결한다. 앱이 실제로 가져온 자료만 저장한다(모델이 지어낸 URL 금지).
     public func addSource(revisionId: Int64, title: String, url: String?, excerpt: String?) async throws {
         _ = try await database.writer.write { db in
+            let sourceUUID = UUIDv7.generate().uuidString
             try db.execute(
-                sql: "INSERT INTO sourceRef (revisionId, title, url, excerpt, retrievedAt) VALUES (?, ?, ?, ?, ?)",
-                arguments: [revisionId, title, url, excerpt, Date.now]
+                sql: "INSERT INTO sourceRef (revisionId, title, url, excerpt, retrievedAt, uuid) VALUES (?, ?, ?, ?, ?, ?)",
+                arguments: [revisionId, title, url, excerpt, Date.now, sourceUUID]
             )
+            try SyncJournal.upsert(db, kind: .source, uuid: sourceUUID)
         }
     }
 }
+
+/// 적용된 오타 보정 1건. 원본 질의는 어디까지나 사용자가 입력한 그대로다.
+public struct LookupCorrection: Sendable, Equatable {
+    /// 사용자가 입력한 원본 질의(앞뒤 공백만 정리됨).
+    public let original: String
+    /// 대신 조회에 쓴 저장된 표현(원문 보존).
+    public let replacement: String
+
+    public init(original: String, replacement: String) {
+        self.original = original
+        self.replacement = replacement
+    }
+}
+
+/// 조회 결과. 정확 검색으로 찾았으면 correction은 nil이다.
+public struct LookupResult: Sendable, Equatable {
+    public var entries: [DictionaryEntry]
+    public var correction: LookupCorrection?
+
+    public init(entries: [DictionaryEntry], correction: LookupCorrection? = nil) {
+        self.entries = entries
+        self.correction = correction
+    }
+}
+
+extension LookupService {
+    /// 조회: 정확 검색이 1차. 결과가 비었고 `typoCorrection`이면 저장된 표현 중
+    /// 철자가 가장 가까운 표현으로 다시 찾는다(오타 자동 보정).
+    ///
+    /// `typoCorrection: false`면 원본 텍스트 그대로만 찾는다. 보정은 저장된 사전
+    /// 안에서만 일어나고, 못 찾으면 AI 조사 단계가 원본 질의를 받는다 — 질의를
+    /// 임의로 고쳐 쓰지 않는다.
+    public func lookup(
+        _ rawQuery: String,
+        revisionLang: EntryLanguage? = nil,
+        typoCorrection: Bool = true
+    ) async throws -> LookupResult {
+        let exact = try await lookupExact(rawQuery, revisionLang: revisionLang)
+        if !exact.isEmpty { return LookupResult(entries: exact) }
+        guard typoCorrection,
+              let suggestion = try await suggestCorrection(for: rawQuery)
+        else { return LookupResult(entries: []) }
+        let corrected = try await lookupExact(suggestion, revisionLang: revisionLang)
+        guard !corrected.isEmpty else { return LookupResult(entries: []) }
+        return LookupResult(
+            entries: corrected,
+            correction: LookupCorrection(original: normalize(rawQuery), replacement: suggestion)
+        )
+    }
+
+    /// 저장된 표현 중 질의와 철자가 가장 가까운 것. 임계값을 넘으면 nil.
+    public func suggestCorrection(for rawQuery: String) async throws -> String? {
+        let query = normalize(rawQuery)
+        guard !query.isEmpty else { return nil }
+        let terms = try await database.writer.read { db in
+            try String.fetchAll(db, sql: "SELECT DISTINCT text FROM alias")
+        }
+        return QueryCorrection.bestMatch(for: query, in: terms)
+    }
+}
+

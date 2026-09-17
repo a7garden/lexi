@@ -19,32 +19,41 @@ final class LookupPipeline {
     let research: WebResearchService?
     private let llmIdentifier: String?
     private let explanationLanguage: ExplanationLanguagePreference
+    /// 설정의 오타 자동 보정. false면 조회가 원본 텍스트를 그대로 쓴다.
+    private let allowsTypoCorrection: Bool
     private(set) var lastQuery: String = ""
 
     init(
         service: LookupService,
         research: WebResearchService?,
         llmIdentifier: String?,
-        explanationLanguage: ExplanationLanguagePreference = .fixed(.korean)
+        explanationLanguage: ExplanationLanguagePreference = .fixed(.korean),
+        allowsTypoCorrection: Bool = true
     ) {
         self.service = service
         self.research = research
         self.llmIdentifier = llmIdentifier
         self.explanationLanguage = explanationLanguage
+        self.allowsTypoCorrection = allowsTypoCorrection
     }
 
-    /// 1차: 사전 정확 검색. AI 호출 없음. 요청한 설명 언어의 개정본을 우선한다.
-    func lookup(_ rawQuery: String) async -> [DictionaryEntry] {
+    /// 1차: 사전 정확 검색 → (설정 허용 시) 오타 보정 재검색. AI 호출 없음.
+    /// 요청한 설명 언어의 개정본을 우선한다. 조회 기록은 원본 질의 그대로 남긴다.
+    func lookup(_ rawQuery: String) async -> LookupResult {
         lastQuery = rawQuery
         let termLanguage = LanguageDetector.detect(rawQuery)
         let revisionLang = explanationLanguage.resolve(termLanguage: termLanguage)
-        let entries = (try? await service.lookupExact(rawQuery, revisionLang: revisionLang)) ?? []
-        if let best = entries.first {
+        let result = (try? await service.lookup(
+            rawQuery,
+            revisionLang: revisionLang,
+            typoCorrection: allowsTypoCorrection
+        )) ?? LookupResult(entries: [])
+        if let best = result.entries.first {
             try? await service.recordLookup(rawQuery, conceptId: best.conceptId, status: .hit)
         } else {
             try? await service.recordLookup(rawQuery, conceptId: nil, status: .miss)
         }
-        return entries
+        return result
     }
 
     /// 2차: 웹 조사 + 로컬 AI 정리 + 자동 저장.

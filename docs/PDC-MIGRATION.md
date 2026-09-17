@@ -1,6 +1,6 @@
 # PDC v2 채택·마이그레이션 계획
 
-상태: 최우선 상호운용성 어댑터 계획 · v2 계약 확정 · 구현 대기
+상태: 최우선 상호운용성 어댑터 계획 · v2 계약 확정 · Stage 0 fixture 연결 완료(2026-09-15) · Stage 1 대기
 외부 계약: `pdc-document/2`(문서), `pdc-query/1`(쿼리 블록, 별도 계약), 표준 commit `0ee51ea` · `pdc-document-conformance/2` revision 2
 목표 역할: 명시적 PDC import/export adapter; Lexi 자체는 vault editor가 아님
 
@@ -43,6 +43,7 @@ Lexi의 내부 정본은 계속 `lexi.sqlite`다. PDC는 사용자가 사전 항
 - 첫 export 때 UUIDv7을 할당하고 `pdc_document_map(concept_id, pdc_document_id)`에 영구 저장한다. 추가는 정상적인 GRDB migration(다음 스키마 버전)과 이전 schema up-test를 동반한다.
 - 같은 concept의 반복 export는 동일 PDC UUID를 쓴다.
 - legacy concept ID는 필요할 때 `lexi_legacy_id` 사용자 property로 보존한다.
+- iCloud 동기화(스키마 v3, 2026-09-15)가 각 행에 행 수준 동기화 UUID(`concept.uuid` 등)를 둔다. 이는 SQLite autoincrement ID와도 PDC 문서 ID와도 다른 내부 동기화 식별자다. Stage 2의 `pdc_document_map(concept_id, pdc_document_id)`은 여전히 별도 마이그레이션으로 추가하며 동기화 UUID를 재활용하지 않는다. 두 체계가 같은 UUIDv7 생성기를 공유하는 것은 의도된 것이다.
 
 ### Import
 
@@ -57,8 +58,9 @@ Lexi의 내부 정본은 계속 `lexi.sqlite`다. PDC는 사용자가 사전 항
 
 ### Stage 0 — fixture와 계약 고정
 
-- `pdc-document-conformance/2` revision 2를 LexiCore 테스트 fixture로 연결한다.
-- `pdc-document/2` envelope·frontmatter schema, `pdc-markdown/1` 본문 layout, `pdc-query/1` 참조 방식, `lexi_*` 사용자 property, revision digest, UUID mapping migration을 문서와 테스트로 고정한다.
+- [x] `pdc-document-conformance/2` revision 2를 LexiCore 테스트 fixture로 연결했다. 정본 사본(`~/Documents/Workspace/Projects/portable-document-contract/conformance/`)에서 `Packages/LexiCore/Tests/LexiCoreTests/Fixtures/pdc2/`로 vendoring했고(Package.swift 테스트 리소스), corpus 판독 모델(`PDCConformanceCorpus`)과 계약 상수(`PDCContract`)를 LexiCore에 둔다.
+- [x] 계약 판단을 테스트로 고정했다(`PDCConformanceTests`): format/revision/profile 식별자, 케이스↔fixture 완전성, 네 범주 분류(정식/보이는 legacy/진단/writer 바이트 보존), legacy가 절대 `valid`로 분류되지 않음, 동일 입력 → 동일 분류(결정론).
+- [ ] 완료 조건의 "동일 입력이 항상 동일 export 계획과 import preview" 검증은 계획 모델이 존재해야 가능하므로 Stage 1 codec 착수 시 잠근다.
 
 완료 조건: 동일 입력이 항상 동일 export 계획과 import preview를 만든다.
 

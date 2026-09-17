@@ -1,6 +1,6 @@
 # Lexi
 
-[한국어](README.md) | [English](README.en.md) | [日本語](README.ja.md) | **中文**
+[한국어](README.ko.md) | [English](README.md) | [日本語](README.ja.md) | **中文**
 
 <p align="center">
   <img src="App/Assets.xcassets/AppIcon.appiconset/AppIcon-128@2x.png" width="128" height="128" alt="Lexi 应用图标">
@@ -11,9 +11,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/project-oxi/lexi/releases/latest">最新发布</a> ·
-  <a href="https://github.com/project-oxi/lexi/actions/workflows/ci.yml"><img src="https://github.com/project-oxi/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
-  <a href="https://github.com/project-oxi/lexi/releases"><img src="https://img.shields.io/github/v/release/project-oxi/lexi" alt="GitHub Release"></a>
+  <a href="https://github.com/a7garden/lexi/releases/latest">最新发布</a> ·
+  <a href="https://github.com/a7garden/lexi/actions/workflows/ci.yml"><img src="https://github.com/a7garden/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
+  <a href="https://github.com/a7garden/lexi/releases"><img src="https://img.shields.io/github/v/release/a7garden/lexi" alt="GitHub Release"></a>
 </p>
 
 Lexi 对已保存的表达无需调用 AI 即可立即显示，只为初次见到的表达用本地 MLX 模型生成解释。网络调查仅在你开启该功能时才会运行，并且只把实际阅读过的公开资料保存为来源。
@@ -33,6 +33,8 @@ Lexi 对已保存的表达无需调用 AI 即可立即显示，只为初次见�
 
 ## 截图
 
+> 应用界面目前仅提供韩语，截图显示的也是韩语界面。
+
 | 完整词典 | 即时查询面板 |
 | --- | --- |
 | ![词典窗口](docs/screenshots/library.png) | ![即时查询面板](docs/screenshots/instant-panel.png) |
@@ -41,8 +43,8 @@ Lexi 对已保存的表达无需调用 AI 即可立即显示，只为初次见�
 
 ## 安装
 
-1. 从 [Releases](https://github.com/project-oxi/lexi/releases/latest) 下载最新的 `Lexi-*-macOS-arm64.zip`。
-2. 解压后把 `Lexi.app` 移入“应用程序”文件夹。
+1. 从 [Releases](https://github.com/a7garden/lexi/releases/latest) 下载最新的 `Lexi-*-macOS-arm64.dmg`。
+2. 打开 DMG，把 `Lexi.app` 拖入“应用程序”文件夹即完成安装。
 3. 启动 Lexi。发行文件已使用 Developer ID 签名，并通过 Apple 公证。
 4. 首次使用选中文本查询时，请允许 macOS 请求的**辅助功能**（손쉬운 사용）权限。
 
@@ -91,7 +93,7 @@ Lexi 对已保存的表达无需调用 AI 即可立即显示，只为初次见�
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 
 ```bash
-git clone https://github.com/project-oxi/lexi.git
+git clone https://github.com/a7garden/lexi.git
 cd lexi
 brew install xcodegen
 xcodegen generate

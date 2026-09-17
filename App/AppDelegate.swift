@@ -25,14 +25,35 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @Published private(set) var iconPlacement: AppIconPlacement
     var showLibraryWindow: (() -> Void)?
     var showSettingsWindow: (() -> Void)?
+    /// 서비스 콜드 런치처럼 LibraryView(WindowActions)가 아직 안 떠서 위 클로저가 nil인 경우의
+    /// 시스템 폴백. Dock 재클릭(rapp)과 같은 위임 경로로 주 윈도우 씬을 생성한다. 테스트에서 대체한다.
+    var reopenPrimaryScene: () -> Void = {
+        // Dock 재클릭과 동일한 'rapp' Apple 이벤트를 자신에게 보낸다. SwiftUI는 이 이벤트로
+        // 주 윈도우 씬을 생성·앞으로 가져온다. 델리게이트 셀렉터를 직접 수행하면 어댑터
+        // 프록시가 종료로 처리하므로 반드시 실제 이벤트로 보내야 한다.
+        let target = NSAppleEventDescriptor(
+            processIdentifier: Int32(ProcessInfo.processInfo.processIdentifier))
+        let event = NSAppleEventDescriptor(
+            eventClass: AEEventClass(kCoreEventClass),
+            eventID: AEEventID(kAEReopenApplication),
+            targetDescriptor: target,
+            returnID: AEReturnID(kAutoGenerateReturnID),
+            transactionID: AETransactionID(kAnyTransactionID))
+        try? event.sendEvent(options: .noReply, timeout: 1)
+    }
+    var openSettingsScene: () -> Void = {
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+    }
 
     private let defaults: UserDefaults
     private var panelController: InstantPanelController?
-    private var panelModel: PanelModel?
+    var panelModel: PanelModel?
     private var pipeline: LookupPipeline?
     private var engineSettings: EngineSettings?
     private var researchTask: Task<Void, Never>?
     private var lastQuery = ""
+    /// iCloud 동기화. 켜져 있으면 기동 직후 시작하고 설정 화면이 상태를 관찰한다.
+    let syncService = CloudSyncService()
 
     override init() {
         defaults = .standard
@@ -58,6 +79,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             self?.lookupFromSelection()
         }
         Self.refreshServices()
+        if defaults.bool(forKey: CloudSyncService.storageKey) {
+            Task { await syncService.start() }
+        }
         if let query = ProcessInfo.processInfo.environment["LEXI_DEMO_QUERY"], !query.isEmpty {
             startLookup(query)
         }
@@ -103,12 +127,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             service: LookupService(database: db),
             research: research,
             llmIdentifier: provider.identifier,
-            explanationLanguage: settings.explanationLanguage
+            explanationLanguage: settings.explanationLanguage,
+            allowsTypoCorrection: settings.typoCorrectionEnabled
         )
         engineSettings = settings
     }
 
-    private func setUpPanel() {
+    func setUpPanel() {
+        // 서비스 Apple 이벤트가 didFinishLaunching보다 먼저 패널을 만들 수 있다(콜드 런치).
+        // 여기서 갈아끼우면 조회 결과는 버려진 모델로 가고, 화면의 패널은 빈 상태로 남는다.
+        guard panelModel == nil, panelController == nil else { return }
         let model = PanelModel()
         panelModel = model
         panelController = InstantPanelController(model: model)
@@ -125,7 +153,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             guard let self else { return }
             let conceptID: Int64?
             switch self.panelModel?.state {
-            case .hit(let entry), .result(let entry, _, _): conceptID = entry.conceptId
+            case .hit(let entry, _), .result(let entry, _, _): conceptID = entry.conceptId
             default: conceptID = nil
             }
             self.panelController?.close()
@@ -153,7 +181,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         guard !trimmed.isEmpty else { return }
         researchTask?.cancel()
         lastQuery = trimmed
-        if panelModel == nil { setUpPanel() }
+        setUpPanel()
         researchTask = Task { await runLookup(trimmed) }
     }
 
@@ -167,19 +195,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             return
         }
         guard let pipeline else { return }
-        let entries = await pipeline.lookup(query)
+        let result = await pipeline.lookup(query)
         guard !Task.isCancelled else { return }
         NotificationCenter.default.post(name: .lexiLibraryChanged, object: nil)
-        if let hit = entries.first {
-            model.update(.hit(hit))
+        if let hit = result.entries.first {
+            model.update(.hit(hit, correction: result.correction))
             panelController?.show(near: NSEvent.mouseLocation)
             return
         }
         model.update(.researching(query: query))
         panelController?.show(near: NSEvent.mouseLocation)
-        let result = await pipeline.researchAndSave(query)
+        let outcome = await pipeline.researchAndSave(query)
         guard !Task.isCancelled else { return }
-        switch result {
+        switch outcome {
         case .success(let (entry, sources)):
             model.update(.result(entry, sources: sources.map {
                 PanelModel.PanelSource(title: $0.title, url: $0.url, excerpt: $0.excerpt)
@@ -202,7 +230,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
 
     func openLibrary(conceptID: Int64? = nil) {
         if let conceptID { libraryRequest = LibraryRequest(conceptID: conceptID) }
-        showLibraryWindow?()
+        if showLibraryWindow != nil {
+            showLibraryWindow?()
+        } else {
+            reopenPrimaryScene()
+        }
         NSApp.activate(ignoringOtherApps: true)
     }
 
@@ -212,7 +244,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func openSettings() {
-        showSettingsWindow?()
+        if showSettingsWindow != nil {
+            showSettingsWindow?()
+        } else {
+            openSettingsScene()
+        }
         NSApp.activate(ignoringOtherApps: true)
     }
 

@@ -23,7 +23,18 @@ struct PanelContentView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     switch model.state {
-                    case .hit(let entry):
+                    case .hit(let entry, let correction):
+                        if let correction {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Label("오타 자동 보정으로 찾았어요", systemImage: "wand.and.stars")
+                                    .font(.caption.weight(.medium))
+                                    .foregroundStyle(.secondary)
+                                Text("“\(correction.original)” → “\(correction.replacement)”")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .textSelection(.enabled)
+                            }
+                        }
                         entryContent(entry, sources: [], newlySaved: false)
                     case .result(let entry, let sources, let saved):
                         entryContent(entry, sources: sources, newlySaved: saved)

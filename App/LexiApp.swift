@@ -24,6 +24,12 @@ struct LexiApp: App {
             }
         }
 
+        Window("통계", id: "stats") {
+            StatsView()
+                .environmentObject(appDelegate)
+                .frame(minWidth: 620, minHeight: 460)
+        }
+        .defaultSize(width: 880, height: 660)
         Settings {
             SettingsView()
                 .environmentObject(appDelegate)
@@ -74,6 +80,10 @@ private struct LexiMenu: View {
         Divider()
         Button("내 사전 열기", systemImage: "books.vertical") {
             openWindow(id: "library")
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        Button("통계 보기", systemImage: "chart.bar.xaxis") {
+            openWindow(id: "stats")
             NSApp.activate(ignoringOtherApps: true)
         }
         Button("설정…", systemImage: "gearshape") {

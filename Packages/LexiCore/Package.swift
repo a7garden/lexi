@@ -23,6 +23,10 @@ let package = Package(
                 .product(name: "MLX", package: "mlx-swift"),
             ]
         ),
-        .testTarget(name: "LexiCoreTests", dependencies: ["LexiCore"])
+        .testTarget(
+            name: "LexiCoreTests",
+            dependencies: ["LexiCore"],
+            resources: [.copy("Fixtures")]
+        )
     ]
 )

@@ -36,4 +36,53 @@ import GRDB
         try db.migrate()
         try db.migrate()  // 두 번 불러도 오류 없음
     }
+    @Test func v2에서_v3로_올라가면_모든_행에_동기화_UUID를_부여한다() async throws {
+        let db = try AppDatabase.makeInMemory()
+        // v2 상태에서 데이터를 남긴 뒤(동기화 이전 사용자의 DB와 동일) v3로 올린다.
+        try AppDatabase.makeMigrator().migrate(db.writer, upTo: "v2")
+        try await db.writer.write { db in
+            try db.execute(sql: "INSERT INTO concept (preferredTerm) VALUES (?)", arguments: ["동기화"])
+            let conceptId = try Int64.fetchOne(db, sql: "SELECT MAX(id) FROM concept")!
+            try db.execute(
+                sql: "INSERT INTO alias (conceptId, text) VALUES (?, ?)",
+                arguments: [conceptId, "동기화"])
+            try db.execute(
+                sql: "INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author) VALUES (?, ?, ?, 'user')",
+                arguments: [conceptId, "여러 기기에서 같은 사전", "iCloud로 개념을 동기화한다."])
+        }
+
+        try db.migrate()
+
+        // 모든 행이 유일한 uuid를 얻고, 동기화 보조 테이블이 빈 채로 준비된다.
+        try await db.writer.write { db in
+            for table in ["concept", "alias", "definitionRevision", "sourceRef"] {
+                let nulls = try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM \(table) WHERE uuid IS NULL")
+                #expect(nulls == 0, "\(table)에 uuid가 비는 행이 있다")
+                let total = try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM \(table)")
+                let distinct = try Int.fetchOne(db, sql: "SELECT COUNT(DISTINCT uuid) FROM \(table)")
+                #expect(total == distinct, "\(table)의 uuid가 유일하지 않다")
+            }
+            #expect(try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM syncJournal") == 0)
+            #expect(try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM syncPendingRemote") == 0)
+            #expect(try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM syncMeta") == 0)
+        }
+        // 기존 데이터는 그대로 보존된다.
+        let service = LookupService(database: db)
+        let entries = try await service.lookupExact("동기화")
+        #expect(entries.count == 1)
+        #expect(entries[0].oneLine == "여러 기기에서 같은 사전")
+    }
+
+    @Test func v1에서_v3로_한_번에_올라가도_UUID가_채워진다() async throws {
+        let db = try AppDatabase.makeInMemory()
+        try db.migrate()
+        let service = LookupService(database: db)
+        let conceptId = try await service.saveConcept(
+            preferredTerm: "한번에", aliases: [], field: nil, oneLine: "요약",
+            easyExplanation: "설명.", author: "user", provider: nil)
+        let uuid = try await db.writer.read { db in
+            try String.fetchOne(db, sql: "SELECT uuid FROM concept WHERE id = ?", arguments: [conceptId])
+        }
+        #expect(uuid != nil)
+    }
 }

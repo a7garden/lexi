@@ -155,16 +155,18 @@ struct EntryDetailView: View {
         }
     }
 
-    @ViewBuilder
     private var sourcesTab: some View {
-        if payload.sources.isEmpty {
-            ContentUnavailableView(
-                payload.entry.author == "ai" ? "외부 출처 없는 AI 초안" : "저장된 출처가 없어요",
-                systemImage: "doc.text.magnifyingglass",
-                description: Text(payload.entry.author == "ai" ? "로컬 모델이 작성한 설명이에요. 필요한 경우 내용을 검토하고 수정해 주세요." : "직접 작성한 설명에는 연결된 웹 출처가 없어요.")
-            )
-        } else {
-            ScrollView {
+        // 빈 상태도 스크롤 루트로 감싸 탭마다 콘텐츠 구조(스크롤 여부)가 바뀌지 않게 한다.
+        // 스크롤 없는 콘텐츠가 직접 오면 내비게이션 바가 넓어져 상단에 큰 여백이 생긴다.
+        ScrollView {
+            if payload.sources.isEmpty {
+                ContentUnavailableView(
+                    payload.entry.author == "ai" ? "외부 출처 없는 AI 초안" : "저장된 출처가 없어요",
+                    systemImage: "doc.text.magnifyingglass",
+                    description: Text(payload.entry.author == "ai" ? "로컬 모델이 작성한 설명이에요. 필요한 경우 내용을 검토하고 수정해 주세요." : "직접 작성한 설명에는 연결된 웹 출처가 없어요.")
+                )
+                .frame(maxWidth: .infinity, minHeight: 320, alignment: .center)
+            } else {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(payload.sources) { source in
                         sourceRow(source)

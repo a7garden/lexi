@@ -36,6 +36,7 @@ extension LibraryFilter {
 struct LibraryView: View {
     @EnvironmentObject private var appDelegate: AppDelegate
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openWindow) private var openWindow
     @StateObject private var viewModel = LibraryViewModel()
     @State private var isShowingNewEntrySheet = false
 
@@ -56,6 +57,10 @@ struct LibraryView: View {
                     isShowingNewEntrySheet = true
                 } label: { Label("개념 추가", systemImage: "plus") }
                 .help("개념을 직접 작성하거나 AI로 조회해요 (⌘N)")
+                Button {
+                    openWindow(id: "stats")
+                } label: { Label("통계", systemImage: "chart.bar.xaxis") }
+                .help("사전 통계 보기")
             }
         }
         .sheet(isPresented: $isShowingNewEntrySheet) {
@@ -83,14 +88,6 @@ struct LibraryView: View {
     private var sidebar: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 16) {
-                HStack(spacing: 10) {
-                    Image(systemName: "character.book.closed.fill")
-                        .font(.title2).foregroundStyle(Color.accentColor)
-                    Text("내 사전").font(.title3.bold())
-                    Spacer()
-                    Text("\(viewModel.counts?.all ?? 0)개의 개념")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
                     TextField("개념, 별칭, 설명 검색", text: Binding(

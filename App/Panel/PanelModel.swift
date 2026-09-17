@@ -6,8 +6,8 @@ import LexiCore
 @MainActor
 public final class PanelModel: ObservableObject {
     public enum PanelState: Equatable, Sendable {
-        /// 사전에 저장된 항목을 바로 보여줌.
-        case hit(DictionaryEntry)
+        /// 사전에 저장된 항목을 바로 보여줌. correction = 오타를 보정해 찾은 경우.
+        case hit(DictionaryEntry, correction: LookupCorrection?)
         /// 사전에 없어 AI 조사 진행 중.
         case researching(query: String)
         /// AI 조사 완료. saved = 사전 저장 여부.

@@ -271,3 +271,61 @@ public actor SemanticLibrarySearch {
         return Float(max(-1, min(1, similarity)))
     }
 }
+
+/// 임베딩 지도 한 점의 입력: 개념 표제어와 문서 벡터.
+public struct ConceptEmbedding: Sendable, Equatable {
+    public var conceptId: Int64
+    public var term: String
+    public var field: String?
+    public var vector: [Float]
+
+    public init(conceptId: Int64, term: String, field: String?, vector: [Float]) {
+        self.conceptId = conceptId
+        self.term = term
+        self.field = field
+        self.vector = vector
+    }
+}
+
+extension SemanticLibrarySearch {
+    /// 통계 화면의 임베딩 지도 입력. 검색과 같은 문서 캐시를 재사용하고 새로 저장되었거나
+    /// 수정된 문서만 다시 계산한다. 원문은 읽기만 하고 DB 정본에는 쓰지 않는다.
+    public func libraryEmbeddings(limit: Int = 500) async throws -> [ConceptEmbedding] {
+        let documents = try await service.semanticLibraryDocuments(filter: .all, limit: limit)
+        guard !documents.isEmpty else { return [] }
+
+        if cachedProviderID != provider.identifier {
+            documentCache.removeAll(keepingCapacity: true)
+            cachedProviderID = provider.identifier
+        }
+        let staleDocuments = documents.filter { document in
+            documentCache[document.item.conceptId]?.sourceText != document.sourceText
+        }
+        if !staleDocuments.isEmpty {
+            let vectors = try await provider.embed(
+                staleDocuments.map(\.sourceText),
+                purpose: .document
+            )
+            guard vectors.count == staleDocuments.count else {
+                throw SemanticSearchError.invalidEmbeddingResult
+            }
+            for (document, vector) in zip(staleDocuments, vectors) {
+                guard Self.isUsable(vector) else { continue }
+                documentCache[document.item.conceptId] = CachedEmbedding(
+                    sourceText: document.sourceText,
+                    vector: vector
+                )
+            }
+        }
+
+        return documents.compactMap { document -> ConceptEmbedding? in
+            guard let vector = documentCache[document.item.conceptId]?.vector else { return nil }
+            return ConceptEmbedding(
+                conceptId: document.item.conceptId,
+                term: document.item.preferredTerm,
+                field: document.item.field,
+                vector: vector
+            )
+        }
+    }
+}

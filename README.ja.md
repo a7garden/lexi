@@ -1,6 +1,6 @@
 # Lexi
 
-[한국어](README.md) | [English](README.en.md) | **日本語** | [中文](README.zh.md)
+[한국어](README.ko.md) | [English](README.md) | **日本語** | [中文](README.zh.md)
 
 <p align="center">
   <img src="App/Assets.xcassets/AppIcon.appiconset/AppIcon-128@2x.png" width="128" height="128" alt="Lexi アプリのアイコン">
@@ -11,9 +11,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/project-oxi/lexi/releases/latest">最新リリース</a> ·
-  <a href="https://github.com/project-oxi/lexi/actions/workflows/ci.yml"><img src="https://github.com/project-oxi/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
-  <a href="https://github.com/project-oxi/lexi/releases"><img src="https://img.shields.io/github/v/release/project-oxi/lexi" alt="GitHub Release"></a>
+  <a href="https://github.com/a7garden/lexi/releases/latest">最新リリース</a> ·
+  <a href="https://github.com/a7garden/lexi/actions/workflows/ci.yml"><img src="https://github.com/a7garden/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
+  <a href="https://github.com/a7garden/lexi/releases"><img src="https://img.shields.io/github/v/release/a7garden/lexi" alt="GitHub Release"></a>
 </p>
 
 Lexiは、すでに保存済みの表現はAIを呼び出さずに即座に表示し、初めて見る表現についてのみローカルのMLXモデルで説明を生成します。ウェブ調査はユーザーが有効にした場合にのみ実行され、実際に読んだ公開資料だけを出典として保存します。
@@ -33,6 +33,8 @@ Lexiは、すでに保存済みの表現はAIを呼び出さずに即座に表�
 
 ## スクリーンショット
 
+> アプリのUIは現在韓国語のみで、スクリーンショットも韓国語の画面です。
+
 | ライブラリ全体 | インスタント検索パネル |
 | --- | --- |
 | ![ライブラリ画面](docs/screenshots/library.png) | ![インスタント検索パネル](docs/screenshots/instant-panel.png) |
@@ -41,8 +43,8 @@ Lexiは、すでに保存済みの表現はAIを呼び出さずに即座に表�
 
 ## インストール
 
-1. [Releases](https://github.com/project-oxi/lexi/releases/latest)から最新の `Lexi-*-macOS-arm64.zip` をダウンロードします。
-2. アーカイブを展開し、`Lexi.app` をアプリケーションフォルダに移動します。
+1. [Releases](https://github.com/a7garden/lexi/releases/latest)から最新の `Lexi-*-macOS-arm64.dmg` をダウンロードします。
+2. DMGを開き、`Lexi.app` をアプリケーションフォルダにドラッグ＆ドロップします。
 3. Lexiを起動します。配布ファイルはDeveloper IDで署名され、Apple公証を経ています。
 4. 選択テキスト検索を初めて使う際に、macOSが求める **アクセシビリティ（손쉬운 사용）** 権限を許可します。
 
@@ -91,7 +93,7 @@ Lexiは、すでに保存済みの表現はAIを呼び出さずに即座に表�
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 
 ```bash
-git clone https://github.com/project-oxi/lexi.git
+git clone https://github.com/a7garden/lexi.git
 cd lexi
 brew install xcodegen
 xcodegen generate

@@ -120,6 +120,60 @@ public struct AppDatabase: Sendable {
                 }
             }
         }
+        migrator.registerMigration("v3") { db in
+            // iCloud 동기화: 각 행에 동기화 UUID(행 수준 안정 식별자)를 부여하고
+            // 미전송 변경 저널·미적용 원격 변경 대기열을 둔다.
+            // 이 UUID는 SQLite autoincrement ID와 PDC 문서 ID(pdc_document_map, 별도 마이그레이션)와
+            // 무관한 내부 동기화 식별자다. 기존 행은 마이그레이션 때 한 번 채워 다시 바뀌지 않는다.
+            try db.alter(table: "concept") { t in
+                t.add(column: "uuid", .text)
+            }
+            try db.alter(table: "alias") { t in
+                t.add(column: "uuid", .text)
+            }
+            try db.alter(table: "definitionRevision") { t in
+                t.add(column: "uuid", .text)
+            }
+            try db.alter(table: "sourceRef") { t in
+                t.add(column: "uuid", .text)
+            }
+            for table in ["concept", "alias", "definitionRevision", "sourceRef"] {
+                let rows = try Row.fetchAll(db, sql: "SELECT id FROM \(table) WHERE uuid IS NULL")
+                for row in rows {
+                    try db.execute(
+                        sql: "UPDATE \(table) SET uuid = ? WHERE id = ?",
+                        arguments: [UUIDv7.generate().uuidString, row["id"] as Int64]
+                    )
+                }
+                try db.execute(sql: "CREATE UNIQUE INDEX \(table)_uuid_idx ON \(table)(uuid)")
+            }
+
+            // 미전송 변경 대기열. (uuid, kind)별로 최신 op 하나만 유지한다.
+            // op: upsert | delete. ack 후 삭제되므로 테이블은 대기 중인 변경만 담는다.
+            try db.create(table: "syncJournal") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.column("uuid", .text).notNull()
+                t.column("kind", .text).notNull()  // concept | revision | alias | source
+                t.column("op", .text).notNull()  // upsert | delete
+                t.column("changedAt", .datetime).notNull().defaults(to: Date.now)
+                t.uniqueKey(["uuid", "kind"])
+            }
+            // 부모보다 먼저 도착한 원격 변경의 임시 보관함(의존성 역순 도착 대응).
+            // payload는 동기화 행 스냅샷의 JSON이다.
+            try db.create(table: "syncPendingRemote") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.column("uuid", .text).notNull()
+                t.column("kind", .text).notNull()
+                t.column("payload", .text).notNull()
+                t.column("createdAt", .datetime).notNull().defaults(to: Date.now)
+                t.uniqueKey(["uuid", "kind"])
+            }
+            // 동기화 엔진 메타(최초 전체 업로드 완료 플래그 등). 정본 데이터가 아니다.
+            try db.create(table: "syncMeta") { t in
+                t.column("key", .text).primaryKey()
+                t.column("value", .text).notNull()
+            }
+        }
         return migrator
     }
 }

@@ -66,12 +66,15 @@ final class EngineSettingsTests: XCTestCase {
         let defaults = UserDefaults(suiteName: name)!
         defer { defaults.removePersistentDomain(forName: name) }
         let before = EngineSettings(defaults: defaults)
+        XCTAssertTrue(before.typoCorrectionEnabled)
         defaults.set(true, forKey: "webResearchAllowed")
         defaults.set("local/new-model", forKey: "mlxModelID")
+        defaults.set(false, forKey: EngineSettings.typoCorrectionStorageKey)
         let after = EngineSettings(defaults: defaults)
         XCTAssertNotEqual(before, after)
         XCTAssertTrue(after.webResearchAllowed)
         XCTAssertEqual(after.modelID, "local/new-model")
+        XCTAssertFalse(after.typoCorrectionEnabled)
     }
 
     func testExplanationLanguagePreferenceParsingAndResolution() {
@@ -144,6 +147,36 @@ final class ServiceRegistrationTests: XCTestCase {
         XCTAssertEqual(delegate.libraryRequest?.newEntry, true)
         XCTAssertNil(delegate.libraryRequest?.conceptID)
     }
+    @MainActor
+    func testPanelSetupKeepsFirstModelWhenLaunchFinishesAfterService() {
+        // 콜드 런치에서 서비스 이벤트가 didFinishLaunching보다 먼저 패널을 만든다.
+        // 뒤따르는 초기화가 모델을 갈아끼우면 조회 결과는 버려진 모델로 가고,
+        // 화면 패널은 "어떤 개념이 궁금한가요?" 빈 상태로 남는다.
+        let delegate = AppDelegate()
+        delegate.setUpPanel()
+        let first = delegate.panelModel
+        delegate.setUpPanel()
+        XCTAssertTrue(first === delegate.panelModel)
+    }
+
+    @MainActor
+    func testLibraryRouteFallsBackToSceneReopenWhenLibraryViewNeverAppeared() {
+        let delegate = AppDelegate()
+        var reopens = 0
+        delegate.reopenPrimaryScene = { reopens += 1 }
+        delegate.openLibrary(conceptID: 42)
+        XCTAssertEqual(reopens, 1)
+        XCTAssertEqual(delegate.libraryRequest?.conceptID, 42)
+    }
+
+    @MainActor
+    func testSettingsRouteFallsBackWhenSettingsSceneNeverAppeared() {
+        let delegate = AppDelegate()
+        var opens = 0
+        delegate.openSettingsScene = { opens += 1 }
+        delegate.openSettings()
+        XCTAssertEqual(opens, 1)
+    }
 }
 
 @MainActor
@@ -209,5 +242,52 @@ final class LibraryEditingTests: XCTestCase {
         XCTAssertTrue(model.items.isEmpty)
         XCTAssertEqual(model.semanticMatches.map(\.item.conceptId), [rag])
         XCTAssertNil(model.semanticMessage)
+    }
+}
+
+@MainActor
+final class LookupPipelineCorrectionTests: XCTestCase {
+    func testCorrectionHitRecordsOriginalQueryVerbatim() async throws {
+        let database = try LexiCore.AppDatabase.makeInMemory()
+        try database.migrate()
+        let service = LookupService(database: database)
+        let conceptId = try await service.saveConcept(
+            preferredTerm: "데이터베이스", aliases: [], field: nil,
+            oneLine: "자료를 체계적으로 보관한다", easyExplanation: "표로 정리해 찾는 창고.",
+            author: "user", provider: nil
+        )
+        let pipeline = LookupPipeline(service: service, research: nil, llmIdentifier: nil)
+
+        let result = await pipeline.lookup("데이터배이스")
+
+        XCTAssertEqual(result.entries.map(\.conceptId), [conceptId])
+        XCTAssertEqual(result.correction?.original, "데이터배이스")
+        XCTAssertEqual(result.correction?.replacement, "데이터베이스")
+        // 조회 기록은 보정된 표현이 아니라 사용자가 입력한 원본 텍스트 그대로 담긴다.
+        let detail = try await service.entryDetail(conceptId: conceptId)
+        XCTAssertEqual(detail?.history.map(\.query), ["데이터배이스"])
+    }
+
+    func testDisabledCorrectionLooksUpOriginalTextAsIs() async throws {
+        let database = try LexiCore.AppDatabase.makeInMemory()
+        try database.migrate()
+        let service = LookupService(database: database)
+        let conceptId = try await service.saveConcept(
+            preferredTerm: "데이터베이스", aliases: [], field: nil,
+            oneLine: "자료를 체계적으로 보관한다", easyExplanation: "표로 정리해 찾는 창고.",
+            author: "user", provider: nil
+        )
+        let pipeline = LookupPipeline(
+            service: service, research: nil, llmIdentifier: nil,
+            allowsTypoCorrection: false
+        )
+
+        let result = await pipeline.lookup("데이터배이스")
+
+        XCTAssertTrue(result.entries.isEmpty)
+        XCTAssertNil(result.correction)
+        // 저장된 개념과 무관한 miss 기록만 남는다.
+        let detail = try await service.entryDetail(conceptId: conceptId)
+        XCTAssertEqual(detail?.history, [])
     }
 }

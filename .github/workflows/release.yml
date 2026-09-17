@@ -136,19 +136,52 @@ jobs:
           xcrun stapler validate "$app_path"
           spctl --assess --type execute --verbose=4 "$app_path"
 
-      - name: Package release
+      - name: Build distributable DMG
         shell: bash
         run: |
           set -euo pipefail
           version="${GITHUB_REF_NAME#v}"
           app_path="$RUNNER_TEMP/Lexi.xcarchive/Products/Applications/Lexi.app"
+          staging_dir="$RUNNER_TEMP/dmg-staging"
           release_dir="$RUNNER_TEMP/release"
-          mkdir -p "$release_dir"
-          release_zip="$release_dir/Lexi-$version-macOS-arm64.zip"
-          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$release_zip"
+          mkdir -p "$staging_dir" "$release_dir"
+          cp -R "$app_path" "$staging_dir/Lexi.app"
+          ln -s /Applications "$staging_dir/Applications"
+          hdiutil create \
+            -volname "Lexi $version" \
+            -srcfolder "$staging_dir" \
+            -ov \
+            -format UDZO \
+            "$release_dir/Lexi-$version-macOS-arm64.dmg"
+
+      - name: Notarize and staple DMG
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          dmg_path="$RUNNER_TEMP/release/Lexi-$version-macOS-arm64.dmg"
+          xcrun notarytool submit "$dmg_path" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+          xcrun stapler staple "$dmg_path"
+          xcrun stapler validate "$dmg_path"
+          spctl --assess --type open --verbose=4 "$dmg_path"
+
+      - name: Generate DMG checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          release_dir="$RUNNER_TEMP/release"
           (
             cd "$release_dir"
-            shasum -a 256 "$(basename "$release_zip")" > "Lexi-$version-macOS-arm64.sha256"
+            shasum -a 256 "Lexi-$version-macOS-arm64.dmg" > "Lexi-$version-macOS-arm64.sha256"
           )
           echo "RELEASE_DIR=$release_dir" >> "$GITHUB_ENV"
 

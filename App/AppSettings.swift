@@ -88,11 +88,15 @@ struct EngineSettings: Equatable {
     let modelID: String
     let webResearchAllowed: Bool
     let explanationLanguage: ExplanationLanguagePreference
+    /// 조회 오타 자동 보정. 기본 켜짐. 끄면 조회가 원본 텍스트를 그대로 쓴다.
+    static let typoCorrectionStorageKey = "autoCorrectTypos"
+    let typoCorrectionEnabled: Bool
 
     init(defaults: UserDefaults = .standard) {
         let stored = defaults.string(forKey: "mlxModelID")?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         modelID = Self.isValidModelID(stored) ? stored : Self.defaultModelID
         webResearchAllowed = defaults.bool(forKey: "webResearchAllowed")
+        typoCorrectionEnabled = defaults.object(forKey: Self.typoCorrectionStorageKey) as? Bool ?? true
         explanationLanguage = ExplanationLanguagePreference(
             stored: defaults.string(forKey: ExplanationLanguagePreference.storageKey))
     }

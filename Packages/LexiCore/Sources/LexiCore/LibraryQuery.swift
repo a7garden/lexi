@@ -324,10 +324,14 @@ extension LookupService {
     /// 즐겨찾기 토글. 목록 정렬 기준인 updatedAt도 함께 갱신한다.
     public func setFavorite(conceptId: Int64, _ favorite: Bool) async throws {
         _ = try await database.writer.write { db in
+            guard let uuid = try String.fetchOne(
+                db, sql: "SELECT uuid FROM concept WHERE id = ?", arguments: [conceptId]
+            ) else { return }
             try db.execute(
                 sql: "UPDATE concept SET isFavorite = ?, updatedAt = ? WHERE id = ?",
                 arguments: [favorite, Date.now, conceptId]
             )
+            try SyncJournal.upsert(db, kind: .concept, uuid: uuid)
         }
     }
 
@@ -341,20 +345,52 @@ extension LookupService {
     ) async throws {
         let lang = language ?? LanguageDetector.detect(oneLine + " " + easyExplanation)
         _ = try await database.writer.write { db in
+            guard let conceptUUID = try String.fetchOne(
+                db, sql: "SELECT uuid FROM concept WHERE id = ?", arguments: [conceptId]
+            ) else { return }
+            let revisionUUID = UUIDv7.generate().uuidString
             try db.execute(
-                sql: "INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author, lang, createdAt) VALUES (?, ?, ?, 'user', ?, ?)",
-                arguments: [conceptId, oneLine, easyExplanation, lang?.rawValue, Date.now]
+                sql: "INSERT INTO definitionRevision (conceptId, oneLine, easyExplanation, author, lang, createdAt, uuid) VALUES (?, ?, ?, 'user', ?, ?, ?)",
+                arguments: [conceptId, oneLine, easyExplanation, lang?.rawValue, Date.now, revisionUUID]
             )
             try db.execute(
                 sql: "UPDATE concept SET updatedAt = ? WHERE id = ?",
                 arguments: [Date.now, conceptId]
             )
+            try SyncJournal.upsert(db, kind: .revision, uuid: revisionUUID)
+            try SyncJournal.upsert(db, kind: .concept, uuid: conceptUUID)
         }
     }
 
     /// 개념 삭제. 별칭·개정본·출처는 FK cascade로 함께 삭제되고, 조회 기록 행은 남고 conceptId만 NULL이 된다.
     public func deleteConcept(conceptId: Int64) async throws {
         _ = try await database.writer.write { db in
+            guard let conceptUUID = try String.fetchOne(
+                db, sql: "SELECT uuid FROM concept WHERE id = ?", arguments: [conceptId]
+            ) else { return }
+            let aliasUUIDs = try String.fetchAll(
+                db, sql: "SELECT uuid FROM alias WHERE conceptId = ? AND uuid IS NOT NULL",
+                arguments: [conceptId])
+            let revisionRows = try Row.fetchAll(
+                db, sql: "SELECT id, uuid FROM definitionRevision WHERE conceptId = ?",
+                arguments: [conceptId])
+            let revisionIds = revisionRows.map { $0["id"] as Int64 }
+            let revisionUUIDs = revisionRows.compactMap { $0["uuid"] as String? }
+            var sourceUUIDs: [String] = []
+            if !revisionIds.isEmpty {
+                let placeholders = String(repeating: "?,", count: revisionIds.count).dropLast()
+                sourceUUIDs = try String.fetchAll(
+                    db,
+                    sql: "SELECT uuid FROM sourceRef WHERE revisionId IN (\(placeholders)) AND uuid IS NOT NULL",
+                    arguments: StatementArguments(revisionIds)
+                )
+            }
+            // 실제 삭제 전에 묘비를 남긴다. 부모 삭제가 FK cascade로 자식을 함께 지우므로
+            // 자식 묘비도 같은 트랜잭션에서 한 번에 기록한다.
+            try SyncJournal.delete(db, kind: .concept, uuid: conceptUUID)
+            for uuid in aliasUUIDs { try SyncJournal.delete(db, kind: .alias, uuid: uuid) }
+            for uuid in revisionUUIDs { try SyncJournal.delete(db, kind: .revision, uuid: uuid) }
+            for uuid in sourceUUIDs { try SyncJournal.delete(db, kind: .source, uuid: uuid) }
             try db.execute(sql: "DELETE FROM concept WHERE id = ?", arguments: [conceptId])
         }
     }

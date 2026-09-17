@@ -23,6 +23,7 @@ struct SettingsView: View {
     @AppStorage("webResearchAllowed") private var webResearchAllowed = false
     @State private var page: Page = .general
     @AppStorage(ExplanationLanguagePreference.storageKey) private var explanationLanguageStored = "ko"
+    @AppStorage(EngineSettings.typoCorrectionStorageKey) private var typoCorrectionEnabled = true
     @State private var modelDraft = ""
     @State private var modelChoice: ModelChoice = .balanced
     @State private var accessibilityGranted = false
@@ -102,6 +103,16 @@ struct SettingsView: View {
         )
     }
 
+    private var syncEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { appDelegate.syncService.isEnabled },
+            set: { enabled in
+                UserDefaults.standard.set(enabled, forKey: CloudSyncService.storageKey)
+                Task { await appDelegate.syncService.setEnabled(enabled) }
+            }
+        )
+    }
+
     private var generalSettings: some View {
         Group {
             Section {
@@ -124,6 +135,19 @@ struct SettingsView: View {
                 Text("AI가 만드는 정의와 설명의 언어예요. **자동**은 조회한 용어의 언어를 따르고 판단에 실패하면 한국어로 설명해요. 이미 저장된 항목은 그 언어로 쓰인 설명이 있을 때 우선 보여요.")
                     .font(.callout).foregroundStyle(.secondary)
             } header: { Text("언어") }
+
+            Section {
+                Toggle("오타 자동 보정", isOn: $typoCorrectionEnabled)
+                Text("질의가 사전에 없으면 저장된 표현 중 철자가 가장 가까운 것으로 찾아줘요. 끄면 입력한 원본 텍스트를 그대로 사용해요.")
+                    .font(.callout).foregroundStyle(.secondary)
+            } header: { Text("조회") }
+
+            Section {
+                Toggle("iCloud 동기화", isOn: syncEnabledBinding)
+                SyncStatusLine(service: appDelegate.syncService)
+                Text("개념·별칭·개정본·출처를 iCloud에 동기화해요. 같은 Apple ID로 쓰는 기기에서 같은 사전을 쓸 수 있어요. 조회 통계와 설정은 동기화하지 않아요.")
+                    .font(.callout).foregroundStyle(.secondary)
+            } header: { Text("동기화") }
 
             Section {
                 KeyboardShortcuts.Recorder("선택한 텍스트 조회", name: .lookupSelection)
@@ -249,5 +273,40 @@ struct SettingsView: View {
 
     private func refreshPermission() {
         accessibilityGranted = SelectedTextReader.isAccessibilityGranted(promptIfNeeded: false)
+    }
+}
+
+/// 동기화 상태 줄. 서비스의 @Published 변화를 관찰해 즉시 반영한다.
+private struct SyncStatusLine: View {
+    @ObservedObject var service: CloudSyncService
+
+    var body: some View {
+        LabeledContent("상태") {
+            HStack(spacing: 6) {
+                if service.phase == .syncing || service.phase == .starting {
+                    ProgressView().controlSize(.small)
+                }
+                Text(statusText)
+            }
+            .foregroundStyle(service.phase.isFailed ? .orange : .primary)
+        }
+        if service.isEnabled, service.pendingCount > 0 {
+            LabeledContent("올릴 변경") {
+                Text("\(service.pendingCount)건")
+            }
+        }
+        Button("지금 동기화") {
+            Task { await service.syncNow() }
+        }
+        .disabled(!service.isEnabled)
+    }
+
+    private var statusText: String {
+        if case .upToDate(let last) = service.phase, let last {
+            let formatter = DateFormatter()
+            formatter.timeStyle = .short
+            return "최신 상태예요 · 마지막 동기화 \(formatter.string(from: last))"
+        }
+        return service.phase.label
     }
 }

@@ -1,112 +1,114 @@
 # Lexi
 
-[한국어](README.md) | [English](README.en.md) | [日本語](README.ja.md) | [中文](README.zh.md)
+[한국어](README.ko.md) | **English** | [日本語](README.ja.md) | [中文](README.zh.md)
 
 <p align="center">
-  <img src="App/Assets.xcassets/AppIcon.appiconset/AppIcon-128@2x.png" width="128" height="128" alt="Lexi 앱 아이콘">
+  <img src="App/Assets.xcassets/AppIcon.appiconset/AppIcon-128@2x.png" width="128" height="128" alt="Lexi app icon">
 </p>
 
 <p align="center">
-  <strong>선택한 낯선 표현을 바로 찾아보고, 내 사전으로 쌓는 macOS용 로컬 우선 AI 사전</strong>
+  <strong>A local-first AI dictionary for macOS that instantly looks up unfamiliar expressions you select and builds them into your personal dictionary</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/project-oxi/lexi/releases/latest">최신 릴리스</a> ·
-  <a href="https://github.com/project-oxi/lexi/actions/workflows/ci.yml"><img src="https://github.com/project-oxi/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
-  <a href="https://github.com/project-oxi/lexi/releases"><img src="https://img.shields.io/github/v/release/project-oxi/lexi" alt="GitHub Release"></a>
+  <a href="https://github.com/a7garden/lexi/releases/latest">Latest release</a> ·
+  <a href="https://github.com/a7garden/lexi/actions/workflows/ci.yml"><img src="https://github.com/a7garden/lexi/actions/workflows/ci.yml/badge.svg" alt="CI"></a> ·
+  <a href="https://github.com/a7garden/lexi/releases"><img src="https://img.shields.io/github/v/release/a7garden/lexi" alt="GitHub Release"></a>
 </p>
 
-Lexi는 이미 저장한 표현은 AI 호출 없이 즉시 보여주고, 처음 보는 표현만 로컬 MLX 모델로 설명을 만듭니다. 웹 조사는 사용자가 켠 경우에만 실행하며, 실제로 읽은 공개 자료만 출처로 저장합니다.
+Lexi instantly shows expressions you have already saved without an AI call, and creates explanations with a local MLX model only for expressions it is seeing for the first time. Web research runs only when you have turned it on, and only public material actually read is stored as a source.
 
-## 주요 기능
+## Key features
 
-- `⌘D` 전역 단축키로 현재 선택한 텍스트를 즉시 조회
-- macOS 서비스 메뉴의 **Lexi에게 물어보기** 지원
-- 메뉴 막대에서 클립보드 검색, 사전 열기, 설정 접근
-- 커서 근처에 나타나는 가벼운 즉시 보기 패널
-- 표제어·별칭·즐겨찾기·출처·수정 이력을 담는 개인 사전
-- 다국어 임베딩으로 저장된 개념을 뜻이 비슷한 항목끼리 찾아보는 의미 검색
-- 한국어·영어·일본어·중국어 등 8개 언어를 자동으로 판별해 기록하는 다국어 조회. 설명 언어를 고르면 그 언어로 쓰인 저장 설명을 우선 보여줍니다
-- Apple Silicon에서 동작하는 MLX 기반 로컬 언어 모델
-- 사용자가 명시적으로 허용한 경우에만 DuckDuckGo 기반 웹 조사
-- AI 초안과 사용자 수정본을 구분해 저장하는 개정 이력
+- Look up the currently selected text instantly with the `⌘D` global shortcut
+- Support for **Ask Lexi** (Lexi에게 물어보기) in the macOS Services menu
+- Clipboard lookup, dictionary opening, and Settings access from the menu bar
+- A lightweight instant-look panel that appears near the cursor
+- A personal dictionary that holds headwords, aliases, favorites, sources, and revision history
+- Semantic search that uses multilingual embeddings to browse saved concepts by similar meaning
+- Multilingual lookup that automatically detects and records eight languages, including Korean, English, Japanese, and Chinese. When you choose an explanation language, saved explanations written in that language are shown first
+- An MLX-based local language model that runs on Apple Silicon
+- DuckDuckGo-based web research, only when explicitly permitted by the user
+- Revision history that stores AI drafts and user-edited versions separately
 
-## 스크린샷
+## Screenshots
 
-| 전체 사전 | 즉시 보기 패널 |
+> The app UI is currently Korean-only; the screenshots show the Korean interface.
+
+| Full library | Instant lookup panel |
 | --- | --- |
-| ![전체 사전 화면](docs/screenshots/library.png) | ![즉시 보기 패널](docs/screenshots/instant-panel.png) |
+| ![Library window](docs/screenshots/library.png) | ![Instant lookup panel](docs/screenshots/instant-panel.png) |
 
-![설정 화면](docs/screenshots/settings.png)
+![Settings window](docs/screenshots/settings.png)
 
-## 설치
+## Installation
 
-1. [Releases](https://github.com/project-oxi/lexi/releases/latest)에서 최신 `Lexi-*-macOS-arm64.zip`을 받습니다.
-2. 압축을 풀고 `Lexi.app`을 응용 프로그램 폴더로 옮깁니다.
-3. Lexi를 실행합니다. 배포 파일은 Developer ID로 서명되고 Apple 공증을 거칩니다.
-4. 선택 텍스트 조회를 처음 사용할 때 macOS가 요청하는 **손쉬운 사용** 권한을 허용합니다.
+1. Download the latest `Lexi-*-macOS-arm64.dmg` from [Releases](https://github.com/a7garden/lexi/releases/latest).
+2. Open the DMG and drag `Lexi.app` onto the Applications folder shortcut.
+3. Launch Lexi. Release artifacts are signed with a Developer ID and notarized by Apple.
+4. The first time you use selected-text lookup, grant the **Accessibility** (손쉬운 사용) permission that macOS asks for.
 
-> Lexi는 Apple Silicon Mac과 macOS 14 Sonoma 이상을 지원합니다. 첫 AI 생성 시 선택한 MLX 모델을 Hugging Face에서 내려받으므로 네트워크 연결과 수 GB의 여유 공간이 필요할 수 있습니다.
+> Lexi supports Apple Silicon Macs running macOS 14 Sonoma or later. The first AI generation downloads the selected MLX model from Hugging Face, so a network connection and several gigabytes of free disk space may be required.
 
-## 사용법
+## Usage
 
-### 선택한 텍스트 조회
+### Selected-text lookup
 
-다른 앱에서 텍스트를 선택하고 `⌘D`를 누릅니다. Lexi는 손쉬운 사용 API로 선택 영역을 읽습니다. 읽기에 실패하더라도 클립보드 내용을 대신 사용하지 않고 사전 창을 엽니다.
+Select text in another app and press `⌘D`. Lexi reads the selection through the Accessibility API. Even if reading fails, it opens the dictionary window instead of falling back to the clipboard contents.
 
-앱의 우클릭 메뉴에서 **서비스 → Lexi에게 물어보기**를 선택해도 됩니다. 이 경로는 손쉬운 사용 권한 없이 선택한 텍스트를 받습니다.
+You can also choose **Services → Ask Lexi** from the app's right-click menu. This path receives the selected text without the Accessibility permission.
 
-메뉴가 보이지 않으면 Lexi **설정 → 일반 → 우클릭 서비스**에서 **목록 새로고침**을 누른 뒤 사용하던 앱의 메뉴를 다시 열어 보세요. macOS **시스템 설정 → 키보드 → 키보드 단축키 → 서비스**에서 **Lexi에게 물어보기**가 켜져 있는지도 확인하세요. 서비스 제공 앱은 다른 앱의 우클릭 메뉴 최상위에 항목을 고정할 수 없으며, 메뉴 구성은 호출 앱이 정합니다. 가장 빠른 호출 경로는 Lexi 설정의 전역 단축키이며, 손쉬운 사용 권한 없이 단축키로 호출하려면 macOS 서비스 설정에서 이 항목에 별도 단축키를 지정할 수 있습니다.
+If the menu does not appear, press **Refresh list** (목록 새로고침) under Lexi **Settings → General → Right-click services** (설정 → 일반 → 우클릭 서비스), then reopen the menu of the app you were using. Also check that **Ask Lexi** is turned on under macOS **System Settings → Keyboard → Keyboard Shortcuts → Services** (시스템 설정 → 키보드 → 키보드 단축키 → 서비스). A service-providing app cannot pin its item to the top of another app's right-click menu; the menu layout is decided by the calling app. The fastest way to invoke Lexi is the global shortcut in Lexi settings, and to invoke it with a shortcut without the Accessibility permission, you can assign a dedicated shortcut to this item in the macOS Services settings.
 
-### 사전과 수정 이력
+### Dictionary and revision history
 
-왼쪽 패널의 검색창과 분류 버튼으로 모든 개념·최근 조회·즐겨찾기·AI 초안·직접 작성 목록을 탐색하고, 오른쪽에서 설명을 읽습니다. 검색은 개념·별칭·한 줄 정의를 함께 찾습니다. **의미로 찾기**를 누르면 일반 검색 결과와 겹치지 않는 저장된 개념을 다국어 임베딩 유사도순으로 묶어 보여줍니다. **개념 추가** 또는 `⌘N`으로 직접 작성하거나 개념 이름만 입력해 AI로 조회할 수 있습니다. 목록의 우클릭 메뉴에서 즐겨찾기와 이름 복사도 지원합니다.
+Use the search field and the category buttons in the left panel to browse the lists of all concepts, recent lookups, favorites, AI drafts, and manually written entries, and read the explanation on the right. Search covers concepts, aliases, and one-line definitions together. Pressing **Find by meaning** (의미로 찾기) groups saved concepts that do not overlap the regular search results and shows them ordered by multilingual embedding similarity. You can write entries yourself with **Add concept** (개념 추가) or `⌘N`, or look up a concept with AI by typing just its name. The list's right-click menu also supports favoriting and copying names.
 
-저장된 표제어나 별칭이 정확히 일치하면 즉시 결과를 표시합니다. 없는 표현은 로컬 모델이 초안을 만들고 사전에 저장합니다. AI가 만든 내용은 초안이므로 중요한 정의는 직접 검토하고 수정해 주세요.
+If a saved headword or alias matches exactly, the result is displayed instantly. For expressions that are not in the dictionary, the local model creates a draft and saves it. What the AI produces is a draft, so review and edit important definitions yourself.
 
-### 설정
+### Settings
 
-- **MLX 모델**: Qwen3 4B(기본)·1.7B(가벼운 모델)·8B(큰 모델) 중 선택하면 바로 저장됩니다. **사용자 지정**을 고르면 Hugging Face의 MLX 모델 ID를 직접 입력하고 적용할 수 있습니다.
-- **웹 조사**: 기본값은 꺼짐입니다. 켜면 검색어와 공개 웹페이지 요청이 외부로 전송됩니다.
-- **단축키·권한**: 일반 탭에서 조회 단축키를 바꾸고 손쉬운 사용 권한을 확인할 수 있습니다.
-- **설명 언어**: 일반 탭에서 AI가 만드는 정의·설명의 언어를 고릅니다. **자동**은 조회한 용어의 언어를 따르고 판단에 실패하면 한국어로 설명합니다. 항목마다 용어·별칭·설명의 언어를 기록해, 같은 개념에 언어가 다른 설명이 있어도 요청한 언어의 설명을 우선 표시합니다.
-- **바로 적용**: 모델 ID는 **적용**을 누르면 저장되며, 웹 조사 변경과 함께 다음 조회부터 적용됩니다. 앱을 다시 시작할 필요가 없습니다.
+- **MLX model**: Choose among Qwen3 4B (default) · 1.7B (lighter) · 8B (larger); the choice is saved immediately. With **Custom** (사용자 지정), you can enter an MLX model ID from Hugging Face directly and apply it.
+- **Web research** (웹 조사): Off by default. When turned on, search queries and requests for public web pages are sent externally.
+- **Shortcuts & permissions** (단축키·권한): Change the lookup shortcut and check the Accessibility permission in the General tab.
+- **Explanation language** (설명 언어): Choose the language of the definitions and explanations the AI produces in the General tab. **Automatic** (자동) follows the language of the looked-up term and explains in Korean when detection fails. Each entry records the language of its term, aliases, and explanations, so even if the same concept has explanations in several languages, the explanation in the requested language is shown first.
+- **Instant apply** (바로 적용): The model ID is saved when you press **Apply** (적용), and together with web research changes takes effect from the next lookup. There is no need to restart the app.
 
-## 개인정보와 네트워크
+## Privacy and networking
 
-- 사전 데이터는 `~/Library/Application Support/Lexi/lexi.sqlite`에 로컬로 저장됩니다.
-- 저장된 표현을 조회할 때는 네트워크나 AI를 사용하지 않습니다.
-- 생성 모델과 의미 검색용 `multilingual-e5-small` 모델 가중치는 각 기능의 첫 사용 시 Hugging Face에서 내려받습니다.
-- 의미 검색은 명시적으로 **의미로 찾기**를 누를 때만 실행되며, 검색어와 사전 내용의 임베딩 계산은 Mac 안에서 이뤄집니다. 임베딩은 파생 메모리 캐시이며 사전 원문이나 개정 이력을 바꾸지 않습니다.
-- 웹 조사를 켠 경우에만 DuckDuckGo 검색과 검색 결과 페이지 요청이 발생합니다.
-- 텔레메트리나 자체 분석 서버는 포함되어 있지 않습니다.
+- Dictionary data is stored locally at `~/Library/Application Support/Lexi/lexi.sqlite`.
+- Looking up saved expressions uses neither the network nor AI.
+- The generative model and the `multilingual-e5-small` weights used for semantic search are downloaded from Hugging Face the first time each feature is used.
+- Semantic search runs only when you explicitly press **Find by meaning**, and the embeddings for the search query and the dictionary content are computed on the Mac. The embeddings are a derived in-memory cache and do not alter the dictionary's source text or revision history.
+- DuckDuckGo searches and requests for search result pages happen only when web research is turned on.
+- No telemetry or self-hosted analytics server is included.
 
-## 직접 빌드하기
+## Building from source
 
-요구 사항:
+Requirements:
 
 - Apple Silicon Mac
-- macOS 14 이상
-- Xcode 16 이상
+- macOS 14 or later
+- Xcode 16 or later
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 
 ```bash
-git clone https://github.com/project-oxi/lexi.git
+git clone https://github.com/a7garden/lexi.git
 cd lexi
 brew install xcodegen
 xcodegen generate
 open Lexi.xcodeproj
 ```
 
-Xcode에서 `Lexi` 스킴을 선택하고 실행합니다. 이 저장소는 생성된 `.xcodeproj`를 커밋하지 않으며 `project.yml`을 프로젝트 설정의 기준으로 사용합니다.
+In Xcode, select the `Lexi` scheme and run. This repository does not commit the generated `.xcodeproj`; `project.yml` is the source of truth for the project configuration.
 
-핵심 패키지 테스트는 다음과 같이 실행합니다.
+Run the core package tests as follows:
 
 ```bash
 swift test --package-path Packages/LexiCore
 ```
 
-서명되지 않은 Release 빌드 확인:
+Verify an unsigned Release build:
 
 ```bash
 xcodegen generate
@@ -118,46 +120,46 @@ xcodebuild \
   build
 ```
 
-## 구조
+## Project layout
 
 ```text
-App/                         SwiftUI·AppKit 앱과 즉시 보기 UI
-Packages/LexiCore/           SQLite, 조회, MLX, 웹 조사 핵심 로직
-docs/PDC-MIGRATION.md        Portable Document Contract 가져오기·내보내기 계획
-AGENTS.md                    저장소 작업 우선순위와 PDC 적용 규칙
-project.yml                  XcodeGen 프로젝트 정의
-.github/workflows/ci.yml     테스트와 서명 없는 빌드 검증
-.github/workflows/release.yml Developer ID 서명·공증·GitHub Release
+App/                         SwiftUI·AppKit app and instant-look UI
+Packages/LexiCore/           SQLite, lookup, MLX, and web research core logic
+docs/PDC-MIGRATION.md        Portable Document Contract import/export plan
+AGENTS.md                    Repository work priorities and PDC application rules
+project.yml                  XcodeGen project definition
+.github/workflows/ci.yml     Test and unsigned build verification
+.github/workflows/release.yml Developer ID signing, notarization, GitHub Release
 ```
 
-## 주요 의존성
+## Key dependencies
 
-| 패키지 | 용도 | 라이선스 |
+| Package | Purpose | License |
 | --- | --- | --- |
-| [GRDB.swift](https://github.com/groue/GRDB.swift) | SQLite 저장소 | MIT |
-| [mlx-swift-examples](https://github.com/ml-explore/mlx-swift-examples) | 로컬 MLX LLM·다국어 임베딩 | MIT |
-| [mlx-swift](https://github.com/ml-explore/mlx-swift) | 임베딩 텐서 연산 | MIT |
-| [KeyboardShortcuts](https://github.com/sindresorhus/KeyboardShortcuts) | 전역 단축키 | MIT |
+| [GRDB.swift](https://github.com/groue/GRDB.swift) | SQLite storage | MIT |
+| [mlx-swift-examples](https://github.com/ml-explore/mlx-swift-examples) | Local MLX LLM and multilingual embeddings | MIT |
+| [mlx-swift](https://github.com/ml-explore/mlx-swift) | Embedding tensor operations | MIT |
+| [KeyboardShortcuts](https://github.com/sindresorhus/KeyboardShortcuts) | Global shortcuts | MIT |
 
-전이 의존성에는 `swift-transformers`, `swift-collections`, `swift-numerics`, `swift-jinja`, `GzipSwift`가 포함됩니다. 각 저작권과 라이선스는 해당 프로젝트에 따릅니다.
+Transitive dependencies include `swift-transformers`, `swift-collections`, `swift-numerics`, `swift-jinja`, and `GzipSwift`. Each is subject to the copyright and license of its own project.
 
-## 릴리스 보안
+## Release security
 
-`v*` 태그는 GitHub Actions에서 다음 절차를 거칩니다.
+`v*` tags go through the following steps in GitHub Actions:
 
-1. 임시 키체인에 Developer ID 인증서 가져오기
-2. Release 아카이브 생성과 코드 서명 검증
-3. Apple notary service 제출과 승인 대기
-4. 공증 티켓 스테이플 및 Gatekeeper 검증
-5. SHA-256 체크섬과 함께 GitHub Release 게시
+1. Import the Developer ID certificate into a temporary keychain
+2. Create the Release archive and verify its code signature
+3. Submit to the Apple notary service and wait for approval
+4. Staple the notarization ticket and verify with Gatekeeper
+5. Publish the GitHub Release together with a SHA-256 checksum
 
-인증서와 비밀번호는 GitHub Actions secrets에만 저장하며 저장소에는 커밋하지 않습니다.
+Certificates and passwords are stored only in GitHub Actions secrets and are never committed to the repository.
 
-## 라이선스
+## License
 
-현재 이 저장소에는 별도의 오픈 소스 라이선스가 부여되지 않았습니다. 별도 고지 없이 코드의 복제·수정·재배포 권한이 허용되는 것은 아닙니다.
+No separate open source license has been granted for this repository at this time. The rights to copy, modify, and redistribute the code are not granted without separate notice.
 
-앱의 서비스 선언·호출 및 설정 회귀 테스트:
+Regression tests for the app's service declaration and invocation, and for settings:
 
 ```bash
 xcodegen generate
