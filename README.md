@@ -21,7 +21,7 @@ Lexi instantly shows expressions you have already saved without an AI call, and 
 ## Key features
 
 - Look up the currently selected text instantly with the `⌘D` global shortcut
-- Support for **Ask Lexi** (Lexi에게 물어보기) in the macOS Services menu
+- Support for **Ask Lexi** in the macOS Services menu
 - Clipboard lookup, dictionary opening, and Settings access from the menu bar
 - A lightweight instant-look panel that appears near the cursor
 - A personal dictionary that holds headwords, aliases, favorites, sources, and revision history
@@ -46,7 +46,7 @@ Lexi instantly shows expressions you have already saved without an AI call, and 
 1. Download the latest `Lexi-*-macOS-arm64.dmg` from [Releases](https://github.com/a7garden/lexi/releases/latest).
 2. Open the DMG and drag `Lexi.app` onto the Applications folder shortcut.
 3. Launch Lexi. Release artifacts are signed with a Developer ID and notarized by Apple.
-4. The first time you use selected-text lookup, grant the **Accessibility** (손쉬운 사용) permission that macOS asks for.
+4. The first time you use selected-text lookup, grant the **Accessibility** permission that macOS asks for.
 
 > Lexi supports Apple Silicon Macs running macOS 14 Sonoma or later. The first AI generation downloads the selected MLX model from Hugging Face, so a network connection and several gigabytes of free disk space may be required.
 
@@ -58,21 +58,21 @@ Select text in another app and press `⌘D`. Lexi reads the selection through th
 
 You can also choose **Services → Ask Lexi** from the app's right-click menu. This path receives the selected text without the Accessibility permission.
 
-If the menu does not appear, press **Refresh list** (목록 새로고침) under Lexi **Settings → General → Right-click services** (설정 → 일반 → 우클릭 서비스), then reopen the menu of the app you were using. Also check that **Ask Lexi** is turned on under macOS **System Settings → Keyboard → Keyboard Shortcuts → Services** (시스템 설정 → 키보드 → 키보드 단축키 → 서비스). A service-providing app cannot pin its item to the top of another app's right-click menu; the menu layout is decided by the calling app. The fastest way to invoke Lexi is the global shortcut in Lexi settings, and to invoke it with a shortcut without the Accessibility permission, you can assign a dedicated shortcut to this item in the macOS Services settings.
+If the menu does not appear, press **Refresh list** under Lexi **Settings → General → Right-click services**, then reopen the menu of the app you were using. Also check that **Ask Lexi** is turned on under macOS **System Settings → Keyboard → Keyboard Shortcuts → Services**. A service-providing app cannot pin its item to the top of another app's right-click menu; the menu layout is decided by the calling app. The fastest way to invoke Lexi is the global shortcut in Lexi settings, and to invoke it with a shortcut without the Accessibility permission, you can assign a dedicated shortcut to this item in the macOS Services settings.
 
 ### Dictionary and revision history
 
-Use the search field and the category buttons in the left panel to browse the lists of all concepts, recent lookups, favorites, AI drafts, and manually written entries, and read the explanation on the right. Search covers concepts, aliases, and one-line definitions together. Pressing **Find by meaning** (의미로 찾기) groups saved concepts that do not overlap the regular search results and shows them ordered by multilingual embedding similarity. You can write entries yourself with **Add concept** (개념 추가) or `⌘N`, or look up a concept with AI by typing just its name. The list's right-click menu also supports favoriting and copying names.
+Use the search field and the category buttons in the left panel to browse the lists of all concepts, recent lookups, favorites, AI drafts, and manually written entries, and read the explanation on the right. Search covers concepts, aliases, and one-line definitions together. Pressing **Find by meaning** groups saved concepts that do not overlap the regular search results and shows them ordered by multilingual embedding similarity. You can write entries yourself with **Add concept** or `⌘N`, or look up a concept with AI by typing just its name. The list's right-click menu also supports favoriting and copying names.
 
 If a saved headword or alias matches exactly, the result is displayed instantly. For expressions that are not in the dictionary, the local model creates a draft and saves it. What the AI produces is a draft, so review and edit important definitions yourself.
 
 ### Settings
 
-- **MLX model**: Choose among Qwen3 4B (default) · 1.7B (lighter) · 8B (larger); the choice is saved immediately. With **Custom** (사용자 지정), you can enter an MLX model ID from Hugging Face directly and apply it.
-- **Web research** (웹 조사): Off by default. When turned on, search queries and requests for public web pages are sent externally.
-- **Shortcuts & permissions** (단축키·권한): Change the lookup shortcut and check the Accessibility permission in the General tab.
-- **Explanation language** (설명 언어): Choose the language of the definitions and explanations the AI produces in the General tab. **Automatic** (자동) follows the language of the looked-up term and explains in Korean when detection fails. Each entry records the language of its term, aliases, and explanations, so even if the same concept has explanations in several languages, the explanation in the requested language is shown first.
-- **Instant apply** (바로 적용): The model ID is saved when you press **Apply** (적용), and together with web research changes takes effect from the next lookup. There is no need to restart the app.
+- **MLX model**: Choose among Qwen3 4B (default) · 1.7B (lighter) · 8B (larger); the choice is saved immediately. With **Custom**, you can enter an MLX model ID from Hugging Face directly and apply it.
+- **Web research**: Off by default. When turned on, search queries and requests for public web pages are sent externally.
+- **Shortcuts & permissions**: Change the lookup shortcut and check the Accessibility permission in the General tab.
+- **Explanation language**: Choose the language of the definitions and explanations the AI produces in the General tab. **Automatic** follows the language of the looked-up term and explains in Korean when detection fails. Each entry records the language of its term, aliases, and explanations, so even if the same concept has explanations in several languages, the explanation in the requested language is shown first.
+- **Instant apply**: The model ID is saved when you press **Apply**, and together with web research changes takes effect from the next lookup. There is no need to restart the app.
 
 ## Privacy and networking
 
