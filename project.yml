@@ -16,13 +16,6 @@ targets:
   Lexi:
     type: application
     platform: macOS
-    entitlements:
-      path: App/Lexi.entitlements
-      properties:
-        com.apple.developer.icloud-container-identifiers:
-          - iCloud.kr.garden.lexi.app
-        com.apple.developer.icloud-services:
-          - CloudKit
     sources:
       - App
     dependencies:
@@ -66,6 +59,7 @@ targets:
         Release:
           CODE_SIGN_IDENTITY: Developer ID Application
           CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
+          CODE_SIGN_ENTITLEMENTS: App/Lexi.entitlements
 
   LexiTests:
     type: bundle.unit-test
