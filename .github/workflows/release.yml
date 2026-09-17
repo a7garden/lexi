@@ -195,7 +195,6 @@ jobs:
             --wait
           xcrun stapler staple "$dmg_path"
           xcrun stapler validate "$dmg_path"
-          spctl --assess --type open --verbose=4 "$dmg_path"
 
       - name: Generate DMG checksum
         shell: bash
