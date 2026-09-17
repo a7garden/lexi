@@ -77,6 +77,31 @@ jobs:
           echo "SIGNING_IDENTITY=$signing_identity" >> "$GITHUB_ENV"
           echo "SIGNING_KEYCHAIN=$keychain_path" >> "$GITHUB_ENV"
 
+      - name: Install provisioning profile
+        env:
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          profile_path="$RUNNER_TEMP/developer-id.mobileprovision"
+          printf '%s' "$PROVISIONING_PROFILE_BASE64" | base64 -D > "$profile_path"
+
+          plist="$(security cms -D -i "$profile_path")"
+          profile_uuid="$(grep -A1 '<key>UUID</key>' <<< "$plist" | sed -n 's|.*<string>\(.*\)</string>.*|\1|p' | head -n 1)"
+          if [[ -z "$profile_uuid" ]]; then
+            echo "Could not read UUID from the provisioning profile." >&2
+            exit 1
+          fi
+          if ! grep -q 'iCloud.kr.garden.lexi.app' <<< "$plist"; then
+            echo "Profile does not authorize the iCloud container iCloud.kr.garden.lexi.app." >&2
+            exit 1
+          fi
+
+          profiles_dir="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$profiles_dir"
+          cp "$profile_path" "$profiles_dir/$profile_uuid.mobileprovision"
+          echo "PROFILE_SPECIFIER=$profile_uuid" >> "$GITHUB_ENV"
+
       - name: Generate Xcode project
         run: xcodegen generate
 
@@ -99,6 +124,7 @@ jobs:
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="$SIGNING_IDENTITY" \
+            PROVISIONING_PROFILE_SPECIFIER="$PROFILE_SPECIFIER" \
             OTHER_CODE_SIGN_FLAGS="--timestamp --keychain $SIGNING_KEYCHAIN" \
             archive
 
