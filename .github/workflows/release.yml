@@ -100,7 +100,6 @@ jobs:
           profiles_dir="$HOME/Library/MobileDevice/Provisioning Profiles"
           mkdir -p "$profiles_dir"
           cp "$profile_path" "$profiles_dir/$profile_uuid.mobileprovision"
-          echo "PROFILE_SPECIFIER=$profile_uuid" >> "$GITHUB_ENV"
 
       - name: Generate Xcode project
         run: xcodegen generate
@@ -124,7 +123,6 @@ jobs:
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="$SIGNING_IDENTITY" \
-            PROVISIONING_PROFILE_SPECIFIER="$PROFILE_SPECIFIER" \
             OTHER_CODE_SIGN_FLAGS="--timestamp --keychain $SIGNING_KEYCHAIN" \
             archive
 
