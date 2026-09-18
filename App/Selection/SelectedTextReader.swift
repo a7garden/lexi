@@ -36,7 +36,10 @@ public enum SelectedTextReader {
     /// 포커스 앱의 선택 텍스트를 trim해서 반환한다.
     ///
     /// 1차로 시스템와이드 포커스 엘리먼트에서 `kAXSelectedTextAttribute`를 읽고,
-    /// 실패하면 포그라운드 앱의 pid로 `AXUIElementCreateApplication`을 만들어 재시도한다.
+    /// 실패하면 포그라운드 앱의 pid로 `AXUIElementCreateApplication`을 만들어
+    /// 앱 포커스 엘리먼트로 재시도한다. Safari/WebKit 웹영역처럼 선택을
+    /// `kAXSelectedTextAttribute`로 노출하지 않는(`noValue`) 대상은 text marker
+    /// range(`AXSelectedTextMarkerRange` + `AXStringForTextMarkerRange`)로 읽는다.
     /// 둘 다 실패하거나 빈 문자열이면 `.selectionUnavailable(appName:)`을 던진다.
     /// - Throws: `SelectedTextError.notTrusted`, `SelectedTextError.selectionUnavailable(appName:)`
     @MainActor
@@ -48,9 +51,9 @@ public enum SelectedTextReader {
 
         // 1차: 시스템와이드 포커스 엘리먼트
         var selected = selectedText(from: AXUIElementCreateSystemWide(), readingFocused: true)
-        // 2차: 포그라운드 앱 pid로 직접 질의
+        // 2차: 포그라운드 앱의 포커스 엘리먼트로 재시도
         if selected == nil, let app = frontmost {
-            selected = selectedText(from: AXUIElementCreateApplication(app.processIdentifier), readingFocused: false)
+            selected = selectedText(from: AXUIElementCreateApplication(app.processIdentifier), readingFocused: true)
         }
 
         guard let text = selected else {
@@ -60,7 +63,7 @@ public enum SelectedTextReader {
     }
 
     /// element(readingFocused=true면 그 포커스 엘리먼트)에서 선택 텍스트를 읽어 trim해 돌려준다.
-    /// 실패하거나 trim 결과가 비면 nil.
+    /// 실패하거나 trim 결과가 빈 문자열이면 nil.
     private static func selectedText(from element: AXUIElement, readingFocused: Bool) -> String? {
         var target = element
         if readingFocused {
@@ -71,12 +74,35 @@ public enum SelectedTextReader {
             }
             target = node as! AXUIElement
         }
+        return selectedText(of: target)
+    }
+
+    /// 표준 속성을 먼저 읽고, 웹영역(WebArea)처럼 이를 노출하지 않는 엘리먼트는
+    /// WebKit의 text marker range로 폴백한다. Safari 웹영역은 선택이 있어도
+    /// `kAXSelectedTextAttribute`가 noValue다.
+    private static func selectedText(of target: AXUIElement) -> String? {
         var value: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(target, kAXSelectedTextAttribute as CFString, &value) == .success,
-              let text = value as? String else {
+        if AXUIElementCopyAttributeValue(target, kAXSelectedTextAttribute as CFString, &value) == .success,
+           let text = value as? String {
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty { return trimmed }
+        }
+
+        // WebKit 확장 속성. 상수 심볼은 Swift에 노출되지 않아 문서화된 리터럴을 쓴다
+        // (AXTrustedCheckOptionPrompt와 같은 이유).
+        var marker: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(target, "AXSelectedTextMarkerRange" as CFString, &marker) == .success,
+              let markerRange = marker else {
+            return nil
+        }
+        var selected: CFTypeRef?
+        guard AXUIElementCopyParameterizedAttributeValue(
+            target, "AXStringForTextMarkerRange" as CFString, markerRange, &selected
+        ) == .success, let text = selected as? String else {
             return nil
         }
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
     }
+
 }
