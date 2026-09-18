@@ -5,11 +5,11 @@ import LexiCore
 extension LibraryFilter {
     var title: String {
         switch self {
-        case .all: "모든 개념"
-        case .recent: "최근 조회"
-        case .favorites: "즐겨찾기"
-        case .aiGenerated: "AI 초안"
-        case .userEdited: "직접 작성"
+        case .all: String(localized: "모든 개념")
+        case .recent: String(localized: "최근 조회")
+        case .favorites: String(localized: "즐겨찾기")
+        case .aiGenerated: String(localized: "AI 초안")
+        case .userEdited: String(localized: "직접 작성")
         }
     }
     var icon: String {
@@ -262,24 +262,24 @@ struct LibraryView: View {
     }
 
     private var emptyListTitle: String {
-        if !viewModel.searchText.isEmpty { return "검색 결과가 없어요" }
+        if !viewModel.searchText.isEmpty { return String(localized: "검색 결과가 없어요") }
         switch viewModel.filter {
-        case .favorites: return "즐겨찾기가 비어 있어요"
-        case .userEdited: return "직접 작성한 개념이 없어요"
-        case .recent: return "최근 조회한 개념이 없어요"
-        case .aiGenerated: return "저장된 AI 초안이 없어요"
-        case .all: return "첫 개념을 추가해 보세요"
+        case .favorites: return String(localized: "즐겨찾기가 비어 있어요")
+        case .userEdited: return String(localized: "직접 작성한 개념이 없어요")
+        case .recent: return String(localized: "최근 조회한 개념이 없어요")
+        case .aiGenerated: return String(localized: "저장된 AI 초안이 없어요")
+        case .all: return String(localized: "첫 개념을 추가해 보세요")
         }
     }
 
     private var emptyListDescription: String {
-        if !viewModel.searchText.isEmpty { return "다른 검색어로 찾아보거나 AI로 조회해 보세요." }
+        if !viewModel.searchText.isEmpty { return String(localized: "다른 검색어로 찾아보거나 AI로 조회해 보세요.") }
         switch viewModel.filter {
-        case .favorites: return "자주 보는 개념의 별을 눌러\n여기에 모아 두세요."
-        case .userEdited: return "직접 쓴 설명과 수정한 개념을\n한곳에서 볼 수 있어요."
-        case .recent: return "단축키나 우클릭으로 조회한 개념이\n최근 순서로 표시됩니다."
-        case .aiGenerated: return "AI로 조회해 저장한 개념이\n여기에 표시됩니다."
-        case .all: return "궁금한 개념을 직접 작성하거나\nAI에게 설명을 요청해 보세요."
+        case .favorites: return String(localized: "자주 보는 개념의 별을 눌러\n여기에 모아 두세요.")
+        case .userEdited: return String(localized: "직접 쓴 설명과 수정한 개념을\n한곳에서 볼 수 있어요.")
+        case .recent: return String(localized: "단축키나 우클릭으로 조회한 개념이\n최근 순서로 표시됩니다.")
+        case .aiGenerated: return String(localized: "AI로 조회해 저장한 개념이\n여기에 표시됩니다.")
+        case .all: return String(localized: "궁금한 개념을 직접 작성하거나\nAI에게 설명을 요청해 보세요.")
         }
     }
 
@@ -292,7 +292,7 @@ struct LibraryView: View {
                     Image(systemName: "star.fill").font(.caption).foregroundStyle(.yellow)
                 }
             }
-            Text(item.oneLine.flatMap { $0.isEmpty ? nil : $0 } ?? "설명을 추가해 보세요")
+            Text(item.oneLine.flatMap { $0.isEmpty ? nil : $0 } ?? String(localized: "설명을 추가해 보세요"))
                 .font(.callout).foregroundStyle(.secondary).lineLimit(2)
             HStack {
                 Label(item.author == "ai" ? "AI 초안" : "직접 작성", systemImage: item.author == "ai" ? "sparkles" : "pencil")

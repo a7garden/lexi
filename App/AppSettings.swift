@@ -25,9 +25,9 @@ enum AppIconPlacement: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .menuBarAndDock: "메뉴 막대와 Dock"
-        case .menuBarOnly: "메뉴 막대만"
-        case .dockOnly: "Dock만"
+        case .menuBarAndDock: String(localized: "메뉴 막대와 Dock")
+        case .menuBarOnly: String(localized: "메뉴 막대만")
+        case .dockOnly: String(localized: "Dock만")
         }
     }
 
@@ -36,6 +36,23 @@ enum AppIconPlacement: String, CaseIterable, Identifiable {
         case (true, true): .menuBarAndDock
         case (true, false): .menuBarOnly
         case (false, _): .dockOnly
+        }
+    }
+}
+
+/// 앱 UI 언어에 맞춘 언어 표시명. LexiCore의 `koreanName`(한국어 고정)은 데이터 라벨이고,
+/// 배지·설정 등 UI에는 이 값을 쓴다.
+extension EntryLanguage {
+    var localizedName: String {
+        switch self {
+        case .korean: String(localized: "한국어")
+        case .english: String(localized: "영어")
+        case .japanese: String(localized: "일본어")
+        case .chinese: String(localized: "중국어")
+        case .french: String(localized: "프랑스어")
+        case .german: String(localized: "독일어")
+        case .spanish: String(localized: "스페인어")
+        case .russian: String(localized: "러시아어")
         }
     }
 }
@@ -74,8 +91,8 @@ enum ExplanationLanguagePreference: Hashable {
 
     var label: String {
         switch self {
-        case .auto: "자동 · 조회 언어 따르기"
-        case .fixed(let language): language.koreanName
+        case .auto: String(localized: "자동 · 조회 언어 따르기")
+        case .fixed(let language): language.localizedName
         }
     }
 
@@ -135,18 +152,18 @@ enum ModelChoice: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .balanced: "Qwen3 4B · 기본"
-        case .light: "Qwen3 1.7B · 가벼운 모델"
-        case .large: "Qwen3 8B · 큰 모델"
-        case .custom: "사용자 지정…"
+        case .balanced: String(localized: "Qwen3 4B · 기본")
+        case .light: String(localized: "Qwen3 1.7B · 가벼운 모델")
+        case .large: String(localized: "Qwen3 8B · 큰 모델")
+        case .custom: String(localized: "사용자 지정…")
         }
     }
     var description: String {
         switch self {
-        case .balanced: "일상적인 개념 설명에 사용할 기본 4-bit 모델이에요."
-        case .light: "더 작은 4-bit 모델로 메모리 사용량을 줄일 수 있어요. 설명의 정확도는 직접 확인해 주세요."
-        case .large: "더 큰 4-bit 모델이에요. 메모리와 저장 공간이 더 필요하고 준비 시간이 길어질 수 있어요."
-        case .custom: "Hugging Face의 MLX 호환 모델 ID를 직접 입력해 주세요."
+        case .balanced: String(localized: "일상적인 개념 설명에 사용할 기본 4-bit 모델이에요.")
+        case .light: String(localized: "더 작은 4-bit 모델로 메모리 사용량을 줄일 수 있어요. 설명의 정확도는 직접 확인해 주세요.")
+        case .large: String(localized: "더 큰 4-bit 모델이에요. 메모리와 저장 공간이 더 필요하고 준비 시간이 길어질 수 있어요.")
+        case .custom: String(localized: "Hugging Face의 MLX 호환 모델 ID를 직접 입력해 주세요.")
         }
     }
     static func matching(_ modelID: String) -> ModelChoice {

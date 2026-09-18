@@ -121,7 +121,7 @@ final class ServiceRegistrationTests: XCTestCase {
         )
         XCTAssertEqual(
             SelectedTextError.notTrusted.errorDescription,
-            "선택한 텍스트를 읽으려면 손쉬운 사용 권한이 필요합니다. Lexi 설정 > 일반 > 접근 권한에서 Lexi를 허용해 주세요."
+            String(localized: "선택한 텍스트를 읽으려면 손쉬운 사용 권한이 필요합니다. Lexi 설정 > 일반 > 접근 권한에서 Lexi를 허용해 주세요.")
         )
     }
 
@@ -132,7 +132,7 @@ final class ServiceRegistrationTests: XCTestCase {
         pasteboard.setString(" \n ", forType: .string)
         var error: NSString?
         AppDelegate().lookupSelectedText(pasteboard, userData: nil, error: &error)
-        XCTAssertEqual(error.map { $0 as String }, "먼저 조회할 텍스트를 선택해 주세요.")
+        XCTAssertEqual(error.map { $0 as String }, String(localized: "먼저 조회할 텍스트를 선택해 주세요."))
     }
 
     @MainActor

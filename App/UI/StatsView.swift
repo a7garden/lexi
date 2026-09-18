@@ -50,7 +50,7 @@ final class StatsViewModel: ObservableObject {
                 configure(database: database, embeddingProvider: MLXTextEmbeddingProvider())
                 await load()
             } catch {
-                loadError = "통계 데이터베이스를 열 수 없어요: \(error.localizedDescription)"
+                loadError = String(localized: "통계 데이터베이스를 열 수 없어요: \(error.localizedDescription)")
             }
         }
     }
@@ -68,7 +68,7 @@ final class StatsViewModel: ObservableObject {
             isLoaded = true
         } catch {
             guard generation == loadGeneration else { return }
-            loadError = "통계를 불러오지 못했어요: \(error.localizedDescription)"
+            loadError = String(localized: "통계를 불러오지 못했어요: \(error.localizedDescription)")
         }
     }
 
@@ -88,8 +88,8 @@ final class StatsViewModel: ObservableObject {
                 } else {
                     embeddingPhase = .idle
                     embeddingMessage = embeddings.count < 3
-                        ? "지도를 그리려면 개념이 3개 이상 쌓여야 해요."
-                        : "개념 벡터가 아직 서로 구분되지 않아요. 개념이 더 쌓이면 다시 시도해 주세요."
+                        ? String(localized: "지도를 그리려면 개념이 3개 이상 쌓여야 해요.")
+                        : String(localized: "개념 벡터가 아직 서로 구분되지 않아요. 개념이 더 쌓이면 다시 시도해 주세요.")
                 }
             } catch is CancellationError {
                 guard generation == embeddingGeneration else { return }
@@ -97,7 +97,7 @@ final class StatsViewModel: ObservableObject {
             } catch {
                 guard generation == embeddingGeneration else { return }
                 embeddingPhase = .idle
-                embeddingMessage = "임베딩을 계산하지 못했어요: \(error.localizedDescription)"
+                embeddingMessage = String(localized: "임베딩을 계산하지 못했어요: \(error.localizedDescription)")
             }
         }
     }
@@ -212,53 +212,53 @@ struct StatsView: View {
         var parts: [String] = []
         if let firstSaved = overview.firstSavedAt {
             let days = max(1, (Calendar.current.dateComponents([.day], from: Calendar.current.startOfDay(for: firstSaved), to: Calendar.current.startOfDay(for: Date())).day ?? 0) + 1)
-            parts.append("사전과 함께한 지 \(days)일째")
+            parts.append(String(localized: "사전과 함께한 지 \(days)일째"))
         }
         if let lastLookup = overview.lastLookupAt {
-            parts.append("마지막 조회: \(lastLookup.formatted(.relative(presentation: .named)))")
+            parts.append(String(localized: "마지막 조회: \(lastLookup.formatted(.relative(presentation: .named)))"))
         }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
 
     private func overviewSection(_ overview: LibraryStatsOverview) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("한눈에 보기", footnote: dateFootnote)
+            sectionHeader(String(localized: "한눈에 보기"), footnote: dateFootnote)
             LazyVGrid(
                 columns: [GridItem(.adaptive(minimum: 170), spacing: 12)],
                 spacing: 12
             ) {
                 StatCard(
-                    title: "총 개념",
+                    title: String(localized: "총 개념"),
                     value: "\(overview.conceptCount)",
-                    subtitle: "별칭 \(overview.aliasCount)개 · 개정본 \(overview.revisionCount)개"
+                    subtitle: String(localized: "별칭 \(overview.aliasCount)개 · 개정본 \(overview.revisionCount)개")
                 )
                 StatCard(
-                    title: "총 조회",
+                    title: String(localized: "총 조회"),
                     value: "\(overview.totalLookups)",
-                    subtitle: "성공 \(overview.hitLookups) · 실패 \(overview.missLookups)"
+                    subtitle: String(localized: "성공 \(overview.hitLookups) · 실패 \(overview.missLookups)")
                 )
                 StatCard(
-                    title: "재조회률",
+                    title: String(localized: "재조회률"),
                     value: overview.revisitRate.map { $0.formatted(.percent.precision(.fractionLength(0))) } ?? "–",
                     subtitle: overview.revisitRate.map { _ in
-                        "조회된 \(overview.lookedConceptCount)개 중 \(overview.revisitedConceptCount)개를 다시 찾았어요"
+                        String(localized: "조회된 \(overview.lookedConceptCount)개 중 \(overview.revisitedConceptCount)개를 다시 찾았어요")
                     }
                 )
                 StatCard(
-                    title: "평균 조회",
+                    title: String(localized: "평균 조회"),
                     value: overview.averageLookupsPerLookedConcept
                         .map { $0.formatted(.number.precision(.fractionLength(1))) } ?? "–",
-                    subtitle: "조회된 개념당"
+                    subtitle: String(localized: "조회된 개념당")
                 )
                 StatCard(
-                    title: "연속 조회",
-                    value: "\(viewModel.lookupStreak)일",
-                    subtitle: viewModel.lookupStreak > 0 ? "기록이 이어지고 있어요" : "오늘 조회해 보세요"
+                    title: String(localized: "연속 조회"),
+                    value: String(localized: "\(viewModel.lookupStreak)일"),
+                    subtitle: viewModel.lookupStreak > 0 ? String(localized: "기록이 이어지고 있어요") : String(localized: "오늘 조회해 보세요")
                 )
                 StatCard(
-                    title: "즐겨찾기",
+                    title: String(localized: "즐겨찾기"),
                     value: "\(overview.favoriteCount)",
-                    subtitle: "AI 개정본 \(overview.aiRevisionCount)개 · 직접 수정 \(overview.userRevisionCount)개"
+                    subtitle: String(localized: "AI 개정본 \(overview.aiRevisionCount)개 · 직접 수정 \(overview.userRevisionCount)개")
                 )
             }
         }
@@ -266,7 +266,7 @@ struct StatsView: View {
 
     private func activitySection(_ daily: [StatsDayPoint]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("최근 30일 활동", footnote: "조회는 실패한 검색도 포함해요")
+            sectionHeader(String(localized: "최근 30일 활동"), footnote: String(localized: "조회는 실패한 검색도 포함해요"))
             card {
                 Chart {
                     ForEach(daily) { point in
@@ -291,17 +291,17 @@ struct StatsView: View {
                     }
                 }
                 .frame(height: 170)
-                legend([("조회", Color.accentColor.opacity(0.85)), ("저장", Color.green.opacity(0.6))])
+                legend([(String(localized: "조회"), Color.accentColor.opacity(0.85)), (String(localized: "저장"), Color.green.opacity(0.6))])
             }
         }
     }
 
     private func topWordsSection(_ stats: LibraryStats) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("가장 많이 조회한 단어", footnote: "조회 수 기준 상위 8개")
+            sectionHeader(String(localized: "가장 많이 조회한 단어"), footnote: String(localized: "조회 수 기준 상위 8개"))
             card {
                 if stats.topWords.isEmpty {
-                    placeholderText("아직 조회 기록이 없어요.")
+                    placeholderText(String(localized: "아직 조회 기록이 없어요."))
                 } else {
                     Chart(stats.topWords) { entry in
                         BarMark(
@@ -344,7 +344,7 @@ struct StatsView: View {
 
     private func hourlySection(_ hourly: [StatsHourCount]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("시간대별 조회")
+            sectionHeader(String(localized: "시간대별 조회"))
             card {
                 Chart(hourly) { bucket in
                     BarMark(
@@ -370,7 +370,7 @@ struct StatsView: View {
 
     private func breakdownSection(_ stats: LibraryStats) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("언어와 분야")
+            sectionHeader(String(localized: "언어와 분야"))
             HStack(alignment: .top, spacing: 12) {
                 card {
                     miniBars(stats.languages, color: .indigo)
@@ -385,7 +385,7 @@ struct StatsView: View {
     private func miniBars(_ items: [StatsNameCount], color: Color) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             if items.isEmpty {
-                placeholderText("데이터가 없어요.")
+                placeholderText(String(localized: "데이터가 없어요."))
             } else {
                 ForEach(items) { item in
                     HStack(spacing: 8) {
@@ -413,10 +413,10 @@ struct StatsView: View {
 
     private func missedSection(_ missed: [MissedQuery]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("저장되지 않은 검색어", footnote: "사전에 닿지 못하고 지나간 질의예요")
+            sectionHeader(String(localized: "저장되지 않은 검색어"), footnote: String(localized: "사전에 닿지 못하고 지나간 질의예요"))
             card {
                 if missed.isEmpty {
-                    placeholderText("지금까지 모든 검색이 저장된 개념으로 이어졌어요.")
+                    placeholderText(String(localized: "지금까지 모든 검색이 저장된 개념으로 이어졌어요."))
                 } else {
                     ForEach(missed) { entry in
                         HStack(spacing: 8) {
@@ -442,7 +442,7 @@ struct StatsView: View {
 
     private var embeddingSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("개념 임베딩 지도", footnote: "비슷한 개념이 가까이 모여요. 점을 누르면 라이브러리에서 열어요")
+            sectionHeader(String(localized: "개념 임베딩 지도"), footnote: String(localized: "비슷한 개념이 가까이 모여요. 점을 누르면 라이브러리에서 열어요"))
             card {
                 switch viewModel.embeddingPhase {
                 case .idle:
@@ -527,14 +527,14 @@ private struct MapChart: View {
 
     /// 분야가 너무 많으면 범례 대신 단색으로 그린다.
     private var colorByField: Bool {
-        Set(points.map { $0.field ?? "분야 없음" }).count <= 8
+        Set(points.map { $0.field ?? String(localized: "분야 없음") }).count <= 8
     }
 
     var body: some View {
         Chart(points) { point in
             if colorByField {
                 mapPoint(point)
-                    .foregroundStyle(by: .value("분야", point.field ?? "분야 없음"))
+                    .foregroundStyle(by: .value("분야", point.field ?? String(localized: "분야 없음")))
             } else {
                 mapPoint(point)
                     .foregroundStyle(Color.accentColor)

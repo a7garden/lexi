@@ -76,9 +76,9 @@ struct EntryDetailView: View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 6) {
                     if let field = payload.entry.field, !field.isEmpty { chip(field, color: .secondary) }
-                    chip(payload.entry.author == "ai" ? "AI 초안" : "직접 작성", color: payload.entry.author == "ai" ? .blue : .green)
+                    chip(payload.entry.author == "ai" ? String(localized: "AI 초안") : String(localized: "직접 작성"), color: payload.entry.author == "ai" ? .blue : .green)
                     if let language = payload.entry.explanationLanguage ?? payload.entry.termLanguage {
-                        chip(language.koreanName, color: .indigo)
+                        chip(language.localizedName, color: .indigo)
                     }
                 }
                 Text(payload.entry.preferredTerm)

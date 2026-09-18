@@ -57,7 +57,7 @@ struct PanelContentView: View {
                             Button("모델 설정") { model.onSettings?() }.buttonStyle(.bordered)
                         }
                     case .empty(let query):
-                        Text(query.isEmpty ? "어떤 개념이 궁금한가요?" : query).font(.title2.bold())
+                        Text(query.isEmpty ? String(localized: "어떤 개념이 궁금한가요?") : query).font(.title2.bold())
                         Text("텍스트를 선택하고 단축키 또는 우클릭 서비스를 사용해 보세요.")
                             .foregroundStyle(.secondary)
                         Button("내 사전 열기") { model.onEdit?() }.buttonStyle(.borderedProminent)
@@ -75,7 +75,7 @@ struct PanelContentView: View {
             HStack(alignment: .top) {
                 Text(entry.preferredTerm).font(.system(size: 26, weight: .bold)).textSelection(.enabled)
                 if let language = entry.explanationLanguage ?? entry.termLanguage {
-                    Text(language.koreanName)
+                    Text(language.localizedName)
                         .font(.caption.weight(.medium))
                         .padding(.horizontal, 8).padding(.vertical, 3)
                         .background(Capsule().fill(Color.indigo.opacity(0.15)))

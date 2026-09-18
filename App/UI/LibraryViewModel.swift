@@ -63,7 +63,7 @@ final class LibraryViewModel: ObservableObject {
                 self.configure(database: database)
                 await refresh()
             } catch {
-                loadError = "라이브러리 데이터베이스를 열 수 없어요: \(error.localizedDescription)"
+                loadError = String(localized: "라이브러리 데이터베이스를 열 수 없어요: \(error.localizedDescription)")
             }
         }
     }
@@ -88,7 +88,7 @@ final class LibraryViewModel: ObservableObject {
             isLoaded = true
         } catch {
             guard generation == refreshGeneration, !Task.isCancelled else { return }
-            loadError = "라이브러리를 불러오지 못했어요: \(error.localizedDescription)"
+            loadError = String(localized: "라이브러리를 불러오지 못했어요: \(error.localizedDescription)")
         }
     }
 
@@ -163,7 +163,7 @@ final class LibraryViewModel: ObservableObject {
                 else { return }
                 semanticMatches = matches
                 semanticMessage = matches.isEmpty
-                    ? "의미가 충분히 비슷한 저장된 개념을 찾지 못했어요."
+                    ? String(localized: "의미가 충분히 비슷한 저장된 개념을 찾지 못했어요.")
                     : nil
                 isSemanticSearching = false
             } catch is CancellationError {
@@ -211,7 +211,7 @@ final class LibraryViewModel: ObservableObject {
         } catch is CancellationError {
         } catch {
             guard !Task.isCancelled else { return }
-            loadError = "상세 정보를 불러오지 못했어요: \(error.localizedDescription)"
+            loadError = String(localized: "상세 정보를 불러오지 못했어요: \(error.localizedDescription)")
         }
     }
 
@@ -229,7 +229,7 @@ final class LibraryViewModel: ObservableObject {
             await refresh()
         } catch {
             applyFavorite(conceptId: conceptId, isFavorite: !isFavorite)
-            loadError = "즐겨찾기를 변경하지 못했어요: \(error.localizedDescription)"
+            loadError = String(localized: "즐겨찾기를 변경하지 못했어요: \(error.localizedDescription)")
         }
     }
 
@@ -260,13 +260,13 @@ final class LibraryViewModel: ObservableObject {
             }
             await refresh()
         } catch {
-            loadError = "항목을 삭제하지 못했어요: \(error.localizedDescription)"
+            loadError = String(localized: "항목을 삭제하지 못했어요: \(error.localizedDescription)")
         }
     }
 
     /// 사용자 수정 저장 후 상세 + 리스트를 갱신한다.
     func saveRevision(conceptId: Int64, oneLine: String, easy: String) async -> String? {
-        guard let service else { return "사전을 준비하는 중이에요. 잠시 후 다시 시도해 주세요." }
+        guard let service else { return String(localized: "사전을 준비하는 중이에요. 잠시 후 다시 시도해 주세요.") }
         do {
             try await service.saveUserRevision(conceptId: conceptId, oneLine: oneLine, easyExplanation: easy)
             await refresh()
@@ -274,16 +274,16 @@ final class LibraryViewModel: ObservableObject {
             detailTask = Task { await loadDetail(conceptId: conceptId) }
             return nil
         } catch {
-            return "수정을 저장하지 못했어요: \(error.localizedDescription)"
+            return String(localized: "수정을 저장하지 못했어요: \(error.localizedDescription)")
         }
     }
 
     /// 직접 입력으로 새 항목을 만든다. 작성자는 "user".
     func createEntry(term: String, oneLine: String, easy: String) async -> String? {
-        guard let service else { return "사전을 준비하는 중이에요. 잠시 후 다시 시도해 주세요." }
+        guard let service else { return String(localized: "사전을 준비하는 중이에요. 잠시 후 다시 시도해 주세요.") }
         do {
             let term = term.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !term.isEmpty else { return "개념 이름을 입력해 주세요." }
+            guard !term.isEmpty else { return String(localized: "개념 이름을 입력해 주세요.") }
             let conceptID = try await service.saveConcept(
                 preferredTerm: term,
                 aliases: [],
@@ -296,7 +296,7 @@ final class LibraryViewModel: ObservableObject {
             await reveal(conceptID: conceptID)
             return nil
         } catch {
-            return "새 항목을 추가하지 못했어요: \(error.localizedDescription)"
+            return String(localized: "새 항목을 추가하지 못했어요: \(error.localizedDescription)")
         }
     }
 

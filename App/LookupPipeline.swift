@@ -117,8 +117,8 @@ final class LookupPipeline {
 
         var errorDescription: String? {
             switch self {
-            case .noEngine: "생성 엔진이 설정되지 않았어요. 설정에서 로컬 모델을 연결하세요."
-            case .notSaved: "생성은 됐지만 사전 저장에 실패했어요."
+            case .noEngine: String(localized: "생성 엔진이 설정되지 않았어요. 설정에서 로컬 모델을 연결하세요.")
+            case .notSaved: String(localized: "생성은 됐지만 사전 저장에 실패했어요.")
             }
         }
     }

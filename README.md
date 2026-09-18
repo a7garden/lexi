@@ -33,7 +33,7 @@ Lexi instantly shows expressions you have already saved without an AI call, and 
 
 ## Screenshots
 
-> The app UI is currently Korean-only; the screenshots show the Korean interface.
+> The app UI ships with Korean, English, Japanese, and Simplified Chinese localizations and follows the system language; the screenshots show the Korean interface.
 
 | Full library | Instant lookup panel |
 | --- | --- |
@@ -157,7 +157,7 @@ Certificates and passwords are stored only in GitHub Actions secrets and are nev
 
 ## License
 
-No separate open source license has been granted for this repository at this time. The rights to copy, modify, and redistribute the code are not granted without separate notice.
+Licensed under the [MIT License](LICENSE).
 
 Regression tests for the app's service declaration and invocation, and for settings:
 

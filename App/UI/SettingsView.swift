@@ -8,6 +8,14 @@ struct SettingsView: View {
         case model = "AI 모델"
         case research = "웹 조사"
         var id: String { rawValue }
+        /// rawValue는 저장·식별용. 화면에는 현지화된 제목을 쓴다.
+        var title: String {
+            switch self {
+            case .general: String(localized: "일반")
+            case .model: String(localized: "AI 모델")
+            case .research: String(localized: "웹 조사")
+            }
+        }
         var icon: String {
             switch self {
             case .general: "keyboard"
@@ -45,7 +53,7 @@ struct SettingsView: View {
                         Button {
                             page = item
                         } label: {
-                            Label(item.rawValue, systemImage: item.icon)
+                            Label(item.title, systemImage: item.icon)
                                 .font(.body.weight(page == item ? .semibold : .regular))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(10)
@@ -67,7 +75,7 @@ struct SettingsView: View {
             .background(.quaternary.opacity(0.3))
             Divider()
             VStack(alignment: .leading, spacing: 4) {
-                Text(page.rawValue).font(.title2.bold()).padding(.horizontal, 24).padding(.top, 24)
+                Text(page.title).font(.title2.bold()).padding(.horizontal, 24).padding(.top, 24)
                 Form {
                     switch page {
                     case .general: generalSettings
@@ -305,7 +313,7 @@ private struct SyncStatusLine: View {
         if case .upToDate(let last) = service.phase, let last {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
-            return "최신 상태예요 · 마지막 동기화 \(formatter.string(from: last))"
+            return String(localized: "최신 상태예요 · 마지막 동기화 \(formatter.string(from: last))")
         }
         return service.phase.label
     }

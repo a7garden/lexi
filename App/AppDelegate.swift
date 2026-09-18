@@ -221,7 +221,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     func searchClipboard() {
         guard let text = NSPasteboard.general.string(forType: .string),
               !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            lookupNotice = "클립보드에 텍스트가 없어요. 복사한 뒤 다시 시도하거나 개념을 직접 추가하세요."
+            lookupNotice = String(localized: "클립보드에 텍스트가 없어요. 복사한 뒤 다시 시도하거나 개념을 직접 추가하세요.")
             openLibrary()
             return
         }
@@ -262,7 +262,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             ?? pboard.string(forType: NSPasteboard.PasteboardType("NSStringPboardType")))?
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard let text, !text.isEmpty else {
-            error.pointee = "먼저 조회할 텍스트를 선택해 주세요." as NSString
+            error.pointee = String(localized: "먼저 조회할 텍스트를 선택해 주세요.") as NSString
             return
         }
         startLookup(text)
