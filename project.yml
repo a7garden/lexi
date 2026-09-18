@@ -2,6 +2,7 @@ name: Lexi
 options:
   bundleIdPrefix: kr.garden.lexi
   createIntermediateGroups: true
+  developmentLanguage: ko
   deploymentTarget:
     macOS: "14.0"
 
@@ -47,7 +48,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: kr.garden.lexi.app
         PRODUCT_NAME: Lexi
         SWIFT_VERSION: "6.0"
-        MARKETING_VERSION: "1.2.0"
+        MARKETING_VERSION: "1.2.1"
         CURRENT_PROJECT_VERSION: "1"
         CODE_SIGN_STYLE: Manual
         DEVELOPMENT_TEAM: W5SAS95CBV

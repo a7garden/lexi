@@ -2,10 +2,22 @@
 
 이 프로젝트의 주요 변경 사항을 기록합니다.
 
+## 1.2.1 - 2026-09-18
+
+### Fixed
+
+- iCloud 동기화를 켜면 첫 전송 처리 중 앱이 종료되던 문제. `CKSyncEngine` 위임 콜백(`handleEvent`) 안에서 엔진 메서드(`sendChanges`)를 기다리면 CloudKit이 콜백 직렬성 위반으로 fatal error를 일으키는데, 전송 실패 재시도(`zoneNotFound` 등)와 계정 로그인 직후 최초 업로드가 정확히 그 경로였다. 후속 전송을 detached Task로 넘겨 콜백 컨텍스트 밖에서 실행한다(앱: `CloudSyncService.continueOutsideDelegateCallback`)
+
+### Changed
+
+- 현지화 보강: 앱 전체 사용자 표시 문자열을 `String(localized:)`로 통일하고, 언어 배지·설정의 언어 표시명을 UI 언어를 따르는 `EntryLanguage.localizedName`으로 바꾼다(데이터 라벨은 기존대로 한국어 고정). 개발 언어(ko)를 프로젝트 설정에 명시하고 KeyboardShortcuts 의존성 핀을 확정하며 스크린샷·README를 갱신했다
+
 ## 1.2.0 - 2026-09-17
 
 ### Added
 
+- 앱 UI 다국어 지원: 한국어(개발 언어)에 영어·일본어·중국어(간체) String Catalog를 추가하고 시스템 언어를 따른다. 서비스 메뉴 항목도 현지화하고, 언어 배지는 UI 언어에 맞춰 표시한다(LexiCore의 언어 메타데이터와 통계 데이터 라벨은 한국어 유지)
+- MIT 라이선스: `LICENSE` 추가, 저장소 전체에 적용
 - 통계 화면: 총 개념·총 조회·재조회률·평균 조회·연속 조회 일수 요약 카드, 가장 많이 조회한 단어 순위와 복습 후보("다시 볼 때가 된 단어"), 최근 30일 조회·저장 활동, 시간대별 조회, 언어·분야 분포, 저장되지 않은 검색어, 개념 임베딩 지도. 라이브러리 툴바의 통계 버튼이나 메뉴 막대 메뉴로 열고, 순위·지도의 점을 누르면 라이브러리에서 해당 개념을 연다. 지도 계산은 사용자가 명시히 요청할 때만 임베딩 모델을 내려받으며 벡터는 DB 정본에 쓰지 않는다(LexiCore: `LibraryStats`, `EmbeddingProjection`, `SemanticLibrarySearch.libraryEmbeddings`)
 - iCloud 동기화: 설정 → 일반 → 동기화에서 켜면 CloudKit 개인 데이터베이스에 개념·별칭·개정본·출처를 동기화해 같은 Apple ID로 쓰는 기기에서 같은 사전을 쓸 수 있다. 로컬 SQLite가 정본이고 동기화는 파생 복사본이다. 오프라인 동안의 변경은 저널에 쌓였다가 이후에 밀어 올리고, 충돌은 개념 필드는 최근 수정 우선, 개정본·출처는 추가 전용, 삭제는 묘비로 수렴시킨다. 조회 통계·설정·모델은 동기화하지 않는다. 스키마 v3 마이그레이션이 따르며(모든 행에 동기화 UUID 부여), 실제 동기화에는 iCloud 컨테이너(`iCloud.kr.garden.lexi.app`) 등록과 서명이 필요하다(LexiCore: `SyncStore`, `SyncJournal`, `UUIDv7`; 앱: `CloudSyncService`)
 - PDC Stage 0: `pdc-document-conformance/2` revision 2 corpus를 LexiCore 테스트 fixture로 연결하고 계약 판단을 테스트로 고정했다(LexiCore: `PDCContract`, `PDCConformanceCorpus`, `PDCConformanceTests`)
