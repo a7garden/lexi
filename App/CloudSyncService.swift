@@ -29,12 +29,12 @@ final class CloudSyncService: NSObject, ObservableObject {
 
         var label: String {
             switch self {
-            case .off: "꺼짐"
-            case .starting: "준비 중…"
-            case .waitingForAccount: "iCloud 계정을 기다리는 중"
-            case .syncing: "동기화 중…"
-            case .upToDate: "최신 상태예요"
-            case .failed(let message): "문제가 있어요: \(message)"
+            case .off: String(localized: "꺼짐")
+            case .starting: String(localized: "준비 중…")
+            case .waitingForAccount: String(localized: "iCloud 계정을 기다리는 중")
+            case .syncing: String(localized: "동기화 중…")
+            case .upToDate: String(localized: "최신 상태예요")
+            case .failed(let message): String(localized: "문제가 있어요: \(message)")
             }
         }
 
@@ -101,7 +101,7 @@ final class CloudSyncService: NSObject, ObservableObject {
             await initialUploadIfNeeded()
         } catch {
             log.error("동기화 시작 실패: \(String(describing: error))")
-            phase = .failed("시작에 실패했어요")
+            phase = .failed(String(localized: "시작에 실패했어요"))
             stop()
         }
     }
@@ -140,7 +140,7 @@ final class CloudSyncService: NSObject, ObservableObject {
         } catch {
             // 계정이 없거나 네트워크가 없으면 다음 사이클이 다시 시도한다.
             log.error("최초 업로드 실패: \(String(describing: error))")
-            phase = .failed("업로드에 실패했어요")
+            phase = .failed(String(localized: "업로드에 실패했어요"))
         }
     }
 
@@ -175,6 +175,22 @@ final class CloudSyncService: NSObject, ObservableObject {
         ])
     }
 
+    /// 엔진의 위임 콜백(handleEvent) 안에서 엔진 메서드를 await하면 CloudKit이
+    /// 콜백 직렬성을 보장할 수 없어 fatal error로 앱을 종료한다. detached Task는
+    /// 콜백의 작업 컨텍스트를 상속하지 않으므로 콜백에서 시작한 엔진 호출은
+    /// 이쪽으로 넘겨 이어 실행한다.
+    private func continueOutsideDelegateCallback(_ operation: @escaping @MainActor @Sendable () async -> Void) {
+        Task.detached(priority: .userInitiated) {
+            await operation()
+        }
+    }
+
+    /// 콜백 밖 컨텍스트에서 대기 중 변경을 서버로 올린다.
+    private func sendPendingChanges() async {
+        guard let engine else { return }
+        try? await engine.sendChanges()
+    }
+
     // MARK: - 상태 직렬화
 
     private static func stateURL() -> URL {
@@ -204,8 +220,11 @@ final class CloudSyncService: NSObject, ObservableObject {
             switch event.changeType {
             case .signIn:
                 // 로컬 SQLite가 정본이므로 데이터는 그대로 두고, 필요하면 전체를 올린다.
-                await initialUploadIfNeeded()
-                phase = .upToDate(lastChangedAt: nil)
+                // 위임 콜백 안에서 엔진을 기다릴 수는 없어 detached Task로 넘긴다.
+                continueOutsideDelegateCallback {
+                    await self.initialUploadIfNeeded()
+                    self.phase = .upToDate(lastChangedAt: nil)
+                }
             case .signOut, .switchAccounts:
                 phase = .waitingForAccount
             @unknown default:
@@ -256,7 +275,7 @@ final class CloudSyncService: NSObject, ObservableObject {
             }
         } catch {
             log.error("원격 변경 적용 실패: \(String(describing: error))")
-            phase = .failed("원격 변경을 적용하지 못했어요")
+            phase = .failed(String(localized: "원격 변경을 적용하지 못했어요"))
         }
     }
 
@@ -319,7 +338,7 @@ final class CloudSyncService: NSObject, ObservableObject {
         }
         if !retry.isEmpty {
             engine.state.add(pendingRecordZoneChanges: retry)
-            try? await engine.sendChanges()
+            continueOutsideDelegateCallback { await self.sendPendingChanges() }
         }
     }
 }
