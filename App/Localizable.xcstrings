@@ -1,0 +1,2102 @@
+{
+  "sourceLanguage" : "ko",
+  "version" : "1.0",
+  "strings" : {
+    "개념 추가…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New Concept…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念を追加…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "添加概念…" } }
+      }
+    },
+    "통계" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Statistics" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "统计" } }
+      }
+    },
+    "클립보드로 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Look Up Clipboard" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "クリップボードを検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询剪贴板" } }
+      }
+    },
+    "내 사전 열기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open My Dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "マイ辞書を開く" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开我的词典" } }
+      }
+    },
+    "통계 보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "View Statistics" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計を見る" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查看统计" } }
+      }
+    },
+    "설정…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "设置…" } }
+      }
+    },
+    "Lexi 종료" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Quit Lexi" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Lexiを終了" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "退出 Lexi" } }
+      }
+    },
+    "클립보드에 텍스트가 없어요. 복사한 뒤 다시 시도하거나 개념을 직접 추가하세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No text on the clipboard. Copy it and try again, or add the concept yourself." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "クリップボードにテキストがありません。コピーしてからもう一度試すか、概念を直接追加してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "剪贴板中没有文本。请复制后重试，或直接添加概念。" } }
+      }
+    },
+    "먼저 조회할 텍스트를 선택해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select some text to look up first." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先に検索するテキストを選択してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先选择要查询的文本。" } }
+      }
+    },
+    "메뉴 막대와 Dock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Menu Bar and Dock" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "メニューバーとDock" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "菜单栏与 Dock" } }
+      }
+    },
+    "메뉴 막대만" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Menu Bar Only" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "メニューバーのみ" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "仅菜单栏" } }
+      }
+    },
+    "Dock만" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dock Only" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Dockのみ" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "仅 Dock" } }
+      }
+    },
+    "자동 · 조회 언어 따르기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Automatic · Follow Lookup Language" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自動 · 検索言語に従う" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "自动 · 跟随查询语言" } }
+      }
+    },
+    "Qwen3 4B · 기본" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 4B · Default" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 4B · デフォルト" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 4B · 默认" } }
+      }
+    },
+    "Qwen3 1.7B · 가벼운 모델" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 1.7B · Lightweight" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 1.7B · 軽量モデル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 1.7B · 轻量模型" } }
+      }
+    },
+    "Qwen3 8B · 큰 모델" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 8B · Large" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 8B · 大型モデル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Qwen3 8B · 大型模型" } }
+      }
+    },
+    "사용자 지정…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Custom…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カスタム…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "自定义…" } }
+      }
+    },
+    "일상적인 개념 설명에 사용할 기본 4-bit 모델이에요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The default 4-bit model for everyday concept explanations." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日常的な概念の説明に使うデフォルトの4-bitモデルです。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用于日常概念解释的默认 4-bit 模型。" } }
+      }
+    },
+    "더 작은 4-bit 모델로 메모리 사용량을 줄일 수 있어요. 설명의 정확도는 직접 확인해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A smaller 4-bit model that uses less memory. Check the accuracy of its explanations yourself." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "より小さい4-bitモデルでメモリ使用量を抑えられます。説明の正確さは自分で確認してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更小的 4-bit 模型，可降低内存占用。请自行核对解释的准确性。" } }
+      }
+    },
+    "더 큰 4-bit 모델이에요. 메모리와 저장 공간이 더 필요하고 준비 시간이 길어질 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A larger 4-bit model. It needs more memory and storage and may take longer to prepare." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "より大きい4-bitモデルです。メモリとストレージが多く必要で、準備に時間がかかることがあります。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更大的 4-bit 模型。需要更多内存和存储空间，准备时间可能更长。" } }
+      }
+    },
+    "Hugging Face의 MLX 호환 모델 ID를 직접 입력해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter an MLX-compatible model ID from Hugging Face." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Hugging FaceのMLX互換モデルIDを直接入力してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请直接输入 Hugging Face 上兼容 MLX 的模型 ID。" } }
+      }
+    },
+    "한국어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Korean" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "韓国語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "韩语" } }
+      }
+    },
+    "영어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "English" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "英語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "英语" } }
+      }
+    },
+    "일본어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Japanese" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日本語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "日语" } }
+      }
+    },
+    "중국어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Chinese" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "中国語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "中文" } }
+      }
+    },
+    "프랑스어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "French" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "フランス語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "法语" } }
+      }
+    },
+    "독일어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "German" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ドイツ語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "德语" } }
+      }
+    },
+    "스페인어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spanish" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スペイン語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "西班牙语" } }
+      }
+    },
+    "러시아어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Russian" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ロシア語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "俄语" } }
+      }
+    },
+    "생성 엔진이 설정되지 않았어요. 설정에서 로컬 모델을 연결하세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No generation engine is configured. Connect a local model in Settings." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "生成エンジンが設定されていません。設定でローカルモデルを接続してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "尚未配置生成引擎。请在设置中连接本地模型。" } }
+      }
+    },
+    "생성은 됐지만 사전 저장에 실패했어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Generated, but saving to the dictionary failed." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "生成はできましたが、辞書への保存に失敗しました。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已生成，但保存到词典失败。" } }
+      }
+    },
+    "선택한 텍스트를 읽으려면 손쉬운 사용 권한이 필요합니다. Lexi 설정 > 일반 > 접근 권한에서 Lexi를 허용해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reading selected text needs the Accessibility permission. Allow Lexi in Lexi Settings > General > Permissions." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "選択テキストの読み取りにはアクセシビリティ権限が必要です。Lexi設定 > 一般 > アクセス権限でLexiを許可してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "读取所选文本需要辅助功能权限。请在 Lexi 设置 > 通用 > 访问权限中允许 Lexi。" } }
+      }
+    },
+    "현재 앱" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "the current app" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "現在のアプリ" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "当前应用" } }
+      }
+    },
+    "%@에서 선택된 텍스트를 가져올 수 없습니다. 텍스트를 선택한 후 다시 시도해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't get the selected text from %@. Select the text and try again." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%@から選択中のテキストを取得できません。テキストを選択してからもう一度お試しください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法从 %@ 获取所选文本。请选择文本后重试。" } }
+      }
+    },
+    "꺼짐" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Off" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "オフ" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已关闭" } }
+      }
+    },
+    "준비 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preparing…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "準備中…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "准备中…" } }
+      }
+    },
+    "iCloud 계정을 기다리는 중" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Waiting for the iCloud account" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloudアカウントを待っています" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在等待 iCloud 账户" } }
+      }
+    },
+    "동기화 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Syncing…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期中…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "同步中…" } }
+      }
+    },
+    "최신 상태예요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Up to date" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最新の状態です" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已是最新" } }
+      }
+    },
+    "문제가 있어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "There's a problem: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "問題が発生しました：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "出现问题：%@" } }
+      }
+    },
+    "시작에 실패했어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Failed to start" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "開始に失敗しました" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "启动失败" } }
+      }
+    },
+    "업로드에 실패했어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Upload failed" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アップロードに失敗しました" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "上传失败" } }
+      }
+    },
+    "원격 변경을 적용하지 못했어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't apply remote changes" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "リモートの変更を適用できませんでした" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法应用远程更改" } }
+      }
+    },
+    "최신 상태예요 · 마지막 동기화 %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Up to date · Last sync %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最新の状態です · 最終同期 %@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已是最新 · 上次同步 %@" } }
+      }
+    },
+    "상태" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Status" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "状態" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "状态" } }
+      }
+    },
+    "올릴 변경" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Pending Uploads" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "送信待ちの変更" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "待上传更改" } }
+      }
+    },
+    "%lld건" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld items" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld件" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 条" } }
+      }
+    },
+    "지금 동기화" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sync Now" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今すぐ同期" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "立即同步" } }
+      }
+    },
+    "일반" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "General" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "一般" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "通用" } }
+      }
+    },
+    "AI 모델" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Model" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AIモデル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 模型" } }
+      }
+    },
+    "웹 조사" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Web Research" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ウェブ調査" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "网络调查" } }
+      }
+    },
+    "나만의 개념 사전" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your own concept dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分だけの概念辞書" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "属于你的概念词典" } }
+      }
+    },
+    "모든 개념" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All Concepts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべての概念" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "全部概念" } }
+      }
+    },
+    "최근 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Recent Lookups" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最近の検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "最近查询" } }
+      }
+    },
+    "즐겨찾기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Favorites" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お気に入り" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "收藏" } }
+      }
+    },
+    "AI 초안" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Draft" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI下書き" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 草稿" } }
+      }
+    },
+    "직접 작성" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Written by You" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分で作成" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "手动编写" } }
+      }
+    },
+    "설정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "设置" } }
+      }
+    },
+    "Lexi 설정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lexi Settings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Lexi設定" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Lexi 设置" } }
+      }
+    },
+    "개념 추가" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Concept" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念を追加" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "添加概念" } }
+      }
+    },
+    "개념을 직접 작성하거나 AI로 조회해요 (⌘N)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Write a concept yourself or look it up with AI (⌘N)" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念を自分で書くかAIで検索します（⌘N）" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "手动编写概念或用 AI 查询（⌘N）" } }
+      }
+    },
+    "사전 통계 보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "View dictionary statistics" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書の統計を見る" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查看词典统计" } }
+      }
+    },
+    "사전 오류" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dictionary Error" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書エラー" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "词典错误" } }
+      }
+    },
+    "확인" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "好" } }
+      }
+    },
+    "개념, 별칭, 설명 검색" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search concepts, aliases, explanations" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念・別名・説明を検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "搜索概念、别名、解释" } }
+      }
+    },
+    "개념 검색" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search concepts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念を検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "搜索概念" } }
+      }
+    },
+    "검색 지우기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Clear search" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索をクリア" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "清除搜索" } }
+      }
+    },
+    "의미로 찾기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Find by Meaning" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味で探す" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "按含义查找" } }
+      }
+    },
+    "의미 검색 다시 하기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search by Meaning Again" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味検索をやり直す" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重新按含义搜索" } }
+      }
+    },
+    "처음 사용하면 다국어 임베딩 모델을 내려받습니다. 검색어와 사전 내용은 Mac 안에서 처리해요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "First use downloads the multilingual embedding model. Queries and dictionary contents stay on your Mac." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初回使用時に多言語埋め込みモデルをダウンロードします。検索語と辞書の内容はMac内で処理されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "首次使用会下载多语言嵌入模型。查询词和词典内容均在 Mac 本地处理。" } }
+      }
+    },
+    "로컬 임베딩" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Local embeddings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ローカル埋め込み" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "本地嵌入" } }
+      }
+    },
+    "우클릭·단축키 사용 방법" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Right-click & shortcut tips" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "右クリック・ショートカットの使い方" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "右键与快捷键用法" } }
+      }
+    },
+    "사전 불러오는 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading dictionary…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書を読み込んでいます…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在载入词典…" } }
+      }
+    },
+    "의미가 비슷한 개념을 찾는 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Finding concepts with similar meanings…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味が似ている概念を探しています…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在查找含义相似的概念…" } }
+      }
+    },
+    "처음 사용하면 다국어 임베딩 모델을 내려받아 시간이 더 걸릴 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "First use downloads the multilingual embedding model, which can take longer." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初回使用時は多言語埋め込みモデルをダウンロードするため、時間がかかることがあります。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "首次使用会下载多语言嵌入模型，可能耗时更久。" } }
+      }
+    },
+    "의미가 비슷한 개념 찾기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Find Similar Concepts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味の似た概念を探す" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查找含义相似的概念" } }
+      }
+    },
+    "이 개념 AI로 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Look Up This Concept with AI" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この概念をAIで検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用 AI 查询此概念" } }
+      }
+    },
+    "모든 개념 보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Show All Concepts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべての概念を表示" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查看全部概念" } }
+      }
+    },
+    "텍스트 일치" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Text Matches" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "テキスト一致" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "文本匹配" } }
+      }
+    },
+    "의미가 비슷한 개념" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concepts with Similar Meanings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味が似ている概念" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "含义相似的概念" } }
+      }
+    },
+    "최근 500개를 표시 중이에요. 검색으로 범위를 좁혀 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Showing the most recent 500. Narrow it down with search." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最新の500件を表示しています。検索で絞り込んでください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "当前显示最近 500 条，请用搜索缩小范围。" } }
+      }
+    },
+    "검색 결과가 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Search Results" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索結果がありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "没有搜索结果" } }
+      }
+    },
+    "즐겨찾기가 비어 있어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Favorites Yet" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お気に入りはまだありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "收藏夹还是空的" } }
+      }
+    },
+    "직접 작성한 개념이 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Concepts Written by You" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分で作成した概念はありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "还没有手动编写的概念" } }
+      }
+    },
+    "최근 조회한 개념이 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Recent Lookups" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最近検索した概念はありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "还没有最近查询的概念" } }
+      }
+    },
+    "저장된 AI 초안이 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Saved AI Drafts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存されたAI下書きはありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "没有已保存的 AI 草稿" } }
+      }
+    },
+    "첫 개념을 추가해 보세요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Your First Concept" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最初の概念を追加してみましょう" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "来添加第一个概念吧" } }
+      }
+    },
+    "다른 검색어로 찾아보거나 AI로 조회해 보세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try another search term or look it up with AI." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "別の検索語で探すか、AIで検索してみてください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "换个搜索词，或用 AI 查询试试。" } }
+      }
+    },
+    "자주 보는 개념의 별을 눌러\n여기에 모아 두세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tap the star on concepts you visit often\nto collect them here." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "よく見る概念の星をタップすると\nここに集められます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "点击常看概念的星标，\n即可集中放在这里。" } }
+      }
+    },
+    "직접 쓴 설명과 수정한 개념을\n한곳에서 볼 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your own explanations and edited concepts\nlive in one place." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分で書いた説明や編集した概念を\n一か所で確認できます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "自己撰写的解释和修改过的概念\n都汇集在一处。" } }
+      }
+    },
+    "단축키나 우클릭으로 조회한 개념이\n최근 순서로 표시됩니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concepts looked up by shortcut or right-click\nappear newest first." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ショートカットや右クリックで検索した概念が\n新しい順に表示されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用快捷键或右键查询的概念\n按最近顺序显示。" } }
+      }
+    },
+    "AI로 조회해 저장한 개념이\n여기에 표시됩니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concepts you looked up with AI and saved\nappear here." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AIで検索して保存した概念が\nここに表示されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用 AI 查询并保存的概念\n会显示在这里。" } }
+      }
+    },
+    "궁금한 개념을 직접 작성하거나\nAI에게 설명을 요청해 보세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Write a concept yourself or ask AI\nto explain it for you." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "気になる概念を自分で書くか、\nAIに説明を頼んでみてください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "直接编写想了解的概念，\n或请 AI 为你解释。" } }
+      }
+    },
+    "%lld개" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld items" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld件" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 条" } }
+      }
+    },
+    "%@, %lld개" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$@, %2$lld items" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%1$@、%2$lld件" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%1$@，%2$lld 条" } }
+      }
+    },
+    "설명을 추가해 보세요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add an explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "説明を追加してみましょう" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "来添加解释吧" } }
+      }
+    },
+    "개념 열기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Concept" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念を開く" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开概念" } }
+      }
+    },
+    "즐겨찾기 해제" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Remove from Favorites" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お気に入りから外す" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "取消收藏" } }
+      }
+    },
+    "즐겨찾기 추가" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add to Favorites" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お気に入りに追加" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "添加到收藏" } }
+      }
+    },
+    "개념 이름 복사" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Copy Concept Name" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念名をコピー" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "拷贝概念名称" } }
+      }
+    },
+    "선택한 텍스트를 확인해 주세요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Check the selected text" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "選択したテキストを確認してください" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请检查所选文本" } }
+      }
+    },
+    "단축키·권한 설정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shortcuts & Permissions" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ショートカット・権限設定" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "快捷键与权限设置" } }
+      }
+    },
+    "닫기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Close" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "閉じる" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "关闭" } }
+      }
+    },
+    "개념 불러오는 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading concept…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念を読み込んでいます…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在载入概念…" } }
+      }
+    },
+    "낯선 개념을 내 지식으로" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Turn Unfamiliar Concepts into Knowledge" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "馴染みのない概念を自分の知識に" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "把陌生的概念变成知识" } }
+      }
+    },
+    "목록에서 개념을 선택하거나 새로 추가해 보세요.\n설명과 출처를 한곳에 모아 다시 꺼내 볼 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select a concept from the list or add a new one.\nExplanations and sources stay in one place for later." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "リストから概念を選ぶか、新しく追加しましょう。\n説明と出典が一か所にまとまり、いつでも見返せます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "从列表选择概念，或添加新的。\n解释和出处集中一处，随时回顾。" } }
+      }
+    },
+    "직접 정리하거나 개념 이름만 입력하고 AI로 조회해 보세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Write it yourself, or enter just the name and look it up with AI." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分でまとめるか、概念名だけ入れてAIで検索してみましょう。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "自行整理，或只输入概念名称用 AI 查询。" } }
+      }
+    },
+    "개념 이름" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concept Name" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念名" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "概念名称" } }
+      }
+    },
+    "예: 기회비용" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "e.g. opportunity cost" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "例: 機会費用" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "例如：机会成本" } }
+      }
+    },
+    "한 줄 정의" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "One-line Definition" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "一行定義" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "一句话定义" } }
+      }
+    },
+    "핵심 의미를 짧게 적어 주세요 (선택)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sum up the core meaning briefly (optional)" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "核心的な意味を短く書いてください（任意）" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "简要写下核心含义（可选）" } }
+      }
+    },
+    "쉬운 설명" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Easy Explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "わかりやすい説明" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "通俗解释" } }
+      }
+    },
+    "AI로 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Look Up with AI" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AIで検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用 AI 查询" } }
+      }
+    },
+    "취소" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "キャンセル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "取消" } }
+      }
+    },
+    "저장" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "保存" } }
+      }
+    },
+    "라이브러리 데이터베이스를 열 수 없어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't open the library database: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ライブラリデータベースを開けません：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法打开资料库数据库：%@" } }
+      }
+    },
+    "라이브러리를 불러오지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't load the library: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ライブラリを読み込めませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法载入资料库：%@" } }
+      }
+    },
+    "의미가 충분히 비슷한 저장된 개념을 찾지 못했어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No saved concepts were similar enough in meaning." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味が十分に似ている保存済み概念が見つかりませんでした。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "没有找到含义足够相似的已存概念。" } }
+      }
+    },
+    "상세 정보를 불러오지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't load details: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "詳細情報を読み込めませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法载入详细信息：%@" } }
+      }
+    },
+    "즐겨찾기를 변경하지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't change the favorite status: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お気に入りを変更できませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法更改收藏状态：%@" } }
+      }
+    },
+    "항목을 삭제하지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't delete the item: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "項目を削除できませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法删除条目：%@" } }
+      }
+    },
+    "사전을 준비하는 중이에요. 잠시 후 다시 시도해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The dictionary is still preparing. Try again shortly." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書を準備しています。しばらくしてからもう一度お試しください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "词典正在准备中，请稍后重试。" } }
+      }
+    },
+    "수정을 저장하지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't save the edit: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "修正を保存できませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法保存修改：%@" } }
+      }
+    },
+    "개념 이름을 입력해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter a concept name." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念名を入力してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入概念名称。" } }
+      }
+    },
+    "새 항목을 추가하지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't add the new item: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しい項目を追加できませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法添加新条目：%@" } }
+      }
+    },
+    "보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "View" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查看" } }
+      }
+    },
+    "설명" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "説明" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "解释" } }
+      }
+    },
+    "출처" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sources" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "出典" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "出处" } }
+      }
+    },
+    "조회 기록" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lookup History" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索履歴" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询记录" } }
+      }
+    },
+    "설명 수정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit Explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "説明を編集" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "修改解释" } }
+      }
+    },
+    "이 개념의 설명 수정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit this concept's explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この概念の説明を編集します" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "修改此概念的解释" } }
+      }
+    },
+    "삭제" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "削除" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除" } }
+      }
+    },
+    "이 항목을 삭제해요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete this item" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この項目を削除します" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除此条目" } }
+      }
+    },
+    "“%@”을(를) 삭제할까요?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete “%@”?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "「%@」を削除しますか？" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "删除“%@”吗？" } }
+      }
+    },
+    "개념과 설명·출처가 삭제됩니다. 조회 기록은 남지만 개념과의 연결은 해제돼요. 되돌릴 수 없어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The concept, its explanation, and its sources will be deleted. Lookup history remains but is detached from the concept. This can't be undone." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念と説明・出典が削除されます。検索履歴は残りますが、概念との関連は解除されます。元に戻せません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "将删除概念及其解释和出处。查询记录会保留，但与概念的关联会解除。此操作无法撤销。" } }
+      }
+    },
+    "아직 설명이 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Explanation Yet" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "まだ説明がありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "还没有解释" } }
+      }
+    },
+    "아래 수정 버튼으로 한 줄 정의와 쉬운 설명을 써 보세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Use the Edit button below to write a one-line definition and an easy explanation." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "下の編集ボタンで一行定義とわかりやすい説明を書いてみましょう。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用下方的修改按钮写一句话定义和通俗解释。" } }
+      }
+    },
+    "수정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "編集" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "修改" } }
+      }
+    },
+    "외부 출처 없는 AI 초안" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Draft without External Sources" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "外部出典のないAI下書き" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无外部出处的 AI 草稿" } }
+      }
+    },
+    "저장된 출처가 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Saved Sources" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存された出典がありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "没有已保存的出处" } }
+      }
+    },
+    "로컬 모델이 작성한 설명이에요. 필요한 경우 내용을 검토하고 수정해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The explanation was written by the local model. Review and edit it if needed." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ローカルモデルが書いた説明です。必要に応じて内容を確認・修正してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "解释由本地模型撰写。如有需要请核对并修改。" } }
+      }
+    },
+    "직접 작성한 설명에는 연결된 웹 출처가 없어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Explanations you write have no linked web sources." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分で書いた説明には関連するウェブ出典がありません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "手动撰写的解释没有关联的网页出处。" } }
+      }
+    },
+    "조회 기록이 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Lookup History" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索履歴がありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "没有查询记录" } }
+      }
+    },
+    "\"%@\" 수정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit “%@”" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "「%@」を編集" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "修改“%@”" } }
+      }
+    },
+    "통계 데이터베이스를 열 수 없어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't open the statistics database: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計データベースを開けません：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法打开统计数据库：%@" } }
+      }
+    },
+    "통계를 불러오지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't load statistics: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計を読み込めませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法载入统计：%@" } }
+      }
+    },
+    "지도를 그리려면 개념이 3개 이상 쌓여야 해요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The map needs at least 3 concepts." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "地図を描くには概念が3つ以上必要です。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "绘制地图至少需要 3 个概念。" } }
+      }
+    },
+    "개념 벡터가 아직 서로 구분되지 않아요. 개념이 더 쌓이면 다시 시도해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concept vectors aren't distinguishable yet. Add more concepts and try again." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念ベクトルがまだ区別できません。概念が増えたらもう一度お試しください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "概念向量尚不能彼此区分，多积累一些概念后再试。" } }
+      }
+    },
+    "임베딩을 계산하지 못했어요: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't compute embeddings: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "埋め込みを計算できませんでした：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法计算嵌入：%@" } }
+      }
+    },
+    "통계를 준비하는 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preparing statistics…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計を準備しています…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在准备统计…" } }
+      }
+    },
+    "새로고침" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Refresh" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "再読み込み" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "刷新" } }
+      }
+    },
+    "최신 통계를 다시 읽어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Re-read the latest statistics" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最新の統計を再度読み込みます" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重新读取最新统计" } }
+      }
+    },
+    "아직 통계를 낼 개념이 없어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Concepts to Chart Yet" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計を出せる概念がまだありません" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "还没有可统计的概念" } }
+      }
+    },
+    "단어를 조회하거나 추가하면 여기에 활동이 쌓여요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Look up or add words and your activity builds up here." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語を検索・追加すると、ここに活動が積み重なります。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询或添加词语后，这里会积累活动。" } }
+      }
+    },
+    "다시 시도" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try Again" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "再試行" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重试" } }
+      }
+    },
+    "사전과 함께한 지 %lld일째" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Day %lld with your dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書と一緒に%lld日目" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "与词典相伴第 %lld 天" } }
+      }
+    },
+    "마지막 조회: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Last lookup: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最終検索：%@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "上次查询：%@" } }
+      }
+    },
+    "한눈에 보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "At a Glance" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ひと目でわかる" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "概览" } }
+      }
+    },
+    "총 개념" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Total Concepts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "総概念数" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "概念总数" } }
+      }
+    },
+    "별칭 %lld개 · 개정본 %lld개" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld aliases · %2$lld revisions" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "別名%1$lld件 · 改訂版%2$lld件" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "别名 %1$lld 条 · 修订版本 %2$lld 个" } }
+      }
+    },
+    "총 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Total Lookups" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "総検索数" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询总数" } }
+      }
+    },
+    "성공 %lld · 실패 %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld hits · %2$lld misses" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "成功%1$lld · 失敗%2$lld" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "成功 %1$lld · 失败 %2$lld" } }
+      }
+    },
+    "재조회률" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Revisit Rate" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "再検索率" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重查率" } }
+      }
+    },
+    "조회된 %lld개 중 %lld개를 다시 찾았어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Revisited %2$lld of %1$lld looked-up concepts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索した%1$lld件のうち%2$lld件を再び調べました" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询过的 %1$lld 个中有 %2$lld 个被再次查找" } }
+      }
+    },
+    "평균 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Avg. Lookups" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "平均検索数" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "平均查询" } }
+      }
+    },
+    "조회된 개념당" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "per looked-up concept" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索された概念あたり" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "每个被查询概念" } }
+      }
+    },
+    "연속 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lookup Streak" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "連続検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "连续查询" } }
+      }
+    },
+    "%lld일" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld days" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld日" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 天" } }
+      }
+    },
+    "기록이 이어지고 있어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your streak is going" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "記録が続いています" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "纪录还在延续" } }
+      }
+    },
+    "오늘 조회해 보세요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Look something up today" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日も検索してみましょう" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "今天来查一个吧" } }
+      }
+    },
+    "AI 개정본 %lld개 · 직접 수정 %lld개" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld AI revisions · %2$lld user edits" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI改訂版%1$lld件 · 自分で修正%2$lld件" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 修订 %1$lld 个 · 手动修改 %2$lld 个" } }
+      }
+    },
+    "최근 30일 활동" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Last 30 Days" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "直近30日の活動" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "近 30 天活动" } }
+      }
+    },
+    "조회는 실패한 검색도 포함해요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lookup counts include failed searches" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索数には失敗した検索も含まれます" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询数包含失败的搜索" } }
+      }
+    },
+    "날짜" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Date" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日付" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "日期" } }
+      }
+    },
+    "조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lookups" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询" } }
+      }
+    },
+    "저장" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saved" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "保存" } }
+      }
+    },
+    "가장 많이 조회한 단어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Most Looked-up Words" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最も検索された単語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询最多的词" } }
+      }
+    },
+    "조회 수 기준 상위 8개" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Top 8 by lookup count" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索数の上位8件" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "按查询次数取前 8" } }
+      }
+    },
+    "아직 조회 기록이 없어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No lookup history yet." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "まだ検索履歴がありません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "还没有查询记录。" } }
+      }
+    },
+    "단어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Word" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "词语" } }
+      }
+    },
+    "다시 볼 때가 된 단어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Words Due for a Revisit" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "見直しどきの単語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "该复习的词" } }
+      }
+    },
+    "시각" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hour" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "時刻" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "时刻" } }
+      }
+    },
+    "%@시" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@:00" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%@時" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%@ 点" } }
+      }
+    },
+    "시간대별 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lookups by Hour" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "時間帯別の検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分时段查询" } }
+      }
+    },
+    "언어와 분야" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Languages & Fields" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "言語と分野" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "语言与领域" } }
+      }
+    },
+    "데이터가 없어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No data." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "データがありません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂无数据。" } }
+      }
+    },
+    "저장되지 않은 검색어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unsaved Queries" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存されなかった検索語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "未保存的搜索词" } }
+      }
+    },
+    "사전에 닿지 못하고 지나간 질의예요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Queries that passed by without touching the dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書に届かず過ぎていった検索です" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "未能命中词典的查询" } }
+      }
+    },
+    "지금까지 모든 검색이 저장된 개념으로 이어졌어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "So far, every search has led to a saved concept." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "これまでのすべての検索が保存済み概念につながっています。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "到目前为止，所有搜索都命中了已保存的概念。" } }
+      }
+    },
+    "%lld회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld times" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld回" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 次" } }
+      }
+    },
+    "개념 임베딩 지도" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concept Embedding Map" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念埋め込みマップ" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "概念嵌入地图" } }
+      }
+    },
+    "비슷한 개념이 가까이 모여요. 점을 누르면 라이브러리에서 열어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Similar concepts cluster together. Tap a point to open it in the library" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "似た概念が近くに集まります。点をタップするとライブラリで開きます" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "相似的概念会彼此靠近。点击圆点即可在资料库中打开" } }
+      }
+    },
+    "각 개념의 문서 벡터를 2차원으로 펼쳐 사전의 지형을 보여줘요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spreads each concept's document vector into 2D to show the terrain of your dictionary." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "各概念の文書ベクトルを2次元に展開し、辞書の地形を見せます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "把每个概念的文档向量展开到二维，展示词典的地形。" } }
+      }
+    },
+    "임베딩 계산하기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Compute Embeddings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "埋め込みを計算" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "计算嵌入" } }
+      }
+    },
+    "처음 사용하면 다국어 임베딩 모델을 내려받아요. 내용은 Mac 안에서만 처리돼요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "First use downloads the multilingual embedding model. Everything is processed only on your Mac." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初回使用時に多言語埋め込みモデルをダウンロードします。内容はMac内でのみ処理されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "首次使用会下载多语言嵌入模型。内容仅在 Mac 本地处理。" } }
+      }
+    },
+    "임베딩을 계산하는 중…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Computing embeddings…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "埋め込みを計算しています…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在计算嵌入…" } }
+      }
+    },
+    "거리는 의미 유사도를 대략적으로 반영해요. 축 방향 자체는 의미가 없어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Distances roughly reflect meaning similarity; the axis directions carry no meaning." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "距離は意味の類似度をおおまかに反映します。軸の方向自体に意味はありません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "距离大致反映含义相似度，坐标轴方向本身没有含义。" } }
+      }
+    },
+    "분야" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Field" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "分野" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "领域" } }
+      }
+    },
+    "분야 없음" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No field" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "分野なし" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无领域" } }
+      }
+    },
+    "닫기 (Esc)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Close (Esc)" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "閉じる（Esc）" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "关闭（Esc）" } }
+      }
+    },
+    "오타 자동 보정으로 찾았어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Found with typo auto-correction" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タイポ自動修正で見つかりました" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "通过拼写自动纠错找到" } }
+      }
+    },
+    "“%@” → “%@”" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "“%1$@” → “%2$@”" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "「%1$@」→「%2$@」" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "“%1$@” → “%2$@”" } }
+      }
+    },
+    "개념의 설명을 만들고 있어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Writing the explanation…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念の説明を作成しています" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在生成概念解释" } }
+      }
+    },
+    "처음 사용하는 모델은 다운로드와 준비에 시간이 걸릴 수 있어요. 완료되면 사전에 자동 저장됩니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A first-time model may take a while to download and prepare. It saves to your dictionary automatically when done." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初めて使うモデルはダウンロードと準備に時間がかかることがあります。完了すると辞書に自動保存されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "首次使用的模型可能需要下载和准备时间。完成后会自动保存到词典。" } }
+      }
+    },
+    "조회 취소" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel Lookup" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索をキャンセル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "取消查询" } }
+      }
+    },
+    "설명을 만들지 못했어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't Write the Explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "説明を作成できませんでした" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法生成解释" } }
+      }
+    },
+    "모델 설정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Model Settings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "モデル設定" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "模型设置" } }
+      }
+    },
+    "어떤 개념이 궁금한가요?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What concept are you curious about?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "どんな概念が知りたいですか？" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "想了解什么概念？" } }
+      }
+    },
+    "텍스트를 선택하고 단축키 또는 우클릭 서비스를 사용해 보세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select text and use the shortcut or the right-click service." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "テキストを選択して、ショートカットまたは右クリックサービスを使ってみてください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "选择文本，然后使用快捷键或右键服务。" } }
+      }
+    },
+    "이 설명의 언어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Language of this explanation" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この説明の言語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "此解释的语言" } }
+      }
+    },
+    "내 사전에 저장했어요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saved to your dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "マイ辞書に保存しました" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已保存到我的词典" } }
+      }
+    },
+    "내 사전에 저장된 개념" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Concept saved in your dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "マイ辞書に保存された概念" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "我的词典中已保存的概念" } }
+      }
+    },
+    "쉽게 이해하기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "In Plain Terms" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "わかりやすく" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "简单理解" } }
+      }
+    },
+    "AI 초안 · 외부 출처 없음" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Draft · No External Sources" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI下書き · 外部出典なし" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 草稿 · 无外部出处" } }
+      }
+    },
+    "AI가 작성한 설명" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Explanation written by AI" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AIが書いた説明" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 撰写的解释" } }
+      }
+    },
+    "참고한 출처" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sources Consulted" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "参照した出典" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "参考出处" } }
+      }
+    },
+    "사전에서 열기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open in Dictionary" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "辞書で開く" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在词典中打开" } }
+      }
+    },
+    "아이콘 표시 위치" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Icon Visibility" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アイコンの表示場所" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "图标显示位置" } }
+      }
+    },
+    "아이콘을 숨겨도 Lexi는 계속 실행됩니다. 앱을 다시 열 수 있도록 메뉴 막대나 Dock 중 한 곳에는 항상 표시해요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lexi keeps running even with its icon hidden. It always stays in the menu bar or the Dock so you can reopen it." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アイコンを隠してもLexiは動き続けます。再び開けるよう、メニューバーかDockのどちらかには常に表示されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "即使隐藏图标，Lexi 仍会继续运行。为确保能再次打开，它会始终显示在菜单栏或 Dock 中。" } }
+      }
+    },
+    "앱 표시" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "App Presence" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アプリの表示" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "应用显示" } }
+      }
+    },
+    "설명 언어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Explanation Language" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "説明の言語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "解释语言" } }
+      }
+    },
+    "AI가 만드는 정의와 설명의 언어예요. **자동**은 조회한 용어의 언어를 따르고 판단에 실패하면 한국어로 설명해요. 이미 저장된 항목은 그 언어로 쓰인 설명이 있을 때 우선 보여요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The language of AI-written definitions and explanations. **Automatic** follows the looked-up term's language and falls back to Korean when detection fails. Saved entries prefer an explanation written in that language when one exists." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AIが作る定義と説明の言語です。**自動**は検索した用語の言語に従い、判定に失敗すると韓国語で説明します。保存済みの項目は、その言語で書かれた説明がある場合に優先表示されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 生成的定义和解释所用语言。**自动**会跟随查询术语的语言，判断失败时以韩语解释。已保存条目存在该语言的解释时会优先显示。" } }
+      }
+    },
+    "언어" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Language" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "言語" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "语言" } }
+      }
+    },
+    "오타 자동 보정" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Typo Auto-Correction" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タイポ自動修正" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "拼写自动纠错" } }
+      }
+    },
+    "질의가 사전에 없으면 저장된 표현 중 철자가 가장 가까운 것으로 찾아줘요. 끄면 입력한 원본 텍스트를 그대로 사용해요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "When a query isn't in the dictionary, finds the saved expression with the closest spelling. Turn it off to use your original text as-is." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索語が辞書にない場合、つづりが最も近い保存済み表現で探します。オフにすると入力した元のテキストをそのまま使います。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询词不在词典中时，会找拼写最接近的已存表述。关闭后按输入的原文使用。" } }
+      }
+    },
+    "조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lookup" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询" } }
+      }
+    },
+    "iCloud 동기화" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud Sync" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud同期" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 同步" } }
+      }
+    },
+    "개념·별칭·개정본·출처를 iCloud에 동기화해요. 같은 Apple ID로 쓰는 기기에서 같은 사전을 쓸 수 있어요. 조회 통계와 설정은 동기화하지 않아요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Syncs concepts, aliases, revisions, and sources to iCloud. Devices signed in with the same Apple ID share the same dictionary. Lookup statistics and settings don't sync." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "概念・別名・改訂版・出典をiCloudに同期します。同じApple IDでサインインしたデバイスで同じ辞書を使えます。検索統計と設定は同期しません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "将概念、别名、修订版本和出处同步到 iCloud。登录同一 Apple ID 的设备可共用同一词典。查询统计和设置不参与同步。" } }
+      }
+    },
+    "동기화" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sync" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "同步" } }
+      }
+    },
+    "선택한 텍스트 조회" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Look Up Selected Text" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "選択テキストを検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询所选文本" } }
+      }
+    },
+    "다른 앱에서 텍스트를 선택한 뒤 누르세요. 자주 쓰는 단축키와 겹치면 여기서 바꿀 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select text in another app, then press it. If it conflicts with a shortcut you already use, change it here." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "他のアプリでテキストを選択してから押してください。よく使うショートカットと重なる場合はここで変更できます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "先在其他应用中选择文本再按下。如与常用快捷键冲突，可在此更改。" } }
+      }
+    },
+    "단축키" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shortcuts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ショートカット" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "快捷键" } }
+      }
+    },
+    "손쉬운 사용 권한" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Accessibility Permission" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アクセシビリティ権限" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "辅助功能权限" } }
+      }
+    },
+    "허용됨" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Granted" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "許可済み" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已允许" } }
+      }
+    },
+    "설정 필요" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Needs Setup" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定が必要" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "需要设置" } }
+      }
+    },
+    "단축키로 다른 앱의 선택 영역을 읽을 때 필요해요. 우클릭 서비스는 이 권한 없이 사용할 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Needed to read another app's selection with the shortcut. The right-click service works without it." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ショートカットで他のアプリの選択範囲を読むときに必要です。右クリックサービスはこの権限なしで使えます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用快捷键读取其他应用的选区时需要。右键服务无需此权限。" } }
+      }
+    },
+    "접근 권한" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Permissions" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アクセス権限" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "访问权限" } }
+      }
+    },
+    "손쉬운 사용 설정 열기…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Accessibility Settings…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アクセシビリティ設定を開く…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开辅助功能设置…" } }
+      }
+    },
+    "설정에서 Lexi를 켜면 잠시 뒤 자동으로 반영돼요. 여전히 '설정 필요'로 보이면 Lexi를 종료한 뒤 다시 실행해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "After you enable Lexi in Settings, this updates automatically within a moment. If it still says \"Needs Setup\", quit and relaunch Lexi." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定でLexiをオンにすると、まもなく自動で反映されます。「設定が必要」のままの場合は、Lexiを終了して再度起動してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在设置中开启 Lexi 后稍候会自动更新。如果仍显示“需要设置”，请退出并重新运行 Lexi。" } }
+      }
+    },
+    "Lexi에게 물어보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Ask Lexi" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Lexiに聞く" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "询问 Lexi" } }
+      }
+    },
+    "텍스트 선택 → 우클릭 → 서비스 → Lexi에게 물어보기에서 사용할 수 있어요. macOS 서비스는 호출 앱이 메뉴 위치를 정하므로 Lexi가 최상위에 고정할 수 없어요. 더 빠른 호출은 위 전역 단축키를 사용하거나, 권한 없이 쓰려면 서비스 설정에서 별도 단축키를 지정하세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Available via select text → right-click → Services → Ask Lexi. macOS services let the calling app decide the menu position, so Lexi can't pin it to the top. For a faster call use the global shortcut above; to use it without the permission, assign a dedicated shortcut in Services settings." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "テキスト選択 → 右クリック → サービス → Lexiに聞くから使えます。macOSのサービスは呼び出し側アプリがメニュー位置を決めるため、Lexiが最上位に固定することはできません。速く呼ぶには上のグローバルショートカットを、権限なしで使うにはサービス設定で専用のショートカットを割り当ててください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用法：选择文本 → 右键 → 服务 → 询问 Lexi。macOS 服务的菜单位置由调用应用决定，Lexi 无法将其固定在顶部。更快的方式是使用上方的全局快捷键；若想免权限使用，可在服务设置中为其单独指定快捷键。" } }
+      }
+    },
+    "우클릭 서비스" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Right-click Service" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "右クリックサービス" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "右键服务" } }
+      }
+    },
+    "서비스 단축키 설정 열기…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Services Shortcut Settings…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "サービスのショートカット設定を開く…" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开服务快捷键设置…" } }
+      }
+    },
+    "목록 새로고침" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Refresh List" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "リストを再読み込み" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "刷新列表" } }
+      }
+    },
+    "등록 정보를 새로고쳤어요. 사용하던 앱에서 메뉴를 다시 열어 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Registration refreshed. Reopen the menu in the app you were using." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "登録情報を更新しました。使っていたアプリでメニューを開き直してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "注册信息已刷新，请在之前使用的应用中重新打开菜单。" } }
+      }
+    },
+    "이 Mac에서 실행" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Runs on This Mac" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "このMacで実行" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在此 Mac 上运行" } }
+      }
+    },
+    "Apple Silicon의 MLX 모델로 설명을 만들어요. 저장된 개념은 모델을 실행하지 않고 바로 보여 줍니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Writes explanations with an MLX model on Apple Silicon. Saved concepts appear instantly without running the model." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Apple SiliconのMLXモデルで説明を作成します。保存済みの概念はモデルを実行せずすぐ表示されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用 Apple Silicon 上的 MLX 模型生成解释。已保存的概念无需运行模型即可立即显示。" } }
+      }
+    },
+    "사용할 모델" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Model" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "使用するモデル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "要使用的模型" } }
+      }
+    },
+    "Hugging Face 모델 ID" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hugging Face Model ID" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Hugging FaceモデルID" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Hugging Face 模型 ID" } }
+      }
+    },
+    "소유자/모델 이름" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "owner/model-name" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "オーナー/モデル名" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "所有者/模型名" } }
+      }
+    },
+    "소유자/모델 이름 형식으로 입력해 주세요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter it in owner/model-name format." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "オーナー/モデル名の形式で入力してください。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请按 所有者/模型名 格式输入。" } }
+      }
+    },
+    "MLX 모델 찾아보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Browse MLX Models" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "MLXモデルを探す" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "浏览 MLX 模型" } }
+      }
+    },
+    "적용" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Apply" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "適用" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "应用" } }
+      }
+    },
+    "저장했어요. 다음 조회부터 적용됩니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Saved. Applies from your next lookup." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存しました。次の検索から適用されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已保存，将从下次查询开始生效。" } }
+      }
+    },
+    "로컬 모델" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Local Model" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ローカルモデル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "本地模型" } }
+      }
+    },
+    "기본 제공 모델은 선택하면 바로 저장됩니다. 처음 사용하는 모델은 조회할 때 Hugging Face에서 내려받으므로 네트워크 연결과 수 GB의 여유 공간이 필요할 수 있어요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Built-in models save as soon as you pick one. A first-time model downloads from Hugging Face on lookup, so a network connection and several GB of free space may be needed." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "内蔵モデルは選ぶとすぐ保存されます。初めて使うモデルは検索時にHugging Faceからダウンロードするため、ネットワーク接続と数GBの空き容量が必要になることがあります。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "内置模型选中即保存。首次使用的模型会在查询时从 Hugging Face 下载，可能需要网络连接和数 GB 可用空间。" } }
+      }
+    },
+    "현재 사용 중인 모델" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Current Model" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "現在のモデル" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "当前使用的模型" } }
+      }
+    },
+    "공개 웹 자료 검색" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search Public Web Sources" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "公開ウェブ資料を検索" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "搜索公开网页资料" } }
+      }
+    },
+    "새 개념을 조회할 때 DuckDuckGo 검색과 공개 웹페이지를 참고합니다. 실제로 읽은 자료만 출처로 저장해요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New lookups consult DuckDuckGo search and public web pages. Only material actually read is stored as a source." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しい概念の検索時にはDuckDuckGo検索と公開ウェブページを参照します。実際に読んだ資料だけを出典として保存します。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询新概念时会参考 DuckDuckGo 搜索和公开网页。只有实际读过的资料才会存为出处。" } }
+      }
+    },
+    "로컬 모델의 지식으로 설명을 만듭니다. 결과에는 외부 출처가 없는 AI 초안임을 표시해요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Writes explanations from the local model's knowledge. Results are marked as AI drafts without external sources." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ローカルモデルの知識で説明を作成します。結果には外部出典のないAI下書きであることが表示されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "使用本地模型的知识生成解释。结果会标注为无外部出处的 AI 草稿。" } }
+      }
+    },
+    "변경은 다음 조회부터 바로 적용됩니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Changes apply from your next lookup." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "変更は次の検索からすぐに適用されます。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更改将从下次查询开始生效。" } }
+      }
+    },
+    "켜면 조회한 텍스트가 검색 서비스로 전송되고 공개 웹페이지에 접속합니다. 이미 저장된 개념을 열 때는 웹 검색을 실행하지 않아요." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "When on, looked-up text is sent to the search service and public web pages are accessed. Opening already-saved concepts runs no web search." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "オンにすると、検索したテキストが検索サービスに送信され、公開ウェブページに接続します。保存済みの概念を開くときはウェブ検索を実行しません。" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "开启后，查询文本会发送给搜索服务并访问公开网页。打开已保存概念时不会执行网络搜索。" } }
+      }
+    }
+  }
+}

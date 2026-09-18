@@ -167,11 +167,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             let text = try SelectedTextReader.readSelectedText()
             startLookup(text)
         } catch {
-            if (error as? SelectedTextError) == .notTrusted {
-                _ = SelectedTextReader.isAccessibilityGranted(promptIfNeeded: true)
-            }
+            let notTrusted = (error as? SelectedTextError) == .notTrusted
             lookupNotice = error.localizedDescription
             openLibrary()
+            guard notTrusted else { return }
+            // 시스템 권한 프롬프트는 비동기로 뜬다. 프롬프트를 먼저 요청하고
+            // openLibrary()의 자체 활성화가 뒤따르면 프롬프트가 즉시 닫혀 버린다.
+            // 활성화가 끝난 뒤 한 런루프 턴 뒤에 요청한다.
+            DispatchQueue.main.async {
+                _ = SelectedTextReader.isAccessibilityGranted(promptIfNeeded: true)
+            }
         }
     }
 

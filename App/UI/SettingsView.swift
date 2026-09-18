@@ -95,6 +95,15 @@ struct SettingsView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             refreshPermission()
         }
+        .task(id: accessibilityGranted) {
+            // 권한 허용 전에 이미 실행 중인 프로세스는 시스템 설정 반영이 늦거나
+            // 재시작 전까지 반영되지 않는다(AXIsProcessTrusted는 프로세스 단위).
+            // 설정 창이 열려 있는 동안 주기적으로 다시 확인해 반영을 놓치지 않는다.
+            while !accessibilityGranted {
+                try? await Task.sleep(for: .seconds(1.5))
+                refreshPermission()
+            }
+        }
     }
 
     private var explanationLanguage: Binding<ExplanationLanguagePreference> {
@@ -174,7 +183,7 @@ struct SettingsView: View {
                     SystemSettings.openAccessibility()
                 }
                 if !accessibilityGranted {
-                    Text("설정에서 Lexi를 켠 뒤 돌아오면 자동으로 다시 확인해요. 이미 켜져 있다면 껐다가 다시 켜 주세요.")
+                    Text("설정에서 Lexi를 켜면 잠시 뒤 자동으로 반영돼요. 여전히 '설정 필요'로 보이면 Lexi를 종료한 뒤 다시 실행해 주세요.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
             } header: { Text("접근 권한") }
