@@ -2,6 +2,14 @@
 
 이 프로젝트의 주요 변경 사항을 기록합니다.
 
+## 1.2.2 - 2026-09-19
+
+### Fixed
+
+- 권한 없이 전역 단축키를 눌렀을 때 시스템 접근성 권한 프롬프트가 잠깐 떴다 사라지던 문제. 프롬프트(`AXIsProcessTrustedWithOptions`)는 비동기로 뜨는데, 직후 라이브러리 창을 열며 스스로 활성화하면(`NSApp.activate`) 시스템 프롬프트가 닫혀 버린다. 창 활성화를 먼저 끝내고 한 런루프 뒤에 프롬프트를 요청한다(앱: `AppDelegate.lookupFromSelection`)
+- 시스템 설정에서 권한을 켠 뒤에도 설정 화면이 계속 "설정 필요"로 남던 문제. 상태는 앱이 활성화될 때만 다시 확인했는데, 허용 전에 이미 실행 중이던 프로세스는 반영이 늦거나 재실행 전까지 안 될 수 있다(`AXIsProcessTrusted`는 프로세스 단위). 설정 창이 열려 있는 동안 1.5초 간격으로 재확인하고, 여전히 "설정 필요"면 앱 재실행을 안내한다(앱: `SettingsView`)
+- Safari 등 WebKit 웹영역의 선택 텍스트를 읽지 못하던 문제. 웹영역(AXWebArea)은 선택이 있어도 `kAXSelectedTextAttribute`를 noValue로 돌려주고, 선택을 WebKit 확장인 text marker range(`AXSelectedTextMarkerRange` + `AXStringForTextMarkerRange`)로만 노출한다. 표준 속성이 실패할 때 marker range로 폴백하고, 어떤 앱에서도 성공하지 못하던 2차 경로(앱 엘리먼트에 직접 질의 → 항상 attributeUnsupported)를 앱 포커스 엘리먼트를 거치도록 고친다(앱: `SelectedTextReader`)
+
 ## 1.2.1 - 2026-09-18
 
 ### Fixed
