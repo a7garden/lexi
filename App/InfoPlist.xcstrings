@@ -1,0 +1,52 @@
+{
+  "sourceLanguage" : "ko",
+  "strings" : {
+    "Lexi에게 물어보기" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask Lexi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lexiに聞く"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "询问 Lexi"
+          }
+        }
+      }
+    },
+    "선택한 텍스트를 Lexi로 조회하고, 없는 개념은 조사해 저장합니다." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looks up the selected text in Lexi, and researches and saves concepts it doesn't have yet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択したテキストをLexiで検索し、持っていない概念は調べて保存します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Lexi 中查询所选文本，并调研、保存尚不存在的概念。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
