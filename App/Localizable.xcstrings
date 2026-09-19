@@ -373,7 +373,14 @@
     "%lld건" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld items" } },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld change" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld changes" } }
+            }
+          }
+        },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld件" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 条" } }
       }
@@ -749,7 +756,14 @@
     "%lld개" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld items" } },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld item" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld items" } }
+            }
+          }
+        },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld件" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 条" } }
       }
@@ -757,7 +771,14 @@
     "%@, %lld개" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$@, %2$lld items" } },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%1$@, %2$lld item" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%1$@, %2$lld items" } }
+            }
+          }
+        },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "%1$@、%2$lld件" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%1$@，%2$lld 条" } }
       }
@@ -1277,7 +1298,7 @@
     "별칭 %lld개 · 개정본 %lld개" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld aliases · %2$lld revisions" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Aliases: %1$lld · Revisions: %2$lld" } },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "別名%1$lld件 · 改訂版%2$lld件" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "别名 %1$lld 条 · 修订版本 %2$lld 个" } }
       }
@@ -1293,7 +1314,7 @@
     "성공 %lld · 실패 %lld" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld hits · %2$lld misses" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hits: %1$lld · Misses: %2$lld" } },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "成功%1$lld · 失敗%2$lld" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "成功 %1$lld · 失败 %2$lld" } }
       }
@@ -1309,7 +1330,7 @@
     "조회된 %lld개 중 %lld개를 다시 찾았어요" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Revisited %2$lld of %1$lld looked-up concepts" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Revisited %2$lld of %1$lld" } },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索した%1$lld件のうち%2$lld件を再び調べました" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "查询过的 %1$lld 个中有 %2$lld 个被再次查找" } }
       }
@@ -1341,7 +1362,14 @@
     "%lld일" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld days" } },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld day" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld days" } }
+            }
+          }
+        },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld日" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 天" } }
       }
@@ -1365,7 +1393,7 @@
     "AI 개정본 %lld개 · 직접 수정 %lld개" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld AI revisions · %2$lld user edits" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI revisions: %1$lld · User edits: %2$lld" } },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI改訂版%1$lld件 · 自分で修正%2$lld件" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AI 修订 %1$lld 个 · 手动修改 %2$lld 个" } }
       }
@@ -1517,7 +1545,14 @@
     "%lld회" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld times" } },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld time" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld times" } }
+            }
+          }
+        },
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld回" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 次" } }
       }
