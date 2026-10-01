@@ -70,6 +70,7 @@ If a saved headword or alias matches exactly, the result is displayed instantly.
 
 - **MLX model**: Choose among Qwen3 4B (default) · 1.7B (lighter) · 8B (larger); the choice is saved immediately. With **Custom**, you can enter an MLX model ID from Hugging Face directly and apply it.
 - **Web research**: Off by default. When turned on, search queries and requests for public web pages are sent externally.
+- **iCloud sync**: Off by default. Enable it under **Settings → General → Sync** to share your dictionary across Macs using the same Apple ID. The data sent to iCloud is described below.
 - **Shortcuts & permissions**: Change the lookup shortcut and check the Accessibility permission in the General tab.
 - **Explanation language**: Choose the language of the definitions and explanations the AI produces in the General tab. **Automatic** follows the language of the looked-up term and explains in Korean when detection fails. Each entry records the language of its term, aliases, and explanations, so even if the same concept has explanations in several languages, the explanation in the requested language is shown first.
 - **Instant apply**: The model ID is saved when you press **Apply**, and together with web research changes takes effect from the next lookup. There is no need to restart the app.
@@ -77,7 +78,8 @@ If a saved headword or alias matches exactly, the result is displayed instantly.
 ## Privacy and networking
 
 - Dictionary data is stored locally at `~/Library/Application Support/Lexi/lexi.sqlite`.
-- Looking up saved expressions uses neither the network nor AI.
+- Looking up saved expressions itself uses neither the network nor AI; optional iCloud sync runs separately.
+- When iCloud sync is enabled, concepts, aliases, definition revisions, and sources are sent to your private CloudKit database in Apple's iCloud. The local SQLite database remains the source of truth. Lookup statistics, settings, and models are not synced. Turning sync off stops the sync service; it does not delete data already stored locally or in iCloud.
 - The generative model and the `multilingual-e5-small` weights used for semantic search are downloaded from Hugging Face the first time each feature is used.
 - Semantic search runs only when you explicitly press **Find by meaning**, and the embeddings for the search query and the dictionary content are computed on the Mac. The embeddings are a derived in-memory cache and do not alter the dictionary's source text or revision history.
 - DuckDuckGo searches and requests for search result pages happen only when web research is turned on.
@@ -100,7 +102,9 @@ xcodegen generate
 open Lexi.xcodeproj
 ```
 
-In Xcode, select the `Lexi` scheme and run. This repository does not commit the generated `.xcodeproj`; `project.yml` is the source of truth for the project configuration.
+This repository does not commit the generated `.xcodeproj`; `project.yml` is the source of truth for the project configuration.
+
+`project.yml` currently uses the maintainer's manual Developer ID signing settings for the app and test targets. If you do not have that signing identity, use the unsigned build and app test commands in this README for local verification. To run a signed build in Xcode, first adapt the signing settings to your own team and certificates, then select the `Lexi` scheme and run. iCloud sync additionally requires a provisioning profile and entitlements that authorize the container identifier used by `CloudSyncService`; unsigned build and test checks do not verify iCloud sync.
 
 Run the core package tests as follows:
 
